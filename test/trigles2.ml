@@ -37,26 +37,21 @@ let get_string len f =
 
 (* Shaders *)  
 
-let glsl_version gl_version = match gl_version with
-| 2,0 -> "100" | 3,0 -> "330 es" 
-| _ -> assert false
-
-let vertex_shader v = str "
-  #version %s
-  in vec3 vertex;
-  in vec3 color;
-  out vec4 v_color;
+let vertex_shader = "
+  #version 100
+  attribute vec3 vertex;
+  attribute vec3 color;
+  varying vec4 v_color;
   void main()
   {
     v_color = vec4(color, 1.0);
     gl_Position = vec4(vertex, 1.0);
-  }" v
+  }"
 
-let fragment_shader v = str "
-  #version %s
-  in vec4 v_color;
-  out vec4 color;
-  void main() { color = v_color; }" v
+let fragment_shader = "
+  #version 100
+  varying vec4 v_color;
+  void main() { gl_FragColor = v_color; }"
 
 (* Geometry *) 
 
@@ -115,9 +110,9 @@ let compile_shader src typ =
   let log = get_string len (Gl.get_shader_info_log sid len None) in
   (Gl.delete_shader sid; `Error_msg log)
 
-let create_program glsl_v =
-  compile_shader (vertex_shader glsl_v) Gl.vertex_shader >>= fun vid -> 
-  compile_shader (fragment_shader glsl_v) Gl.fragment_shader >>= fun fid ->
+let create_program () =
+  compile_shader vertex_shader Gl.vertex_shader >>= fun vid -> 
+  compile_shader fragment_shader Gl.fragment_shader >>= fun fid ->
   let pid = Gl.create_program () in
   let get_program pid e = get_int (Gl.get_programiv pid e) in
   Gl.attach_shader pid vid; Gl.delete_shader vid; 
@@ -217,7 +212,7 @@ let tri ~gl:(maj, min as gl) =
   Sdl.init Sdl.Init.video          >>= fun () -> 
   create_window ~gl                >>= fun (win, ctx) ->
   create_geometry ()               >>= fun bids -> 
-  create_program (glsl_version gl) >>= fun pid ->
+  create_program ()                >>= fun pid ->
   event_loop win (draw pid bids)   >>= fun () ->
   delete_program pid               >>= fun () -> 
   delete_geometry bids             >>= fun () ->
