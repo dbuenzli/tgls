@@ -1,7 +1,9 @@
 description = "Thin bindings to OpenGL {3,4} and OpenGL ES {2,3} for OCaml"
+version = "%%VERSION%%"
 
 package "tgl3" (
  version = "%%VERSION%%"
+ description = "Thin bindings to OpenGL 3.x for OCaml"
  requires = "ctypes ctypes.foreign"
  archive(byte) = "tgl3.cma"
  archive(byte, plugin) = "tgl3.cma"
@@ -17,6 +19,72 @@ package "tgl3" (
   requires = "compiler-libs.toplevel"
   archive(byte) = "tgl3_top.cma"
   archive(byte, plugin) = "tgl3_top.cma"
-  archive(native) = "tdsl_top.cmxa"
+  archive(native) = "tgl3_top.cmxa"
   archive(native, plugin) = "tgl3_top.cmxs"
   exists_if = "tgl3_top.cma"))
+
+package "tgl4" (
+ version = "%%VERSION%%"
+ description = "Thin bindings to OpenGL 4.x for OCaml"
+ requires = "ctypes ctypes.foreign"
+ archive(byte) = "tgl4.cma"
+ archive(byte, plugin) = "tgl4.cma"
+ archive(native) = "tgl4.cmxa"
+ archive(native, plugin) = "tgl4.cmxs"
+ archive(byte, toploop) += "tgl4_top.cma"
+ archive(native, toploop) += "tgl4_top.cmxa"
+ exists_if = "tgl4.cma"
+
+ package "top" (
+  version = "%%VERSION%%"
+  description = "Toplevel module for Tgl4"
+  requires = "compiler-libs.toplevel"
+  archive(byte) = "tgl4_top.cma"
+  archive(byte, plugin) = "tgl4_top.cma"
+  archive(native) = "tgl4_top.cmxa"
+  archive(native, plugin) = "tgl4_top.cmxs"
+  exists_if = "tgl4_top.cma"))
+
+package "tgles2" (
+ version = "%%VERSION%%"
+ description = "Thin bindings to OpenGL ES 2 for OCaml"
+ requires = "ctypes ctypes.foreign"
+ archive(byte) = "tgles2.cma"
+ archive(byte, plugin) = "tgles2.cma"
+ archive(native) = "tgles2.cmxa"
+ archive(native, plugin) = "tgles2.cmxs"
+ archive(byte, toploop) += "tgles2_top.cma"
+ archive(native, toploop) += "tgles2_top.cmxa"
+ exists_if = "tgles2.cma"
+
+ package "top" (
+  version = "%%VERSION%%"
+  description = "Toplevel module for Tgles2"
+  requires = "compiler-libs.toplevel"
+  archive(byte) = "tgles2_top.cma"
+  archive(byte, plugin) = "tgles2_top.cma"
+  archive(native) = "tgles2_top.cmxa"
+  archive(native, plugin) = "tgles2_top.cmxs"
+  exists_if = "tgles2_top.cma"))
+
+package "tgles3" (
+ version = "%%VERSION%%"
+ description = "Thin bindings to OpenGL ES 3 for OCaml"
+ requires = "ctypes ctypes.foreign"
+ archive(byte) = "tgles3.cma"
+ archive(byte, plugin) = "tgles3.cma"
+ archive(native) = "tgles3.cmxa"
+ archive(native, plugin) = "tgles3.cmxs"
+ archive(byte, toploop) += "tgles3_top.cma"
+ archive(native, toploop) += "tgles3_top.cmxa"
+ exists_if = "tgles3.cma"
+
+ package "top" (
+  version = "%%VERSION%%"
+  description = "Toplevel module for Tgles3"
+  requires = "compiler-libs.toplevel"
+  archive(byte) = "tgles3_top.cma"
+  archive(byte, plugin) = "tgles3_top.cma"
+  archive(native) = "tgles3_top.cmxa"
+  archive(native, plugin) = "tgles3_top.cmxs"
+  exists_if = "tgles3_top.cma"))
