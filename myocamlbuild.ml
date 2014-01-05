@@ -11,15 +11,19 @@ let rpi =
   try ignore (run_and_read "cat /proc/cpuinfo | grep -q BCM2708"); true
   with Failure _ -> false
 
-(* pkg-config invocation. N.B. ~pretend:true implies we fail silently. *) 
+(* pkg-config invocation. N.B. we don't fail if we don't have the package. *) 
 
 let pkg_config flags package = 
+  let has_package = 
+    try ignore (run_and_read ("pkg-config --exists " ^ package)); true
+    with Failure _ -> false 
+  in
   let cmd tmp = 
-    Command.execute ~quiet:true ~pretend:true & 
+    Command.execute ~quiet:true & 
     Cmd( S [ A "pkg-config"; A ("--" ^ flags); A package; Sh ">"; A tmp]);
     List.map (fun arg -> A arg) (string_list_of_file tmp)
   in
-  with_temp_file "pkgconfig" "pkg-config" cmd
+  if has_package then with_temp_file "pkgconfig" "pkg-config" cmd else []
 
 (* Tags for OpenGL X.Y *) 
 
