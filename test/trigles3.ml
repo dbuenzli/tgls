@@ -162,7 +162,7 @@ let pp_opengl_info ppf () =
   let pp = Format.fprintf in
   let pp_opt ppf = function None -> pp ppf "error" | Some s -> pp ppf "%s" s in
   pp ppf "@[<v>@,";
-  pp ppf "Renderer @[@[%a@]@," pp_opt (Gl.get_string Gl.renderer);
+  pp ppf "Renderer @[<v>@[%a@]@," pp_opt (Gl.get_string Gl.renderer);
   pp ppf "@[OpenGL %a / GLSL %a@]@]@," 
     pp_opt (Gl.get_string Gl.version)
     pp_opt (Gl.get_string Gl.shading_language_version);
