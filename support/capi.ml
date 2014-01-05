@@ -319,7 +319,14 @@ let enums api =
     let get f v t = try f v with Failure _ -> failwith (err_enum_parse e t v) in
     let v = e_def.Glreg.e_value in
     let v = match e_def.Glreg.e_type with 
-    | None -> `GLenum (get int_of_string v "<unspecified>")
+    | None -> 
+        (* FIXME (or not): hack for compiling on 32 bits platforms *)
+        if Sys.word_size = 32 && v = "0xFFFFFFFF" && 
+           (e_def.Glreg.e_name = "GL_ALL_BARRIER_BITS" ||
+            e_def.Glreg.e_name = "GL_ALL_SHADER_BITS")
+        then `GLenum (-1)
+        else
+        `GLenum (get int_of_string v "<unspecified>")
     | Some ("ull" as t) -> `GLuint64 (get Int64.of_string v t)
     | Some ("u" as t) -> `GLuint (get Int32.of_string v t)
     | Some t -> failwith (err_enum_type t e)

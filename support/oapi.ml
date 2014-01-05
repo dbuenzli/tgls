@@ -495,6 +495,16 @@ let derived_doc = function
     Some "{b Note.} [indices] are byte offsets in the buffer bound on \
           {!Gl.element_array_buffer}. Directly specifiying index arrays \
           is unsupported."
+| "glMemoryBarrier" -> (* FIXME (or not): see Capi.enums *)
+    Some "{b Warning.} On 32 bits platforms the constant 
+          {!all_barrier_bits} is represented by 0x7FFFFFFF
+          instead of 0xFFFFFFF, this may result in an OpenGL
+          error (or not)."
+| "glUseProgramStages" -> (* FIXME (or not): see Capi.enums *)
+    Some "{b Warning.} On 32 bits platforms the constant 
+          {!all_shader_bits} is represented by 0x7FFFFFFF 
+          instead of 0xFFFFFFF, this may result in an OpenGL 
+          error (or not)."
 | _ -> None
   
 let derived api (fn, (cargs, cret) as cdef) = 
