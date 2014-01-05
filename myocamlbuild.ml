@@ -7,7 +7,9 @@ let os = run_and_read "uname -s"
 let darwin = os = "Darwin\n" 
 let linux = os = "Linux\n" 
 let rpi = 
-  linux && run_and_read "cat /proc/cpuinfo | grep -o BCM2708" = "BCM2708"
+  linux &&
+  try ignore (run_and_read "cat /proc/cpuinfo | grep -q BCM2708"); true
+  with Failure _ -> false
 
 (* pkg-config invocation. N.B. ~pretend:true implies we fail silently. *) 
 
