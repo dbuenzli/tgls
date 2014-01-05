@@ -24,6 +24,7 @@ Tgls can be installed with `opam`:
 If you don't use `opam` consult the [`opam`](opam) file for
 build instructions and a complete specification of the dependencies.
 
+
 ## Supported OpenGL versions 
 
 Tgls provides four libraries and corresponding `ocamlfind` packages:
@@ -40,10 +41,11 @@ Tgls provides four libraries and corresponding `ocamlfind` packages:
 * `tgles3`, supports all functions and enumerants to program with an
    OpenGL ES 3.0 context.
 
-Compatibility contexts are not supported. For extensions, most of
-those only add few entry points and/or enumerants, it seems the
-easiest is to access them by using ocaml-ctypes (though the tools in
-[support](support/) could be enhanced to support them).
+Compatibility contexts are not supported. For extensions, most of them
+only add few entry points and/or enumerants, as such it seems the
+easiest way to access them is to manually use [ocaml-ctypes][1] and
+the appropriate constants (the tools in [support](support/) could be
+enhanced to support them but it's not planned to do so).
 
 
 ## Documentation
@@ -77,7 +79,7 @@ The resulting binaries are in `_build/test` :
   triangle, needs [tsdl][4].
 
 The C file [`assert_sizes.c`](test/assert_sizes.c) is a program that
-should exit with [0] on your platform to ensure the bindings will
+should exit with 0 on your platform to ensure the bindings will
 work correctly. 
   
 [4]: http://erratique.ch/software/tsdl 

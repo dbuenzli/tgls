@@ -2,7 +2,7 @@ The distribution contains generated data. If you want to contribute
 please hack your way directly via the source repository.
 
 For developing, you will need to install [xmlm][1] and download a
-a copy of the [OpenGL XML registry][2] to $REGPATH. From the root
+copy of the [OpenGL XML registry][2] to `$REGPATH`. From the root
 directory of the repository type:
 
     ln -s $REGPATH support/gl.xml 
