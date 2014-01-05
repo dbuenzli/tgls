@@ -92,6 +92,10 @@ add doc test/trigl3.ml
 add doc test/trigl4.ml
 add doc test/trigles2.ml
 add doc test/trigles3.ml
+add doc test/linkgl3.ml
+add doc test/linkgl4.ml
+add doc test/linkgles2.ml
+add doc test/linkgles3.ml
 
 build
 install tgls
