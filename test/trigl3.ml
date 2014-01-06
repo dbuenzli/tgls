@@ -37,12 +37,13 @@ let get_string len f =
 (* Shaders *)  
 
 let glsl_version gl_version = match gl_version with
-| 3,2 -> "150" | 3,3 -> "330" 
-| 4,0 -> "400" | 4,1 -> "410" | 4,2 -> "420" | 4,3 -> "430" | 4,4 -> "440"
+| 3,0 -> "130" | 3,1 -> "140"
+| 3,2 -> "150 core" | 3,3 -> "330 core"
+| 4,0 -> "400 core" | 4,1 -> "410 core" | 4,2 -> "420 core" | 4,3 -> "430 core" | 4,4 -> "440 core"
 | _ -> assert false
 
 let vertex_shader v = str "
-  #version %s core
+  #version %s
   in vec3 vertex;
   in vec3 color;
   out vec4 v_color;
@@ -53,7 +54,7 @@ let vertex_shader v = str "
   }" v
 
 let fragment_shader v = str "
-  #version %s core
+  #version %s
   in vec4 v_color;
   out vec4 color;
   void main() { color = v_color; }" v
