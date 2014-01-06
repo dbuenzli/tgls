@@ -26,7 +26,7 @@ let pp_mli_api_header ppf api =
 
     Open the module use it, this defines only the module [%s]
     in your scope. To use in the toplevel with [findlib], 
-    just [#require \"%s\"], it automatically loads the library and 
+    just [#require \"tgls.%s\"], it automatically loads the library and 
     opens the [%s] module.
 
     {b References} 
