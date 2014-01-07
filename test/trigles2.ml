@@ -195,7 +195,7 @@ let event_loop win draw =
     | `Key_down when key_scancode e = `Escape -> `Ok ()
     | `Window_event -> 
         begin match window_event e with 
-        | `Resized -> 
+        | `Exposed | `Resized -> 
             let w, h = window_size e in
             reshape win (Int32.to_int w) (Int32.to_int h);
             draw win;
