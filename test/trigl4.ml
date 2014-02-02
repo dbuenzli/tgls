@@ -195,7 +195,6 @@ let event_loop win draw =
   let key_scancode e = Sdl.Scancode.enum Sdl.Event.(get e keyboard_scancode) in
   let event e = Sdl.Event.(enum (get e typ)) in
   let window_event e = Sdl.Event.(window_event_enum (get e window_event_id)) in
-  let window_size e = Sdl.Event.(get e window_data1, get e window_data2) in
   let rec loop () = 
     Sdl.wait_event (Some e) >>= fun () ->
     match event e with
@@ -204,8 +203,8 @@ let event_loop win draw =
     | `Window_event -> 
         begin match window_event e with 
         | `Exposed | `Resized -> 
-            let w, h = window_size e in
-            reshape win (Int32.to_int w) (Int32.to_int h);
+            let w, h = Sdl.get_window_size win in
+            reshape win w h;
             draw win;
             draw win; (* bug on osx ? *) 
             loop ()
