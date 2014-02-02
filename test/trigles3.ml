@@ -47,6 +47,7 @@ let vertex_shader = "
 
 let fragment_shader = "
   #version 330 es
+  precision highp float;
   in vec4 v_color;
   out vec4 color;
   void main() { color = v_color; }"
