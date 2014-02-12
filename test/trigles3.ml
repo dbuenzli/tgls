@@ -14,10 +14,7 @@ open Tgles3
 
 let str = Printf.sprintf 
 
-let ( >>= ) x f = match x with 
-| `Error -> `Error_msg (Sdl.get_error ()) 
-| `Error_msg _ as e -> e
-| `Ok v -> f v
+let ( >>= ) x f = match x with `Ok v -> f v | `Error _ as e -> e
 
 (* Helper functions. *) 
 
@@ -123,7 +120,7 @@ let compile_shader src typ =
   if get_shader sid Gl.compile_status = Gl.true_ then `Ok sid else
   let len = get_shader sid Gl.info_log_length in
   let log = get_string len (Gl.get_shader_info_log sid len None) in
-  (Gl.delete_shader sid; `Error_msg log)
+  (Gl.delete_shader sid; `Error log)
 
 let create_program () =
   compile_shader vertex_shader Gl.vertex_shader >>= fun vid -> 
@@ -138,7 +135,7 @@ let create_program () =
   if get_program pid Gl.link_status = Gl.true_ then `Ok pid else
   let len = get_program pid Gl.info_log_length in
   let log = get_string len (Gl.get_program_info_log pid len None) in 
-  (Gl.delete_program pid; `Error_msg log)
+  (Gl.delete_program pid; `Error log)
   
 let delete_program pid = 
   Gl.delete_program pid; `Ok ()
@@ -236,6 +233,6 @@ let main () =
   Arg.parse (Arg.align options) anon usage;
   match tri ~gl:(3, 0) with
   | `Ok () -> exit 0
-  | `Error_msg msg -> Sdl.log "%s@." msg; exit 1
+  | `Error msg -> Sdl.log "%s@." msg; exit 1
         
 let () = main ()
