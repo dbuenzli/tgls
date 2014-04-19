@@ -68,7 +68,7 @@ let is_arg_voidp_or_index f a = match f with
   | "glVertexAttribLPointer" -> 
       a = "pointer"
   | "glGetCompressedTexImage" | "glGetTexImage" -> a = "img" 
-  | "glReadPixels" -> a = "data"
+  | "glReadPixels" -> a = "pixels"
   | _ -> false
 
 (*---------------------------------------------------------------------------
