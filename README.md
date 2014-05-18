@@ -7,7 +7,7 @@ to OpenGL libraries. It has support for core OpenGL 3.{2,3} and
 4.{0,1,2,3,4} and OpenGL ES {2,3}.
 
 Tgls depends on [ocaml-ctypes][1] and the C OpenGL library of your
-platform.
+platform. It is distributed under the BSD3 license.
           
 [1]: https://github.com/ocamllabs/ocaml-ctypes
 
