@@ -8,6 +8,8 @@ module Config = struct
   let build_support = Some "pkg/build_support.ml"
   let git_hook = build_support 
   let distrib_hook = build_support 
+  
+  let distrib_remove = "support" :: distrib_remove
 
   let vars =
     [ "NAME", "tgls";

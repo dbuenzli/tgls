@@ -8,7 +8,7 @@ directory of the repository type:
     ln -s $REGPATH support/gl.xml 
     ./build support
 
-See also [support/README.md][3].
+See also [support/README.md][3] in the source repository.
 
 [1]: http://erratique.ch/software/xmlm
 [2]: http://www.opengl.org/registry/
