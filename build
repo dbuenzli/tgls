@@ -30,7 +30,11 @@ action ()
                     tgles3.cmxa dlltgles3.so 
                     ;;
       doc)          shift; pkg-doc $* doc/api-dev.docdir ;;
-      clean)        $OCAMLBUILD -clean ;;
+      clean)        $OCAMLBUILD -clean
+                    rm -f src/tgl3.mli src/tgl3.ml src/tgl4.mli src/tgl4.ml \
+                          src/tgles2.mli src/tgles2.ml src/tgles3.mli \
+                          src/tgles3.ml
+                    ;;
       *)            $OCAMLBUILD $* ;;
     esac
 } 
