@@ -66,7 +66,7 @@ let get_uniform_indices =
 
 let get_uniform_indices program names indices =
   let count = List.length names in
-  let names = Array.(start (of_list string names)) in
+  let names = CArray.(start (of_list string names)) in
   let indices = to_voidp (bigarray_start array1 indices) in
   get_uniform_indices program count names indices
 "
@@ -152,7 +152,7 @@ let transform_feedback_varyings =
 
 let transform_feedback_varyings program varyings mode =
   let count = List.length varyings in
-  let varyings = Array.(start (of_list string varyings)) in
+  let varyings = CArray.(start (of_list string varyings)) in
   transform_feedback_varyings program count varyings mode
 "
 
