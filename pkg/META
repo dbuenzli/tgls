@@ -10,7 +10,7 @@ package "tgl3" (
  archive(native) = "tgl3.cmxa"
  archive(native, plugin) = "tgl3.cmxs"
  archive(byte, toploop) += "tgl3_top.cma"
- archive(native, toploop) += "tgl3_top.cmxa"
+ archive(native, toploop) += "tgl3_top.cmxs"
  exists_if = "tgl3.cma"
 
  package "top" (
@@ -32,7 +32,7 @@ package "tgl4" (
  archive(native) = "tgl4.cmxa"
  archive(native, plugin) = "tgl4.cmxs"
  archive(byte, toploop) += "tgl4_top.cma"
- archive(native, toploop) += "tgl4_top.cmxa"
+ archive(native, toploop) += "tgl4_top.cmxs"
  exists_if = "tgl4.cma"
 
  package "top" (
@@ -54,7 +54,7 @@ package "tgles2" (
  archive(native) = "tgles2.cmxa"
  archive(native, plugin) = "tgles2.cmxs"
  archive(byte, toploop) += "tgles2_top.cma"
- archive(native, toploop) += "tgles2_top.cmxa"
+ archive(native, toploop) += "tgles2_top.cmxs"
  exists_if = "tgles2.cma"
 
  package "top" (
@@ -76,7 +76,7 @@ package "tgles3" (
  archive(native) = "tgles3.cmxa"
  archive(native, plugin) = "tgles3.cmxs"
  archive(byte, toploop) += "tgles3_top.cma"
- archive(native, toploop) += "tgles3_top.cmxa"
+ archive(native, toploop) += "tgles3_top.cmxs"
  exists_if = "tgles3.cma"
 
  package "top" (
