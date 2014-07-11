@@ -1,22 +1,25 @@
-#!/usr/bin/env ocaml 
+#!/usr/bin/env ocaml
 #directory "pkg";;
 #use "topkg.ml";;
 
-let () = 
+let () =
   Pkg.describe "tgls" ~builder:`OCamlbuild [
     Pkg.lib "pkg/META";
     Pkg.lib ~exts:Exts.module_library "src/tgl3";
     Pkg.lib ~exts:Exts.module_library "src/tgl4";
     Pkg.lib ~exts:Exts.module_library "src/tgles2";
     Pkg.lib ~exts:Exts.module_library "src/tgles3";
+    Pkg.lib ~exts:Exts.module_library "src/tglx1";
     Pkg.lib ~exts:Exts.library "src/tgl3_top";
     Pkg.lib ~exts:Exts.library "src/tgl4_top";
     Pkg.lib ~exts:Exts.library "src/tgles2_top";
     Pkg.lib ~exts:Exts.library "src/tgles3_top";
+    Pkg.lib ~exts:Exts.library "src/tglx1_top";
     Pkg.stublibs "src/dlltgl3.so";
     Pkg.stublibs "src/dlltgl4.so";
     Pkg.stublibs "src/dlltgles2.so";
     Pkg.stublibs "src/dlltgles3.so";
+    Pkg.stublibs "src/dlltglx1.so";
     Pkg.doc "README.md";
     Pkg.doc "CHANGES.md";
     Pkg.doc "DEVEL.md";
@@ -28,4 +31,5 @@ let () =
     Pkg.doc "test/linkgl3.ml";
     Pkg.doc "test/linkgl4.ml";
     Pkg.doc "test/linkgles2.ml";
-    Pkg.doc "test/linkgles3.ml";]
+    Pkg.doc "test/linkgles3.ml";
+    Pkg.doc "test/linkglx1.ml";]

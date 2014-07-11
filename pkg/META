@@ -88,3 +88,25 @@ package "tgles3" (
   archive(native) = "tgles3_top.cmxa"
   archive(native, plugin) = "tgles3_top.cmxs"
   exists_if = "tgles3_top.cma"))
+
+package "tglx1" (
+ version = "%%VERSION%%"
+ description = "Thin bindings to GLX for OCaml"
+ requires = "ctypes ctypes.foreign"
+ archive(byte) = "tglx1.cma"
+ archive(byte, plugin) = "tglx1.cma"
+ archive(native) = "tglx1.cmxa"
+ archive(native, plugin) = "tglx1.cmxs"
+ archive(byte, toploop) += "tglx1_top.cma"
+ archive(native, toploop) += "tglx1_top.cmxs"
+ exists_if = "tglx1.cma"
+
+ package "top" (
+  version = "%%VERSION%%"
+  description = "Toplevel module for Tglx1"
+  requires = "compiler-libs.toplevel"
+  archive(byte) = "tglx1_top.cma"
+  archive(byte, plugin) = "tglx1_top.cma"
+  archive(native) = "tglx1_top.cmxa"
+  archive(native, plugin) = "tglx1_top.cmxs"
+  exists_if = "tglx1_top.cma"))

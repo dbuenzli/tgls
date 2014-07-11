@@ -14,7 +14,7 @@
 type version = int * int
 (** The type for version numbers. *)
 
-type id = [ `Gl of version | `Gles of version | `Ext of string ]
+type id = [ `Gl of version | `Gles of version | `Glx of version | `Ext of string ]
 (** The type for API identifiers. *)
 
 val id_of_string : string -> id
@@ -37,15 +37,17 @@ val profile : t -> string option
 (** [id api] is the profile of [api]. *)
 
 (** {1:types C types} *)
-    
-type base_type = 
-  [ `GLbitfield | `GLboolean | `GLbyte | `GLchar | `GLclampx | `GLdouble 
-  | `GLenum | `GLfixed | `GLfloat | `GLint | `GLint64 | `GLintptr | `GLshort 
-  | `GLsizei | `GLsizeiptr | `GLsync | `GLubyte | `GLuint | `GLuint64 
-  | `GLushort | `GLDEBUGPROC | `Void | `Void_or_index ]
-(** The type for C base types as found in OpenGL APIs. *) 
-  
-val base_type_to_string : base_type -> string 
+type base_type =
+  [ `GLbitfield | `GLboolean | `GLbyte | `GLchar | `GLclampx | `GLdouble
+  | `GLenum | `GLfixed | `GLfloat | `GLint | `GLint64 | `GLintptr | `GLshort
+  | `GLsizei | `GLsizeiptr | `GLsync | `GLubyte | `GLuint | `GLuint64
+  | `GLushort | `GLDEBUGPROC | `Void | `Void_or_index | `Char | `Int
+  | `Unsigned_int | `Unsigned_long | `Bool | `Display
+  | `Window | `Pixmap | `Font | `XVisualInfo | `GLXFBConfig | `GLXContext
+  | `GLXPixmap | `GLXPbuffer | `GLXWindow | `GLXDrawable | `GLXextFuncPtr ]
+(** The type for C base types as found in OpenGL APIs. *)
+
+val base_type_to_string : base_type -> string
 (** [base_type_to_string t] is a string representation for [t]. *)
   
 val base_type_def : t -> base_type -> [ `Def of string | `Builtin ]

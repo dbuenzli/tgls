@@ -30,6 +30,8 @@ let doc_synopsis api = match Capi.id api with
 | `Gl (maj, _) -> str "OpenGL %d.x" maj
 | `Gles (maj, 0) -> str "OpenGL ES %d" maj
 | `Gles (maj, _) -> str "OpenGL ES %d.x" maj
+| `Glx (maj, 0) -> str "GLX %d" maj
+| `Glx (maj, _) -> str "GLX %d.x" maj
 | `Ext e -> e
 
 let doc_synopsis_long api = 
@@ -39,6 +41,7 @@ let doc_synopsis_long api =
   | `Gl (3, 3) -> str "OpenGL 3.2 and 3.3" 
   | `Gl (maj, min) -> str "OpenGL %s" (mins maj min)
   | `Gles (maj, min) -> str "OpenGL ES %s" (mins maj min)
+  | `Glx (maj, min) -> str "GLX %s" (mins maj min)
   | `Ext e -> e
 
 (* OCaml identifiers
@@ -60,10 +63,12 @@ let identifier = function
 let module_lib api = match (Capi.id api) with
 | `Gles (m, _) -> str "Tgles%d" m 
 | `Gl (m, _) -> str "Tgl%d" m
+| `Glx (m, _) -> str "Tgl%d" m
 | `Ext e -> str "T%s" (String.lowercase e)
 
 let module_bind api = match (Capi.id api) with
 | `Gles _ | `Gl _ -> "Gl"
+| `Glx _ -> "Glx"
 | `Ext e -> let m = String.lowercase e in m.[0] <- Char.uppercase m.[0]; m
 
 (* Types *) 
@@ -131,6 +136,22 @@ let int =
 let intptr = int
 let sizeiptr = int        
 let sizei = int
+
+let unsigned_int =
+  { type_name = "int";
+    type_def = `Builtin;
+    type_ctypes = `View ("int_as_uint",
+                      "Unsigned.UInt.to_int", "Unsigned.UInt.of_int",
+                      "unsigned int");
+    type_doc = None; }
+
+let unsigned_long =
+  { type_name = "int";
+    type_def = `Builtin;
+    type_ctypes = `View ("int_as_uint",
+                      "Unsigned.UInt.to_int", "Unsigned.UInt.of_int",
+                      "unsigned long");
+    type_doc = None; }
 
 let uint =
   { type_name = "int";
@@ -223,6 +244,39 @@ let string_opt =
     type_def = `Builtin; 
     type_ctypes = `Builtin "string_opt"; 
     type_doc = None }
+
+let xid name =
+  { type_name = name;
+    type_def = `Alias "int";
+    type_ctypes = `Builtin "int";
+    type_doc = None; }
+
+let glxcontext = xid "glxcontext"
+let glxpixmap = xid "glxpixmap"
+let glxpbuffer = xid "glxpbuffer"
+let glxwindow = xid "glxwindow"
+let glxdrawable = xid "glxdrawable"
+
+let abstr name =
+  { type_name = name;
+    type_def = `Abstract "unit";
+    type_ctypes = `Def (name,
+                        Printf.sprintf "let %s : %s typ = ptr void" name name);
+    type_doc = None; }
+
+let display = abstr "display"
+let window = abstr "window"
+let pixmap = abstr "pixmap"
+let font = abstr "font"
+let xvisualinfo = abstr "xvisualinfo"
+let glxfbconfig = xid "glxfbonfig"
+
+let glxextfuncptr =
+  { type_name = "glxextfuncptr";
+    type_def = `Abstract "unit";
+    type_ctypes = `Def ("glxextfuncptr",
+                        "let glxextfuncptr : glxextfuncptr typ = ptr void");
+    type_doc = None; }
 
 let ba_as_voidp name =
   `View (name,
@@ -414,6 +468,18 @@ let type_def api t =
       | `GLuint64 -> `Ok uint64
       | `GLushort -> `Ok uint16
       | `Void -> `Ok void
+      | `Char -> `Ok char
+      | `Int -> `Ok int
+      | `Unsigned_int -> `Ok unsigned_int
+      | `Unsigned_long -> `Ok unsigned_long
+      | `Bool -> `Ok bool
+      | `GLXFBConfig -> `Ok glxfbconfig
+      | `GLXContext -> `Ok glxcontext
+      | `GLXPixmap -> `Ok glxpixmap
+      | `GLXPbuffer -> `Ok glxpbuffer
+      | `GLXWindow -> `Ok glxwindow
+      | `GLXDrawable -> `Ok glxdrawable
+      | `GLXextFuncPtr -> `Ok glxextfuncptr
       | _ -> no_def t
       end
   | `Ptr (`Base `GLchar) -> `Ok ba_as_charp
@@ -437,6 +503,11 @@ let type_def api t =
       | `GLushort -> `Ok ba_as_uint16p
       | `Void -> `Ok ba_as_voidp
       | `Void_or_index -> `Ok ba_or_offset_as_voidp
+      | `Display -> `Ok display
+      | `Window -> `Ok window
+      | `Pixmap -> `Ok pixmap
+      | `Font -> `Ok font
+      | `XVisualInfo -> `Ok xvisualinfo
       | b -> no_def t
       end
   | `Nullable (`Ptr (`Base `GLchar)) -> `Ok ba_opt_as_charp
@@ -471,16 +542,20 @@ type func =
     fun_def : fun_def;
     fun_doc : string option; } 
 
-let fun_name api f = (* remove `gl', uncamlcase, lowercase *)
+let fun_name api f = (* remove `gl'/`glx', uncamlcase, lowercase *)
   let cname = fst f in
-  if not (String.length cname > 3 && String.sub cname 0 2 = "gl") 
-  then failwith (err_odd_fname cname)
-  else
+  let skip =
+    if (String.length cname > 4 && String.sub cname 0 3 = "glX")
+    then 3
+    else if (String.length cname > 3 && String.sub cname 0 2 = "gl")
+         then 2
+         else failwith (err_odd_fname cname)
+  in
   let is_upper c = 'A' <= c && c <= 'Z' in
   let is_digit c = '0' <= c && c <= '9'  in
   let buf = Buffer.create (String.length cname) in
   let last_up = ref true (* avoids prefix by _ *) in
-  for i = 2 to String.length cname - 1 do
+  for i = skip to String.length cname - 1 do
     if is_upper cname.[i] &&
        not (!last_up) &&
        not (is_digit (cname.[i - 1])) (* maps eg 2D to 2d not 2_d *)
@@ -565,7 +640,11 @@ let types api =
       List.fold_left add_arg_type (add_type acc ret) args
   | _ -> acc 
   in
-  let manual = [ debug_proc ] in
+  let manual =
+    match Capi.id api with
+    | `Gl _ | `Gles _ -> [ debug_proc ]
+    | _ -> [ enum ]
+  in
   List.fold_left add_types manual (funs api)
   
 (* Enum value definitions. *) 
@@ -578,13 +657,18 @@ type enum =
 let enums api = 
   let add_fname acc f = Sset.add (fun_name api f) acc in
   let fun_names = List.fold_left add_fname Sset.empty (Capi.funs api) in
-  let enum (cname, v) = 
-    (* remove `GL_`, lowercase, fix clashes with fun names *) 
-    if not (String.length cname > 3 && (String.sub cname 0 3) = "GL_")
-    then failwith (err_odd_ename cname)
-    else
-    let n = String.lowercase (String.sub cname 3 (String.length cname - 3)) in
-    let n = identifier n in
+  let enum (cname, v) =
+    (* remove `GL_'/`GLX_', lowercase, fix clashes with fun names *)
+    let n =
+      if (String.length cname > 3 && (String.sub cname 0 3) = "GL_")
+      then String.sub cname 3 (String.length cname - 3)
+      else if (String.length cname > 4 && (String.sub cname 0 4) = "GLX_")
+           then String.sub cname 4 (String.length cname - 4)
+           else if (String.length cname > 6 && (String.sub cname 0 6) = "__GLX_")
+                then String.sub cname 6 (String.length cname - 6)
+                else failwith (err_odd_ename cname)
+    in
+    let n = identifier (String.lowercase n) in
     let n = if Sset.mem n fun_names then n ^ "_enum" else n in
     { enum_name = n; enum_c_name = cname; enum_value = v }
   in

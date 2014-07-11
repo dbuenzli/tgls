@@ -39,7 +39,7 @@ end
 (* API identifiers *)
 
 type version = int * int
-type id = [ `Gl of version | `Gles of version | `Ext of string ]
+type id = [ `Gl of version | `Gles of version | `Glx of version | `Ext of string ]
 
 let id_of_string s = 
   let is_digit c = '0' <= c && c <= '9'  in
@@ -57,7 +57,12 @@ let id_of_string s =
          is_digit s.[4] 
       then `Gles (int_of_digit s.[4], 0)
       else `Ext s
-  | 7 (* glesX.X *) -> 
+  | 6 (* glxX.X *) ->
+      if s.[0] = 'g' && s.[1] = 'l' && s.[2] = 'x' &&
+         is_digit s.[3] && s.[4] = '.' && is_digit s.[5]
+      then `Glx (int_of_digit s.[3], int_of_digit s.[5])
+      else `Ext s
+  | 7 (* glesX.X *) ->
       if s.[0] = 'g' && s.[1] = 'l' && s.[2] = 'e' && s.[3] = 's' &&
          is_digit s.[4] && s.[5] = '.' && is_digit s.[6] 
       then `Gles (int_of_digit s.[4], int_of_digit s.[6])
@@ -110,8 +115,9 @@ let names_ext r ext profile =
 let registry_api r id = match id with 
 | `Gl _ -> "gl" 
 | `Gles (1, _) -> "gles1"
-| `Gles _ ->  "gles2" 
-| `Ext e -> failwith "Extension support is TODO"
+| `Gles _ ->  "gles2"
+| `Glx _ -> "glx"
+| `Ext e -> failwith (Printf.sprintf "Extension %s is not supported" e)
 
 let names r id profile = 
   let api = registry_api r id in
@@ -119,6 +125,7 @@ let names r id profile =
   | `Gl version -> names_api_profile r ~api profile version
   | `Gles (1, _ as version) -> names_api_profile r ~api profile version
   | `Gles version -> names_api_profile r ~api profile version
+  | `Glx version -> names_api_profile r ~api profile version
   | `Ext ext -> names_ext r ext profile
 
 (* Apis *) 
@@ -152,33 +159,53 @@ let lookup_fun registry f =
 
 (* C types *) 
 
-type base_type = 
-  [ `GLbitfield | `GLboolean | `GLbyte | `GLchar | `GLclampx | `GLdouble 
-  | `GLenum | `GLfixed | `GLfloat | `GLint | `GLint64 | `GLintptr | `GLshort 
-  | `GLsizei | `GLsizeiptr | `GLsync | `GLubyte | `GLuint | `GLuint64 
-  | `GLushort | `GLDEBUGPROC | `Void | `Void_or_index ]
+type base_type =
+  [ `GLbitfield | `GLboolean | `GLbyte | `GLchar | `GLclampx | `GLdouble
+  | `GLenum | `GLfixed | `GLfloat | `GLint | `GLint64 | `GLintptr | `GLshort
+  | `GLsizei | `GLsizeiptr | `GLsync | `GLubyte | `GLuint | `GLuint64
+  | `GLushort | `GLDEBUGPROC | `Void | `Void_or_index | `Char | `Int
+  | `Unsigned_int | `Unsigned_long | `Bool | `Display
+  | `Window | `Pixmap | `Font | `XVisualInfo | `GLXFBConfig | `GLXContext
+  | `GLXPixmap | `GLXPbuffer | `GLXWindow | `GLXDrawable | `GLXextFuncPtr ]
 
 let base_type_to_string = function 
 | `GLbitfield -> "GLbitfield" | `GLboolean -> "GLboolean" | `GLbyte -> "GLbyte"
-| `GLchar -> "GLchar" | `GLclampx -> "GLclampx" | `GLdouble -> "GLdouble" 
-| `GLenum -> "GLenum" | `GLfixed -> "GLfixed" | `GLfloat -> "GLfloat" 
-| `GLint -> "GLint" | `GLint64 -> "GLint64" | `GLintptr -> "GLintptr" 
-| `GLshort -> "GLshort" | `GLsizei -> "GLsizei" | `GLsizeiptr -> "GLsizeiptr" 
-| `GLsync -> "GLsync" | `GLubyte -> "GLubyte" | `GLuint -> "GLuint" 
-| `GLuint64 -> "GLuint64" | `GLushort -> "GLushort" 
-| `GLDEBUGPROC -> "GLDEBUGPROC" | `Void -> "void" 
-| `Void_or_index -> "void_or_index"
+| `GLchar -> "GLchar" | `GLclampx -> "GLclampx" | `GLdouble -> "GLdouble"
+| `GLenum -> "GLenum" | `GLfixed -> "GLfixed" | `GLfloat -> "GLfloat"
+| `GLint -> "GLint" | `GLint64 -> "GLint64" | `GLintptr -> "GLintptr"
+| `GLshort -> "GLshort" | `GLsizei -> "GLsizei" | `GLsizeiptr -> "GLsizeiptr"
+| `GLsync -> "GLsync" | `GLubyte -> "GLubyte" | `GLuint -> "GLuint"
+| `GLuint64 -> "GLuint64" | `GLushort -> "GLushort"
+| `GLDEBUGPROC -> "GLDEBUGPROC" | `Void -> "void"
+| `Void_or_index -> "void_or_index" | `Char -> "char" | `Int -> "int"
+| `Unsigned_int -> "unsigned int" | `Unsigned_long -> "unsigned long"
+| `Bool -> "Bool"
+| `Display -> "Display" | `Window ->  "Window" | `Pixmap ->  "Pixmap"
+| `Font ->  "Font" | `XVisualInfo ->  "XVisualInfo"
+| `GLXFBConfig -> "GLXFBConfig" | `GLXContext -> "GLXContext"
+| `GLXPixmap -> "GLXPixmap" | `GLXPbuffer -> "GLXPbuffer"
+| `GLXWindow -> "GLXWindow" | `GLXDrawable -> "GLXDrawable"
+| `GLXextFuncPtr -> "__GLXextFuncPtr"
+| _ -> assert false
 
 let base_type_of_string = function 
 | "GLbitfield" -> `GLbitfield | "GLboolean" -> `GLboolean | "GLbyte" -> `GLbyte
-| "GLchar" -> `GLchar | "GLclampx" -> `GLclampx | "GLdouble" -> `GLdouble 
-| "GLenum" -> `GLenum | "GLfixed" -> `GLfixed | "GLfloat" -> `GLfloat 
-| "GLint" -> `GLint | "GLint64" -> `GLint64 | "GLintptr" -> `GLintptr 
-| "GLshort" -> `GLshort | "GLsizei" -> `GLsizei | "GLsizeiptr" -> `GLsizeiptr 
-| "GLsync" -> `GLsync | "GLubyte" -> `GLubyte | "GLuint" -> `GLuint 
-| "GLuint64" -> `GLuint64 | "GLushort" -> `GLushort 
-| "GLDEBUGPROC" -> `GLDEBUGPROC | "void" -> `Void 
-| "void_or_index" -> `Void_or_index
+| "GLchar" -> `GLchar | "GLclampx" -> `GLclampx | "GLdouble" -> `GLdouble
+| "GLenum" -> `GLenum | "GLfixed" -> `GLfixed | "GLfloat" -> `GLfloat
+| "GLint" -> `GLint | "GLint64" -> `GLint64 | "GLintptr" -> `GLintptr
+| "GLshort" -> `GLshort | "GLsizei" -> `GLsizei | "GLsizeiptr" -> `GLsizeiptr
+| "GLsync" -> `GLsync | "GLubyte" -> `GLubyte | "GLuint" -> `GLuint
+| "GLuint64" -> `GLuint64 | "GLushort" -> `GLushort
+| "GLDEBUGPROC" -> `GLDEBUGPROC | "void" -> `Void
+| "void_or_index" -> `Void_or_index | "char" -> `Char
+| "int" -> `Int | "unsigned int" -> `Unsigned_int
+| "unsigned long" -> `Unsigned_long | "Bool" -> `Bool
+| "Display" -> `Display | "Window" -> `Window | "Pixmap" -> `Pixmap
+| "Font" -> `Font | "XVisualInfo" -> `XVisualInfo
+| "GLXFBConfig" -> `GLXFBConfig | "GLXContext" -> `GLXContext
+| "GLXPixmap" -> `GLXPixmap | "GLXPbuffer" -> `GLXPbuffer
+| "GLXWindow" -> `GLXWindow | "GLXDrawable" -> `GLXDrawable
+| "__GLXextFuncPtr" -> `GLXextFuncPtr
 | b -> failwith (err_base_type b)
 
 let base_type_def api base = 
@@ -333,7 +360,10 @@ let enums api =
     in
     e, v
   in
-  List.map enum (Sset.elements api.enum_names)
+  Sset.elements api.enum_names |>
+  (* To quote glx.xml: "This is modest abuse of the <enum> mechanism [...]" *)
+  List.filter ((<>) "GLX_EXTENSION_NAME") |>
+  List.map enum
 
 (*---------------------------------------------------------------------------
    Copyright 2013 Daniel C. Bünzli.

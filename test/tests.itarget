@@ -14,3 +14,5 @@ linkgles2.byte
 linkgles2.native
 linkgles3.byte
 linkgles3.native
+linkglx1.byte
+linkglx1.native
