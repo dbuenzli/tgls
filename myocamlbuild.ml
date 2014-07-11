@@ -89,6 +89,7 @@ let () =
       gl_tag ~tag:"use_gl4" ~lib:"tgl3" ~cpkg:"gl";
       gles_tag ~tag:"use_gles2" ~lib:"tgles2" ~cpkg:"glesv2";
       gles_tag ~tag:"use_gles3" ~lib:"tgles3" ~cpkg:"glesv3";
+      gl_tag ~tag:"use_glx1" ~lib:"glu" ~cpkg:"glu";
   | _ -> ()
   end
     

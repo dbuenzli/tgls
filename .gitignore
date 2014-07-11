@@ -1,5 +1,6 @@
 _build
 support/gl.xml
+support/glx.xml
 src/tgl3.mli
 src/tgl3.ml
 src/tgl4.mli
@@ -8,8 +9,13 @@ src/tgles2.mli
 src/tgles2.ml
 src/tgles3.mli
 src/tgles3.ml
+src/tglx1.mli
+src/tglx1.ml
 tmp
 *~
 \.\#*
 \#*#
 CLOCK.org
+*.native
+*.byte
+tgls.install

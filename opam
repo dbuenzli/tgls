@@ -1,13 +1,13 @@
 opam-version: "1.1"
-maintainer: "Daniel Bünzli <daniel.buenzl i@erratique.ch>"
+maintainer: "Daniel Bünzli <daniel.buenzli@erratique.ch>"
 homepage: "http://erratique.ch/software/tgls"
-authors: ["Daniel Bünzli <daniel.buenzl i@erratique.ch>"]
+authors: ["Daniel Bünzli <daniel.buenzli@erratique.ch>"]
 doc: "http://erratique.ch/software/tgls/doc/"
 tags: [ "bindings" "opengl" "opengl-es" "graphics" ]
 license: "BSD3"
 ocaml-version: [>= "4.00.1"]
 depends: [ "ocamlfind" "ctypes" {>= "0.3"}]
-build: 
+build:
 [
   [ "ocaml" "pkg/git.ml" ]
   [ "ocaml" "pkg/build.ml" "native=%{ocaml-native}%"

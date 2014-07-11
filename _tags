@@ -5,10 +5,10 @@ true: thread
 <support/**> : package(xmlm)
 
 <src> : include
-<src/tgl{3,4,es2,es3}.{ml,mli}> : package(ctypes)
-<src/tgl{3,4,es2,es3}.{cma,cmxa,cmxs}> : custom, thread, \
+<src/tgl{3,4,es2,es3,x1}.{ml,mli}> : package(ctypes)
+<src/tgl{3,4,es2,es3,x1}.{cma,cmxa,cmxs}> : custom, thread, \
   package(ctypes), package(ctypes.foreign)
-<src/tgl{3,4,es2,es3}_top.*> : package(compiler-libs.toplevel)
+<src/tgl{3,4,es2,es3,x1}_top.*> : package(compiler-libs.toplevel)
 
 <src/tgl3.{cma,cmxa,cmxs}> : use_gl3
 <src/libtgl3.*> : use_gl3
@@ -22,6 +22,9 @@ true: thread
 <src/tgles3.{cma,cmxa,cmxs}> : use_gles3
 <src/libtgles3.*> : use_gles3
 
+<src/tglx1.{cma,cmxa,cmxs}> : use_glx1
+<src/libtglx1.*> : use_glx1
+
 <test> : include
 <test/trigl{3,4,es2,es3}.{ml,mli,byte,native}> : package(tsdl)
 <test/trigl3.{byte,native}> : use_gl3
@@ -29,9 +32,10 @@ true: thread
 <test/trigles2.{byte,native}> : use_gles2
 <test/trigles3.{byte,native}> : use_gles3
 
-<test/linkgl{3,4,es2,es3}.{ml,mli,byte,native}> : package(ctypes.foreign)
+<test/linkgl{3,4,es2,es3,x1}.{ml,mli,byte,native}> : package(ctypes.foreign)
 <test/linkgl3.{byte,native}> : use_gl3
 <test/linkgl4.{byte,native}> : use_gl4
 <test/linkgles2.{byte,native}> : use_gles2
 <test/linkgles3.{byte,native}> : use_gles3
+<test/linkglx1.{byte,native}> : use_glx1
 
