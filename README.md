@@ -4,7 +4,7 @@ Release %%VERSION%%
 
 Tgls is a set of independent OCaml libraries providing thin bindings
 to OpenGL libraries. It has support for core OpenGL 3.{2,3} and
-4.{0,1,2,3,4} and OpenGL ES {2,3}.
+4.{0,1,2,3,4} and OpenGL ES 2 and 3.{0,1}.
 
 Tgls depends on [ocaml-ctypes][1] and the C OpenGL library of your
 platform. It is distributed under the BSD3 license.
@@ -39,7 +39,7 @@ Tgls provides four libraries and corresponding `ocamlfind` packages:
    OpenGL ES 2.0 context.
 
 * `tgles3`, supports all functions and enumerants to program with an
-   OpenGL ES 3.0 context.
+   OpenGL ES 3.0 to 3.1 context.
 
 Compatibility contexts are not supported. For extensions, most of them
 only add few entry points and/or enumerants, as such it seems the

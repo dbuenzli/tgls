@@ -31,7 +31,7 @@ let docs_GL_ES_2_0 =
 let docs_GL_ES_3_0 =
   let home = "http://www.khronos.org/opengles/3_X" in
   let man_base  = "http://www.khronos.org/opengles/sdk/docs/man3/" in
-  let man = page_uri (str "%sxhtml/%s.xml" man_base) in
+  let man = page_uri (str "%shtml/%s.xhtml" man_base) in
   (home, man)
 
 let docs_GL_3_X =
@@ -382,6 +382,7 @@ let () =
     "glMapBuffer", "glMapBuffer";
     "glMapBufferRange", "glMapBufferRange";
     "glMemoryBarrier", "glMemoryBarrier";
+    "glMemoryBarrierByRegion", "glMemoryBarrier";
     "glMinSampleShading", "glMinSampleShading";
     "glMultiDrawArrays", "glMultiDrawArrays";
     "glMultiDrawArraysIndirect", "glMultiDrawArraysIndirect";

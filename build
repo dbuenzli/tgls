@@ -20,8 +20,8 @@ action ()
                     ./apiquery.native -ml -api gl4.4 > src/tgl4.ml
                     ./apiquery.native -mli -api gles2.0 > src/tgles2.mli
                     ./apiquery.native -ml -api gles2.0 > src/tgles2.ml
-                    ./apiquery.native -mli -api gles3.0 > src/tgles3.mli
-                    ./apiquery.native -ml -api gles3.0 > src/tgles3.ml
+                    ./apiquery.native -mli -api gles3.1 > src/tgles3.mli
+                    ./apiquery.native -ml -api gles3.1 > src/tgles3.ml
                     ;;
       tgls)         $OCAMLBUILD \
                     tgl3.cmxa dlltgl3.so \
