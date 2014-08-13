@@ -4,19 +4,19 @@
    %%NAME%% release %%VERSION%%
   ---------------------------------------------------------------------------*)
 
-let pp = Format.fprintf 
+let pp = Format.fprintf
 let str = Printf.sprintf
 type binding = string * string
 
-let get_uri api f = match Doc.man_uri api f with 
-| Some doc -> doc | None -> assert false 
+let get_uri api f = match Doc.man_uri api f with
+| Some doc -> doc | None -> assert false
 
-let glCreateShaderProgramv api = str 
+let glCreateShaderProgramv api = str
 "\
 val create_shader_programv : enum -> string -> int
 (** {{:%s}
     [glCreateShaderProgramv]} [type_ source] *)
-" 
+"
 (get_uri api "glCreateShaderProgramv"),
 "\
 let create_shader_programv =
@@ -28,7 +28,7 @@ let create_shader_programv type_ src =
   create_shader_programv type_ 1 src
 "
 
-let glDebugMessageCallback api = str 
+let glDebugMessageCallback api = str
 "\
 val debug_message_callback : debug_proc -> unit
 (** {{:%s}
@@ -81,7 +81,7 @@ val map_buffer : enum -> int -> enum -> ('a, 'b) Bigarray.kind ->
     {b Note.} [length] is the length, in number of bigarray elements, of the
     mapped buffer.
 
-    {b Warning.} The bigarray becomes invalid once the buffer is unmapped and 
+    {b Warning.} The bigarray becomes invalid once the buffer is unmapped and
     program termination may happen if you don't respect the access policy. *)
 "
 (get_uri api "glMapBuffer"),
@@ -98,7 +98,7 @@ let map_buffer target len access kind =
 
 let glMapBufferRange api = str
 "\
-val map_buffer_range : enum -> int -> int -> enum -> 
+val map_buffer_range : enum -> int -> int -> enum ->
   ('a, 'b) Bigarray.kind -> ('a, 'b) bigarray
 (** {{:%s}
     [glMapBufferRanage]} [target offset length access kind]
@@ -106,7 +106,7 @@ val map_buffer_range : enum -> int -> int -> enum ->
     {b Note.} [length] is the length in number of bigarray elements of the
     mapped buffer. [offset] is in bytes.
 
-    {b Warning.} The bigarray becomes invalid once the buffer is unmapped and 
+    {b Warning.} The bigarray becomes invalid once the buffer is unmapped and
     program termination may happen if you don't respect the access policy. *)
 "
 (get_uri api "glMapBufferRange"),
@@ -122,7 +122,7 @@ let map_buffer_range target offset len access kind =
   bigarray_of_ptr array1 len kind p
 "
 
-let glShaderSource api = str 
+let glShaderSource api = str
 "\
 val shader_source : int -> string -> unit
 (** {{:%s}
@@ -173,7 +173,7 @@ let get api = function
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 

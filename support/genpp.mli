@@ -6,23 +6,23 @@
 
 (** Binding generation helpers. *)
 
-(** {1 Documentation generalities for APIs} *) 
+(** {1 Documentation generalities for APIs} *)
 
 val pp_mli_api_header : Format.formatter -> Capi.t -> unit
-(** [pp_mli_api_header ppf mli] prints an [.mli] file header for [api] 
-    on [ppf]. *) 
+(** [pp_mli_api_header ppf mli] prints an [.mli] file header for [api]
+    on [ppf]. *)
 
-val pp_mli_api_footer : Format.formatter -> Capi.t -> unit 
+val pp_mli_api_footer : Format.formatter -> Capi.t -> unit
 (** [pp_mli_api_footer ppf mli] prints an [.mli] file footer for [api]
-    on [ppf]. *) 
+    on [ppf]. *)
 
 (** {1 License} *)
 
 val pp_license_header : Format.formatter -> unit -> unit
-(** [pp_license_header ppf ()] prints a license header on [ppf]. *) 
+(** [pp_license_header ppf ()] prints a license header on [ppf]. *)
 
 val pp_license_footer : Format.formatter -> unit -> unit
-(** [pp_license_footer ppf ()] prints a license footer on [ppf]. *) 
+(** [pp_license_footer ppf ()] prints a license footer on [ppf]. *)
 
 (*---------------------------------------------------------------------------
    Copyright (c) 2013 Daniel C. Bünzli.
@@ -31,7 +31,7 @@ val pp_license_footer : Format.formatter -> unit -> unit
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 
@@ -56,5 +56,3 @@ val pp_license_footer : Format.formatter -> unit -> unit
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   ---------------------------------------------------------------------------*)
-
-

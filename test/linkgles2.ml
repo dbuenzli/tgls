@@ -4,8 +4,8 @@
    %%NAME%% release %%VERSION%%
   ---------------------------------------------------------------------------*)
 
-(* Tests that the Tgles2 library link flags are correct.  
-   
+(* Tests that the Tgles2 library link flags are correct.
+
    Compile with:
    ocamlfind ocamlc -linkpkg -package ctypes.foreign,tgls.tgles2 \
                     -o linkgles2.byte linkgles2.ml
@@ -22,25 +22,25 @@ open Tgles2
 open Ctypes
 open Foreign
 
-let str = Printf.sprintf 
+let str = Printf.sprintf
 
-let lookup symb = 
-  try 
-    ignore (foreign_value symb (ptr void)); 
-    Printf.printf "[OK] Found %s for OpenGL ES 2.0\n" symb; 
+let lookup symb =
+  try
+    ignore (foreign_value symb (ptr void));
+    Printf.printf "[OK] Found %s for OpenGL ES 2.0\n" symb;
     exit 0
   with
-  | Dl.DL_error _ -> 
-      Printf.eprintf "[FAIL] %s not found for OpenGL ES 2.0\n" symb; 
+  | Dl.DL_error _ ->
+      Printf.eprintf "[FAIL] %s not found for OpenGL ES 2.0\n" symb;
       exit 1
 
 let yes = ref true
-let test () = 
+let test () =
   let link () = if !yes then () else Gl.viewport 0 0 400 400; in
-  link (); (* just make sure the library is linked *) 
+  link (); (* just make sure the library is linked *)
   lookup "glUseProgram"
-  
-let main () = 
+
+let main () =
   let exec = Filename.basename Sys.executable_name in
   let usage = str "Usage: %s [OPTION]\n Tests Tgles2 linking.\nOptions:" exec in
   let options = [] in
@@ -57,7 +57,7 @@ let () = main ()
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 

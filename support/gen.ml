@@ -4,179 +4,179 @@
    %%NAME%% release %%VERSION%%
   ---------------------------------------------------------------------------*)
 
-let str = Printf.sprintf 
-let pp = Format.fprintf 
+let str = Printf.sprintf
+let pp = Format.fprintf
 let pp_nop ppf () = ()
-let rec pp_list ?(pp_sep = Format.pp_print_cut) pp_v ppf = function 
+let rec pp_list ?(pp_sep = Format.pp_print_cut) pp_v ppf = function
 | [] -> ()
-| v :: vs -> 
+| v :: vs ->
     pp_v ppf v; if vs <> [] then (pp_sep ppf (); pp_list ~pp_sep pp_v ppf vs)
 
-let pp_text ?(verb = false) ppf s = 
+let pp_text ?(verb = false) ppf s =
   (* hint spaces and new lines with Format's funs *)
   let len = String.length s in
   let left = ref 0 in
-  let right = ref 0 in 
+  let right = ref 0 in
   let flush () =
-    Format.pp_print_string ppf (String.sub s !left (!right - !left)); 
-    incr right; left := !right; 
+    Format.pp_print_string ppf (String.sub s !left (!right - !left));
+    incr right; left := !right;
   in
-  while (!right <> len) do 
+  while (!right <> len) do
     if s.[!right] = '\n' then (flush (); Format.pp_force_newline ppf ()) else
-    if s.[!right] = ' ' && not verb then 
-      (flush (); Format.pp_print_space ppf ()) 
-    else 
+    if s.[!right] = ' ' && not verb then
+      (flush (); Format.pp_print_space ppf ())
+    else
     incr right
   done;
   if !left <> len then flush ()
 
-(* Type generation. *) 
+(* Type generation. *)
 
-let pp_mli_type api ppf t = 
-  let pp_doc () = match t.Oapi.type_doc with 
+let pp_mli_type api ppf t =
+  let pp_doc () = match t.Oapi.type_doc with
   | None -> ()
   | Some t -> pp ppf "@[(** %s *)@]@,@," t
   in
   begin match t.Oapi.type_def with
-  | `Builtin -> () 
+  | `Builtin -> ()
   | `Alias a -> pp ppf "@[type %s = %s@]@," t.Oapi.type_name a; pp_doc ()
   | `Abstract _ -> pp ppf "@[type %s@]@," t.Oapi.type_name; pp_doc ()
   end
 
 let pp_ml_type acc api ppf t = (* [acc] remembers views already printed *)
-  begin match t.Oapi.type_def with 
+  begin match t.Oapi.type_def with
   | `Builtin -> ()
-  | `Alias a | `Abstract a -> 
+  | `Alias a | `Abstract a ->
       pp ppf "@[type %s = %s@]@," t.Oapi.type_name a;
   end;
-  begin match t.Oapi.type_ctypes with 
+  begin match t.Oapi.type_ctypes with
   | `Builtin _ | `Builtin_wrap_in _ -> acc
   | `Def (n, s) ->
       if List.mem n acc then acc else (pp ppf "@[%s@]@,@," s; n :: acc)
-  | `View (n, r, w, t) -> 
-      if List.mem n acc then acc else 
+  | `View (n, r, w, t) ->
+      if List.mem n acc then acc else
       (pp ppf "@[let %s =@\n\
                  \  view ~read:%s@\n\
                  \       ~write:%s@\n\
                  \       %s@]@,@," n r w t; n :: acc)
   end
 
-let pp_ml_types api ppf l = 
-  let rec loop acc = function 
+let pp_ml_types api ppf l =
+  let rec loop acc = function
     | t :: ts -> loop (pp_ml_type acc api ppf t) ts
     | [] -> ()
   in
   loop [] l
 
-let sort_types ts = 
-  let compare t t' = 
-    (* Only [debug_proc] depends on the others, put it at the end. 
+let sort_types ts =
+  let compare t t' =
+    (* Only [debug_proc] depends on the others, put it at the end.
        We then generate defs in the order given by this function. *)
-    if t.Oapi.type_name = "debug_proc" then 1 else 
+    if t.Oapi.type_name = "debug_proc" then 1 else
     if t'.Oapi.type_name = "debug_proc" then -1 else
     compare t t'
   in
-  List.sort compare ts 
-  
-(* Function generation. *) 
+  List.sort compare ts
 
-let pp_linked_fun_name ~log api ppf f = match Doc.man_uri api f with 
+(* Function generation. *)
+
+let pp_linked_fun_name ~log api ppf f = match Doc.man_uri api f with
 | Some uri -> pp ppf "@[{{:%s}@,[%s]}@]" uri f
-| None -> 
-    pp log "W: No documentation URI for function `%s'@." f; 
+| None ->
+    pp log "W: No documentation URI for function `%s'@." f;
     pp ppf "[%s]" f
 
 let pp_mli_fun ~log api ppf f = match f.Oapi.fun_def with
 | `Manual (mli, _) -> pp ppf "@[%a@]" (pp_text ~verb:true) mli
 | `Unbound _ -> assert false
-| `Unknown -> 
+| `Unknown ->
     let cname, _ = f.Oapi.fun_c in
-    pp log "W: `%s` unknown, generating failing stub.@\n" cname; 
+    pp log "W: `%s` unknown, generating failing stub.@\n" cname;
     pp ppf "@[val %s@ : unit@ -> unit@]@," f.Oapi.fun_name;
     pp ppf "(** @[\xE2\x9C\x98 %a *)@]@," (pp_linked_fun_name ~log api) cname
-| `Derived (args, ret) -> 
+| `Derived (args, ret) ->
     let pp_arg_typ ppf a = pp ppf "%s" Oapi.(a.arg_type.type_name) in
     let pp_arg_typ_sep ppf () = pp ppf " ->@ " in
     let pp_arg ppf a = match a.Oapi.arg_name with
-    | "" -> pp ppf "()" 
+    | "" -> pp ppf "()"
     | a -> pp ppf "%s" (Oapi.identifier a)
     in
     let pp_arg_sep ppf () = pp ppf "@ " in
-    let pp_doc ppf d = match d with 
-    | None -> () | Some d -> pp ppf "@,@,@[%a@]" (pp_text ~verb:false) d 
+    let pp_doc ppf d = match d with
+    | None -> () | Some d -> pp ppf "@,@,@[%a@]" (pp_text ~verb:false) d
     in
     let fname = f.Oapi.fun_name in
-    let cname, _ = f.Oapi.fun_c in 
+    let cname, _ = f.Oapi.fun_c in
     pp ppf "@[<2>val %s@ : %a ->@ %s@]@,"
-      fname (pp_list ~pp_sep:pp_arg_typ_sep pp_arg_typ) args 
-      ret.Oapi.type_name; 
+      fname (pp_list ~pp_sep:pp_arg_typ_sep pp_arg_typ) args
+      ret.Oapi.type_name;
     pp ppf "(** @[<v>@[<2>%a@ [%a]@]%a *)@]@,"
       (pp_linked_fun_name ~log api) cname
-      (pp_list ~pp_sep:pp_arg_sep pp_arg) args 
+      (pp_list ~pp_sep:pp_arg_sep pp_arg) args
       pp_doc f.Oapi.fun_doc
-     
-let ctypes_name t = match t.Oapi.type_ctypes with 
+
+let ctypes_name t = match t.Oapi.type_ctypes with
 | `Builtin c | `Builtin_wrap_in (c, _) | `Def (c, _) | `View (c, _, _, _) -> c
 
 let must_wrap args =
-  let must_wrap a = match Oapi.(a.arg_type.type_ctypes) with 
-  | `Builtin_wrap_in (c, _) -> true | _ -> false 
+  let must_wrap a = match Oapi.(a.arg_type.type_ctypes) with
+  | `Builtin_wrap_in (c, _) -> true | _ -> false
   in
   List.exists must_wrap args
 
-let pp_arg_wrap ppf a = match Oapi.(a.arg_type.type_ctypes) with 
-| `Builtin_wrap_in (_, pp_wrap) -> 
+let pp_arg_wrap ppf a = match Oapi.(a.arg_type.type_ctypes) with
+| `Builtin_wrap_in (_, pp_wrap) ->
     pp ppf "%a@," pp_wrap Oapi.(identifier a.arg_name)
 | _ -> ()
 
-let pp_ml_fun ~log api ppf f = match f.Oapi.fun_def with 
+let pp_ml_fun ~log api ppf f = match f.Oapi.fun_def with
 | `Manual (_, ml) -> pp ppf "@[%a@]" (pp_text ~verb:true) ml
 | `Unbound _ -> assert false
-| `Unknown -> 
+| `Unknown ->
     let cname, _ = f.Oapi.fun_c in
     pp ppf "@[<2>let %s _ =@ failwith \"%s\"@]@," f.Oapi.fun_name cname
-| `Derived (args, ret) -> 
+| `Derived (args, ret) ->
     let pp_arg_ctype ppf a = pp ppf "%s" (ctypes_name a.Oapi.arg_type) in
     let pp_sep ppf () = pp ppf " @@->@ " in
     let fname = f.Oapi.fun_name in
     let cname, _ = f.Oapi.fun_c in
     pp ppf "@[<2>let %s =@\n@[<2>foreign ~stub \"%s\"@ \
             @[<1>(%a @@->@ returning %s)@]@]@]@,"
-      fname cname (pp_list ~pp_sep pp_arg_ctype) args (ctypes_name ret); 
-    if not (must_wrap args) then () else 
+      fname cname (pp_list ~pp_sep pp_arg_ctype) args (ctypes_name ret);
+    if not (must_wrap args) then () else
     let pp_arg_name ppf a = pp ppf "%s" Oapi.(identifier a.arg_name) in
-    pp ppf "@,@[<2>let %s @[%a@] =@\n@[<v>%a@]@[<2>%s %a@]@]@," 
+    pp ppf "@,@[<2>let %s @[%a@] =@\n@[<v>%a@]@[<2>%s %a@]@]@,"
       fname
-      (pp_list ~pp_sep:Format.pp_print_space pp_arg_name) args 
+      (pp_list ~pp_sep:Format.pp_print_space pp_arg_name) args
       (pp_list ~pp_sep:(fun ppf () -> ()) pp_arg_wrap) args
       fname
-      (pp_list ~pp_sep:Format.pp_print_space pp_arg_name) args 
+      (pp_list ~pp_sep:Format.pp_print_space pp_arg_name) args
 
 (* Enum generation *)
 
-let pp_ml_enum_value ppf = function 
+let pp_ml_enum_value ppf = function
 | `GLenum e -> pp ppf "0x%X" e
 | `GLuint i -> pp ppf "0x%lXl" i
 | `GLuint64 i -> pp ppf "0x%LXL" i
-  
-let pp_mli_enum_type ppf = function 
+
+let pp_mli_enum_type ppf = function
 | `GLenum e -> pp ppf "enum"
 | `GLuint i -> pp ppf "int32"
 | `GLuint64 i -> pp ppf "int64"
 
-let pp_mli_enum api ppf e = 
-  pp ppf "@[val %s : %a@]@," 
+let pp_mli_enum api ppf e =
+  pp ppf "@[val %s : %a@]@,"
     e.Oapi.enum_name pp_mli_enum_type e.Oapi.enum_value
 
-let pp_ml_enum api ppf e = 
-  pp ppf "@[<2>let %s =@ %a@]" 
+let pp_ml_enum api ppf e =
+  pp ppf "@[<2>let %s =@ %a@]"
     e.Oapi.enum_name pp_ml_enum_value e.Oapi.enum_value
 
-(* Module signature generation *) 
-      
-let pp_mli_module ~log ppf api = 
+(* Module signature generation *)
+
+let pp_mli_module ~log ppf api =
   let synopsis = Oapi.doc_synopsis api in
-  pp ppf 
+  pp ppf
     "@[<v>\
      (** {1 %s} *)@,@,\
      (** @[<v>%s bindings.@,@,\
@@ -198,7 +198,7 @@ let pp_mli_module ~log ppf api =
      \  @[<v>%a@]@,\
      \  (** {1:enums Enums} *)@,@,\
      \  @[<v>%a@]@,\
-     end@,@,@]" 
+     end@,@,@]"
     synopsis synopsis (Oapi.module_bind api)
     (pp_list ~pp_sep:pp_nop (pp_mli_type api))
     (sort_types (Oapi.types api))
@@ -206,19 +206,19 @@ let pp_mli_module ~log ppf api =
     (Oapi.funs api)
     (pp_list (pp_mli_enum api))
     (Oapi.enums api)
-  
-let pp_api_mli ~log ppf api = 
+
+let pp_api_mli ~log ppf api =
   Genpp.pp_license_header ppf ();
   Genpp.pp_mli_api_header ppf api;
   pp_mli_module ~log ppf api;
-  Genpp.pp_mli_api_footer ppf api; 
+  Genpp.pp_mli_api_footer ppf api;
   Genpp.pp_license_footer ppf ();
   ()
 
-(* Module implementation generation *) 
+(* Module implementation generation *)
 
 let pp_ml_module ~log ppf api =
-  pp ppf 
+  pp ppf
     "@[<v>\
      open Ctypes@,\
      open Foreign@,@,\
@@ -279,14 +279,14 @@ let pp_ml_module ~log ppf api =
      \  @[<v>%a@]@,\
      end@,@,@]"
     (Oapi.doc_synopsis api) (Oapi.module_bind api)
-    (pp_ml_types api) 
+    (pp_ml_types api)
     (sort_types (Oapi.types api))
-    (pp_list (pp_ml_fun ~log api)) 
+    (pp_list (pp_ml_fun ~log api))
     (Oapi.funs api)
-    (pp_list (pp_ml_enum api)) 
+    (pp_list (pp_ml_enum api))
     (Oapi.enums api)
 
-let pp_api_ml ~log ppf api = 
+let pp_api_ml ~log ppf api =
   Genpp.pp_license_header ppf ();
   pp_ml_module ~log ppf api;
   Genpp.pp_license_footer ppf ();
@@ -299,7 +299,7 @@ let pp_api_ml ~log ppf api =
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 

@@ -4,10 +4,10 @@
    %%NAME%% release %%VERSION%%
   ---------------------------------------------------------------------------*/
 
-/* Compile with: 
+/* Compile with:
    gcc -o assert_sizes assert_sizes.c
 
-   The following assertions should hold to be sure that the bindings 
+   The following assertions should hold to be sure that the bindings
    work correctly. */
 
 #include <assert.h>
@@ -16,20 +16,20 @@
 int main (void)
 {
 
-  assert (sizeof (int) == 4); 
+  assert (sizeof (int) == 4);
   assert (sizeof (unsigned int) == 4);
-  
+
   if (sizeof (void *) == 4)
     {
       assert (sizeof (ptrdiff_t) == 4);
     }
-  else if (sizeof (void *) == 8) 
+  else if (sizeof (void *) == 8)
     {
       assert (sizeof (ptrdiff_t) == 8);
     }
-  else 
-    { 
-      assert (0); 
+  else
+    {
+      assert (0);
     }
   return 0;
 }
@@ -42,7 +42,7 @@ int main (void)
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 

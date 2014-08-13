@@ -4,8 +4,8 @@
    %%NAME%% release %%VERSION%%
   ---------------------------------------------------------------------------*)
 
-(* Tests that the Tgl3 library link flags are correct.  
-   
+(* Tests that the Tgl3 library link flags are correct.
+
    Compile with:
    ocamlfind ocamlc -linkpkg -package ctypes.foreign,tgls.tgl3 \
                     -o linkgl3.byte linkgl3.ml
@@ -22,33 +22,33 @@ open Tgl3
 open Ctypes
 open Foreign
 
-let str = Printf.sprintf 
+let str = Printf.sprintf
 
-let lookup min symb = 
-  try 
-    ignore (foreign_value symb (ptr void)); 
-    Printf.printf "[OK] Found %s for OpenGL 3.%d\n" symb min; 
+let lookup min symb =
+  try
+    ignore (foreign_value symb (ptr void));
+    Printf.printf "[OK] Found %s for OpenGL 3.%d\n" symb min;
     exit 0
   with
-  | Dl.DL_error _ -> 
-      Printf.eprintf "[FAIL] %s not found for OpenGL 3.%d\n" symb min; 
+  | Dl.DL_error _ ->
+      Printf.eprintf "[FAIL] %s not found for OpenGL 3.%d\n" symb min;
       exit 1
 
 let yes = ref true
-let test minor = 
+let test minor =
   let link () = if !yes then () else Gl.viewport 0 0 400 400; in
-  link (); (* just make sure the library is linked *) 
-  match minor with 
+  link (); (* just make sure the library is linked *)
+  match minor with
   | 2 -> lookup minor "glProvokingVertex"
   | 3 -> lookup minor "glQueryCounter"
   | x -> Printf.eprintf "[FAIL] Unsupported OpenGL version: 3.%d\n" x; exit 1
-  
-let main () = 
+
+let main () =
   let exec = Filename.basename Sys.executable_name in
   let usage = str "Usage: %s [OPTION]\n Tests Tgl3 linking.\nOptions:" exec in
   let minor = ref 2 in
   let options =
-    [ "-minor", Arg.Set_int minor, 
+    [ "-minor", Arg.Set_int minor,
       " <x> use Use an OpenGL 3.x context (default to 3.2)"; ]
   in
   let anon _ = raise (Arg.Bad "no arguments are supported") in
@@ -64,7 +64,7 @@ let () = main ()
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 

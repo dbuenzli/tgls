@@ -8,12 +8,12 @@
 
 (** {1 API binding generation} *)
 
-val pp_api_mli : log:Format.formatter ->  Format.formatter -> Capi.t -> unit 
-(** [pp_api_mli log ppf api] pretty prints a binding signature for [api] on 
+val pp_api_mli : log:Format.formatter ->  Format.formatter -> Capi.t -> unit
+(** [pp_api_mli log ppf api] pretty prints a binding signature for [api] on
     [ppf]. Warnings and errors are logged on [log]. *)
 
-val pp_api_ml : log:Format.formatter -> Format.formatter -> Capi.t -> unit 
-(** [pp_api_ml log ppf api] pretty prints a binding implementation for [api] 
+val pp_api_ml : log:Format.formatter -> Format.formatter -> Capi.t -> unit
+(** [pp_api_ml log ppf api] pretty prints a binding implementation for [api]
     on [ppf]. Warnings and errors are logged on [log]. *)
 
 (*---------------------------------------------------------------------------
@@ -23,7 +23,7 @@ val pp_api_ml : log:Format.formatter -> Format.formatter -> Capi.t -> unit
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 

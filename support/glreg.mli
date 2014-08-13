@@ -4,9 +4,9 @@
    %%NAME%% release %%VERSION%%
   ---------------------------------------------------------------------------*)
 
-(** OpenGL registry decoder. 
+(** OpenGL registry decoder.
 
-    [Glreg] decodes the data of the 
+    [Glreg] decodes the data of the
     {{:http://www.opengl.org/registry}OpenGL registry} from its
     XML representation.
 
@@ -14,97 +14,97 @@
 
 (** {1 Registry representation} *)
 
-type typ = 
+type typ =
   { t_name : string;
-    t_api : string option; 
-    t_requires : string option; 
+    t_api : string option;
+    t_requires : string option;
     t_def : string; }
 (** The type representing the type tag. The [def] string is obtained
-    from the contents of the tag by concatenating all {e data} sections 
+    from the contents of the tag by concatenating all {e data} sections
     and removing any ["typedef"] and [";"] suffix. *)
 
-type group = 
-  { g_name : string; 
+type group =
+  { g_name : string;
     g_enums : string list; }
 (** The type representing the [group] tag. *)
 
-type enum = 
-  { e_name : string; 
-    e_p_namespace : string; 
+type enum =
+  { e_name : string;
+    e_p_namespace : string;
     e_p_type : string option;
     e_p_group : string option;
     e_p_vendor : string option;
-    e_value : string; 
-    e_api : string option; 
+    e_value : string;
+    e_api : string option;
     e_type : string option;
     e_alias : string option; }
-(** The type representing an enum tag. The [e_p]* fields come from 
+(** The type representing an enum tag. The [e_p]* fields come from
     the parent's [enums] tag. *)
 
-type param_type = 
-  { p_group : string option; 
-    p_type : string; 
+type param_type =
+  { p_group : string option;
+    p_type : string;
     p_len : string option;
-    p_nullable : bool; (** This doesn't exist in the registry. 
+    p_nullable : bool; (** This doesn't exist in the registry.
                            See {!Fixreg}. *)}
 (** The type for representing return types and parameter type of commands. *)
 
-type command = 
-  { c_name : string; 
+type command =
+  { c_name : string;
     c_p_namespace : string;
     c_ret : param_type; (** group * return type *)
     c_params : (string * param_type) list;
-    c_alias : string option; 
+    c_alias : string option;
     c_vec_equiv : string option; }
-(** The type representing a command tag. The [c_p]* fields come 
+(** The type representing a command tag. The [c_p]* fields come
     from the parent [commands]'s tag. *)
 
-type i_element = 
+type i_element =
   { i_name : string;
-    i_type : [ `Enum | `Command | `Type ]; 
+    i_type : [ `Enum | `Command | `Type ];
     i_api : string option;
     i_profile : string option; }
 (** The type for interface elements as described in require and remove
-    tags. [i_api] comes from the nearest ancestor ([feature], [require] or 
+    tags. [i_api] comes from the nearest ancestor ([feature], [require] or
     [remove] tag). *)
 
-type feature = 
-  { f_api : string; 
+type feature =
+  { f_api : string;
     f_number : int * int;
-    f_require : i_element list; 
+    f_require : i_element list;
     f_remove : i_element list; }
-(** The type for representing a [feature] tag. *)    
+(** The type for representing a [feature] tag. *)
 
-type extension = 
-  { x_name : string; 
-    x_supported : string option; 
-    x_require : i_element list; 
+type extension =
+  { x_name : string;
+    x_supported : string option;
+    x_require : i_element list;
     x_remove : i_element list; }
 (** The type for repesenting an [extension] tag. *)
 
 type t =
-  { types : (string, typ list) Hashtbl.t; 
-    groups : (string, group) Hashtbl.t; 
+  { types : (string, typ list) Hashtbl.t;
+    groups : (string, group) Hashtbl.t;
     enums : (string, enum list) Hashtbl.t;
-    commands : (string, command list) Hashtbl.t; 
+    commands : (string, command list) Hashtbl.t;
     features : (string, feature list) Hashtbl.t;
     extensions : (string, extension) Hashtbl.t; }
 (** The type for an OpenGL registry.
-  {ul 
-  {- [types] the contents of types tag represented as a map from 
+  {ul
+  {- [types] the contents of types tag represented as a map from
      type names to their definition(s).}
-  {- [groups] the contents of groups tag represented as a map from 
+  {- [groups] the contents of groups tag represented as a map from
      group names to their definition.}
-  {- [enums] the contents of enums tag represented as a map from 
+  {- [enums] the contents of enums tag represented as a map from
      {e enum} name to their definition(s).}
-  {- [commands] the contents of commands tag represented as a map from 
+  {- [commands] the contents of commands tag represented as a map from
      {e command} name to their definition(s).}
-  {- [feature] the contents of feature tags represented as a map from 
+  {- [feature] the contents of feature tags represented as a map from
      api name to their definition.}
-  {- [extensions] the contents of extension tags represented as a map 
+  {- [extensions] the contents of extension tags represented as a map
      from extension name to their definition.}} *)
 
-(** {1:decoder Decoder} *) 
+(** {1:decoder Decoder} *)
 
 type src = [ `Channel of Pervasives.in_channel | `String of string ]
 (** The type for input sources. *)
@@ -112,16 +112,16 @@ type src = [ `Channel of Pervasives.in_channel | `String of string ]
 type decoder
 (** The type for the OpenGL XML registry decoder *)
 
-val decoder : [< src ] -> decoder 
+val decoder : [< src ] -> decoder
 (** [decoder src] is a decoder that inputs from [src]. *)
 
 val decode : decoder -> [ `Error of string | `Ok of t ]
-(** [decode d] decodes an OpenGL XML registry from [d] or returns an 
+(** [decode d] decodes an OpenGL XML registry from [d] or returns an
     error. *)
 
-val decoded_range : decoder -> (int * int) * (int * int) 
+val decoded_range : decoder -> (int * int) * (int * int)
 (** [decoded_range d] is the range of characters spanning the [`Error]
-    decoded by [d]. A pair of line and column numbers respectively 
+    decoded by [d]. A pair of line and column numbers respectively
     one and zero based. *)
 
 (*---------------------------------------------------------------------------
@@ -131,7 +131,7 @@ val decoded_range : decoder -> (int * int) * (int * int)
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 

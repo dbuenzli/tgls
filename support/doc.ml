@@ -8,54 +8,54 @@ let str = Printf.sprintf
 
 module Smap = Map.Make(String)
 
-let fun_page_map = ref Smap.empty (* Filled at the end of the module *) 
+let fun_page_map = ref Smap.empty (* Filled at the end of the module *)
 let fun_to_page f = try Some (Smap.find f !fun_page_map) with Not_found -> None
 let page_uri uri f = match fun_to_page f with
 | None -> None | Some page -> Some (uri page)
 
-let default = 
+let default =
   ("http://www.opengl.org", fun _ -> None)
 
-let docs_GL_ES_1_0 = 
+let docs_GL_ES_1_0 =
   let home = "http://www.khronos.org/opengles/1_X" in
   let man_base = "http://www.khronos.org/opengles/sdk/1.1/docs/man/" in
   let man = page_uri (str "%s%s.xml" man_base) in
   (home, man)
-  
-let docs_GL_ES_2_0 = 
+
+let docs_GL_ES_2_0 =
   let home = "http://www.khronos.org/opengles/2_X" in
   let man_base = "http://www.khronos.org/opengles/sdk/docs/man/" in
   let man = page_uri (str "%sxhtml/%s.xml" man_base) in
   (home, man)
-  
-let docs_GL_ES_3_0 = 
+
+let docs_GL_ES_3_0 =
   let home = "http://www.khronos.org/opengles/3_X" in
   let man_base  = "http://www.khronos.org/opengles/sdk/docs/man3/" in
   let man = page_uri (str "%sxhtml/%s.xml" man_base) in
   (home, man)
-  
-let docs_GL_3_X = 
+
+let docs_GL_3_X =
   let home = "http://www.opengl.org/registry" in
-  let man_base = "http://www.opengl.org/sdk/docs/man3/" in 
+  let man_base = "http://www.opengl.org/sdk/docs/man3/" in
   let man = page_uri (str "%sxhtml/%s.xml" man_base) in
   (home, man)
-  
-let docs_GL_4_X = 
+
+let docs_GL_4_X =
   let home = "http://www.opengl.org/registry" in
   let man_base = "http://www.opengl.org/sdk/docs/man4/" in 
   let man = page_uri (str "%sxhtml/%s.xml" man_base) in
   (home, man)
-  
-let docs_ext e = 
+
+let docs_ext e =
   try
-    let fst = String.index_from e 0 '_' in 
-    let snd = String.index_from e (fst + 1) '_' in 
+    let fst = String.index_from e 0 '_' in
+    let snd = String.index_from e (fst + 1) '_' in
     let vend = String.sub e (fst + 1) (snd - fst - 1) in
     let ext = String.sub e (snd + 1) (String.length e - snd - 1) in
-    let home = str "http://www.opengl.org/registry/specs/%s/%s.txt" vend ext in 
-    let man = fun _ -> None in 
+    let home = str "http://www.opengl.org/registry/specs/%s/%s.txt" vend ext in
+    let man = fun _ -> None in
     (home, man)
-  with Not_found -> default 
+  with Not_found -> default
 
 let docs api = match Capi.id api with
 | `Gl (3, _) -> docs_GL_3_X
@@ -69,13 +69,13 @@ let docs api = match Capi.id api with
 let home_uri api = fst (docs api)
 let man_uri api = snd (docs api)
 
-(* 
-   Extracted from https://www.opengl.org/sdk/docs/man/xhtml/index.html 
-   and manual additions. We hope the scheme is identical for all GLs. 
+(*
+   Extracted from https://www.opengl.org/sdk/docs/man/xhtml/index.html
+   and manual additions. We hope the scheme is identical for all GLs.
 *)
 
-let () = 
-  fun_page_map := 
+let () =
+  fun_page_map :=
     List.fold_left (fun acc (f, page) -> Smap.add f page acc) Smap.empty [
     "glActiveShaderProgram", "glActiveShaderProgram";
     "glActiveTexture", "glActiveTexture";
@@ -194,17 +194,17 @@ let () =
     "glDrawElementsBaseVertex", "glDrawElementsBaseVertex";
     "glDrawElementsIndirect", "glDrawElementsIndirect";
     "glDrawElementsInstanced", "glDrawElementsInstanced";
-    "glDrawElementsInstancedBaseInstance", 
+    "glDrawElementsInstancedBaseInstance",
     "glDrawElementsInstancedBaseInstance";
     "glDrawElementsInstancedBaseVertex", "glDrawElementsInstancedBaseVertex";
-    "glDrawElementsInstancedBaseVertexBaseInstance", 
+    "glDrawElementsInstancedBaseVertexBaseInstance",
     "glDrawElementsInstancedBaseVertexBaseInstance";
     "glDrawRangeElements", "glDrawRangeElements";
     "glDrawRangeElementsBaseVertex", "glDrawRangeElementsBaseVertex";
     "glDrawTransformFeedback", "glDrawTransformFeedback";
     "glDrawTransformFeedbackInstanced", "glDrawTransformFeedbackInstanced";
     "glDrawTransformFeedbackStream", "glDrawTransformFeedbackStream";
-    "glDrawTransformFeedbackStreamInstanced", 
+    "glDrawTransformFeedbackStreamInstanced",
     "glDrawTransformFeedbackStreamInstanced";
     "glEnable", "glEnable";
     "glEnableVertexAttribArray", "glEnableVertexAttribArray";
@@ -266,9 +266,9 @@ let () =
     "glGetFloatv", "glGet";
     "glGetFragDataIndex", "glGetFragDataIndex";
     "glGetFragDataLocation", "glGetFragDataLocation";
-    "glGetFramebufferAttachmentParameter", 
+    "glGetFramebufferAttachmentParameter",
     "glGetFramebufferAttachmentParameter";
-    "glGetFramebufferAttachmentParameteriv", 
+    "glGetFramebufferAttachmentParameteriv",
     "glGetFramebufferAttachmentParameter";
     "glGetFramebufferParameter", "glGetFramebufferParameter";
     "glGetFramebufferParameteriv", "glGetFramebufferParameter";
@@ -673,7 +673,7 @@ let () =
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 

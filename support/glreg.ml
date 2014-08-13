@@ -5,14 +5,14 @@
   ---------------------------------------------------------------------------*)
 
 let str = Printf.sprintf
-let str_of_name (u,l) = str "{%s}%s" u l 
+let str_of_name (u,l) = str "{%s}%s" u l
 let split_string s sep =
-  let rec split accum j = 
+  let rec split accum j =
     let i = try (String.rindex_from s j sep) with Not_found -> -1 in
-    if (i = -1) then 
-      let p = String.sub s 0 (j + 1) in 
+    if (i = -1) then
+      let p = String.sub s 0 (j + 1) in
       if p <> "" then p :: accum else accum
-    else 
+    else
     let p = String.sub s (i + 1) (j - i) in
     let accum' = if p <> "" then p :: accum else accum in
     split accum' (i - 1)
@@ -32,90 +32,90 @@ let err_exp_data = "expected character data"
 let err_wf = "document not well formed"
 let err_miss_att n = str "missing attribute (%s)" (str_of_name n)
 let err_miss_el n = str "missing element (%s)" (str_of_name n)
-let err_exp_registry f = 
+let err_exp_registry f =
   str "expected registry element found %s" (str_of_name f)
 
 (* Registry representation *)
 
-type typ = 
+type typ =
   { t_name : string;
-    t_api : string option; 
-    t_requires : string option; 
+    t_api : string option;
+    t_requires : string option;
     t_def : string; }
 
-type group = 
-  { g_name : string; 
+type group =
+  { g_name : string;
     g_enums : string list; }
 
-type enum = 
-  { e_name : string; 
-    e_p_namespace : string; 
-    e_p_type : string option; 
+type enum =
+  { e_name : string;
+    e_p_namespace : string;
+    e_p_type : string option;
     e_p_group : string option;
     e_p_vendor : string option;
     e_value : string;
-    e_api : string option; 
+    e_api : string option;
     e_type : string option;
     e_alias : string option; }
 
-type param_type = 
-  { p_group : string option; 
-    p_type : string; 
+type param_type =
+  { p_group : string option;
+    p_type : string;
     p_len : string option;
     p_nullable : bool; }
 
-type command = 
-  { c_name : string; 
+type command =
+  { c_name : string;
     c_p_namespace : string;
-    c_ret : param_type; 
+    c_ret : param_type;
     c_params : (string * param_type) list;
-    c_alias : string option; 
+    c_alias : string option;
     c_vec_equiv : string option; }
 
-type i_element = 
+type i_element =
   { i_name : string;
-    i_type : [ `Enum | `Command | `Type ]; 
+    i_type : [ `Enum | `Command | `Type ];
     i_api : string option;
     i_profile : string option; }
 
-type feature = 
-  { f_api : string; 
+type feature =
+  { f_api : string;
     f_number : int * int;
-    f_require : i_element list; 
+    f_require : i_element list;
     f_remove : i_element list; }
 
-type extension = 
-  { x_name : string; 
-    x_supported : string option; 
-    x_require : i_element list; 
+type extension =
+  { x_name : string;
+    x_supported : string option;
+    x_require : i_element list;
     x_remove : i_element list; }
 
 type t =
-  { types : (string, typ list) Hashtbl.t; 
-    groups : (string, group) Hashtbl.t; 
+  { types : (string, typ list) Hashtbl.t;
+    groups : (string, group) Hashtbl.t;
     enums : (string, enum list) Hashtbl.t;
-    commands : (string, command list) Hashtbl.t; 
+    commands : (string, command list) Hashtbl.t;
     features : (string, feature list) Hashtbl.t;
     extensions : (string, extension) Hashtbl.t; }
 
-let add err_def ht n v = 
-  try ignore (Hashtbl.find ht n); err (err_def n) with 
+let add err_def ht n v =
+  try ignore (Hashtbl.find ht n); err (err_def n) with
   | Not_found -> Hashtbl.add ht n v
 
-let add_list ht n v =   
-  try Hashtbl.replace ht n (v :: (Hashtbl.find ht n)) 
+let add_list ht n v =
+  try Hashtbl.replace ht n (v :: (Hashtbl.find ht n))
   with Not_found -> Hashtbl.add ht n [v]
 
-let add_type r n t = add_list r.types n t                       
+let add_type r n t = add_list r.types n t
 let add_group r n g = add err_group_def r.groups n g
 let add_enum r n e = add_list r.enums n e
 let add_command r n c = add_list r.commands n c
-let add_feature r n f = add_list r.features n f 
+let add_feature r n f = add_list r.features n f
 let add_extension r n x = add err_ext_def r.extensions n x
 
-(* Decode *) 
+(* Decode *)
 
-(* XML names *) 
+(* XML names *)
 
 let ns_gl = ""
 let n_alias = (ns_gl, "alias")
@@ -144,7 +144,7 @@ let n_require = (ns_gl, "require")
 let n_remove = (ns_gl, "remove")
 let n_supported = (ns_gl, "supported")
 let n_type = (ns_gl, "type")
-let n_types = (ns_gl, "types") 
+let n_types = (ns_gl, "types")
 let n_value = (ns_gl, "value")
 let n_vecequiv = (ns_gl, "vecequiv")
 let n_vendor = (ns_gl, "vendor")
@@ -163,37 +163,37 @@ let rec skip_el d =             (* skips an element, start signal was input. *)
   | `El_end -> if depth = 0 then () else loop d (depth - 1)
   | s -> loop d depth
   in
-  loop d 0 
+  loop d 0
 
 let p_data d = match Xmlm.input d with   (* gets data and parses end signal. *)
-| `Data data -> 
-    begin match Xmlm.input d with 
+| `Data data ->
+    begin match Xmlm.input d with
     | `El_end -> data
     | _ -> err err_exp_el_end
     end
 | _ -> err err_exp_data
 
-let p_seq r d n p_el = 
-  let rec loop r d = match Xmlm.input d with 
-  | `El_end -> () 
+let p_seq r d n p_el =
+  let rec loop r d = match Xmlm.input d with
+  | `El_end -> ()
   | `El_start (n, atts) when n = n -> p_el r d atts; loop r d
   | `El_start _ -> skip_el d; loop r d
-  | `Data _ -> err err_data 
+  | `Data _ -> err err_data
   | _ -> assert false
   in
   loop r d
 
-let p_type r d atts = 
-  let t_name = ref (attv_opt n_name atts) in 
-  let t_requires = attv_opt n_requires atts in 
+let p_type r d atts =
+  let t_name = ref (attv_opt n_name atts) in
+  let t_requires = attv_opt n_requires atts in
   let t_api = attv_opt n_api atts in
   let def = Buffer.create 255 in
-  let rec loop r d = match Xmlm.input d with 
+  let rec loop r d = match Xmlm.input d with
   | `El_start (n, _) when n = n_name -> t_name := Some (p_data d); loop r d
   | `El_start (n, _) -> skip_el d; loop r d
-  | `El_end -> 
+  | `El_end ->
       let t_name = match !t_name with None -> "" | Some name -> name in
-      let t_def = 
+      let t_def =
         let d = Buffer.contents def in
         let d = if String.length d <= 8 then d else match String.sub d 0 8 with
         | "typedef " -> String.sub d 8 (String.length d - 8 - 1) | _ -> d
@@ -204,48 +204,48 @@ let p_type r d atts =
   | `Data s -> Buffer.add_string def s; loop r d
   | _ -> assert false
   in
-  loop r d 
+  loop r d
 
-let p_group r d atts = 
-  let g_name = attv n_name atts in 
-  let rec loop acc r d = match Xmlm.input d with 
-  | `El_start (n, atts) when n = n_enum -> 
-      begin match Xmlm.input d with 
-      | `El_end -> loop ((attv n_name atts) :: acc) r d 
+let p_group r d atts =
+  let g_name = attv n_name atts in
+  let rec loop acc r d = match Xmlm.input d with
+  | `El_start (n, atts) when n = n_enum ->
+      begin match Xmlm.input d with
+      | `El_end -> loop ((attv n_name atts) :: acc) r d
       | _ -> err err_exp_el_end
       end
   | `El_start _ -> skip_el d; loop acc r d
   | `El_end ->
       add_group r g_name { g_name; g_enums = (List.rev acc); }
-  | `Data _ -> err err_data 
+  | `Data _ -> err err_data
   | _ -> assert false
   in
-  loop [] r d 
+  loop [] r d
 
-let p_enums r d atts = 
-  let e_p_namespace = attv n_namespace atts in 
+let p_enums r d atts =
+  let e_p_namespace = attv n_namespace atts in
   let e_p_type = attv_opt n_type atts in
   let e_p_group = attv_opt n_group atts in
   let e_p_vendor = attv_opt n_type atts in
-  let rec loop r d = match Xmlm.input d with 
-  | `El_start (n, atts) when n = n_enum -> 
-      begin match Xmlm.input d with 
-      | `El_end -> 
-          let e_name = attv n_name atts in 
-          let e_value = attv n_value atts in 
-          let e_api = attv_opt n_api atts in 
-          let e_type = attv_opt n_type atts in 
-          let e_alias = attv_opt n_alias atts in 
+  let rec loop r d = match Xmlm.input d with
+  | `El_start (n, atts) when n = n_enum ->
+      begin match Xmlm.input d with
+      | `El_end ->
+          let e_name = attv n_name atts in
+          let e_value = attv n_value atts in
+          let e_api = attv_opt n_api atts in
+          let e_type = attv_opt n_type atts in
+          let e_alias = attv_opt n_alias atts in
           let e = { e_name; e_p_namespace; e_p_group; e_p_type; e_p_vendor;
                     e_value; e_api; e_type; e_alias; }
           in
-          add_enum r e_name e; 
+          add_enum r e_name e;
           loop r d
       | _ -> err err_exp_el_end
       end
-  | `El_start _ -> skip_el d; loop r d 
+  | `El_start _ -> skip_el d; loop r d
   | `El_end -> ()
-  | `Data _ -> err err_data 
+  | `Data _ -> err err_data
   | _ -> assert false
   in
   loop r d
@@ -255,169 +255,169 @@ let p_param r d atts =
   let p_len = attv_opt n_len atts in
   let p_type = Buffer.create 255 in
   let name = ref None in
-  let rec loop r d = match Xmlm.input d with 
+  let rec loop r d = match Xmlm.input d with
   | `El_start (n, _) when n = n_name -> name := Some (p_data d); loop r d
   | `El_start (n, _) when n = n_ptype ->
       if Buffer.length p_type <> 0 then Buffer.add_char p_type ' ';
       Buffer.add_string p_type (p_data d); loop r d
-  | `El_end -> 
-      let name = match !name with 
-      | None -> err (err_miss_el n_name) 
-      | Some name -> name 
+  | `El_end ->
+      let name = match !name with
+      | None -> err (err_miss_el n_name)
+      | Some name -> name
       in
       let p_type = Buffer.contents p_type in
       name, { p_group; p_type; p_len; p_nullable = false; }
-  | `Data s -> 
+  | `Data s ->
       if Buffer.length p_type <> 0 && s <> "" then Buffer.add_char p_type ' ';
       Buffer.add_string p_type s; loop r d
   | _ -> assert false
   in
-  loop r d 
-  
+  loop r d
+
 let p_command c_p_namespace r d atts =
   let c_proto = ref None in
-  let c_params = ref [] in 
-  let c_alias = ref None in 
+  let c_params = ref [] in
+  let c_alias = ref None in
   let c_vec_equiv = ref None in
-  let rec loop r d = match Xmlm.input d with 
-  | `El_start (n, atts) when n = n_proto -> 
-      c_proto := Some (p_param r d atts); loop r d 
-  | `El_start (n, atts) when n = n_param -> 
+  let rec loop r d = match Xmlm.input d with
+  | `El_start (n, atts) when n = n_proto ->
+      c_proto := Some (p_param r d atts); loop r d
+  | `El_start (n, atts) when n = n_param ->
       c_params := (p_param r d atts) :: !c_params; loop r d
-  | `El_start (n, atts) when n = n_alias -> 
+  | `El_start (n, atts) when n = n_alias ->
       c_alias := Some (attv n_name atts); skip_el d; loop r d
-  | `El_start (n, atts) when n = n_vecequiv -> 
+  | `El_start (n, atts) when n = n_vecequiv ->
       c_vec_equiv := Some (attv n_name atts); skip_el d; loop r d
-  | `El_start _ -> 
-      skip_el d; loop r d 
-  | `El_end -> 
-      let c_name, c_ret = match !c_proto with 
-      | None -> err (err_miss_el n_proto) | Some v -> v 
-      in 
-      (* add info not present in the registry. *) 
-      let add_miss_arg f (arg, p) = 
-        let p = 
+  | `El_start _ ->
+      skip_el d; loop r d
+  | `El_end ->
+      let c_name, c_ret = match !c_proto with
+      | None -> err (err_miss_el n_proto) | Some v -> v
+      in
+      (* add info not present in the registry. *)
+      let add_miss_arg f (arg, p) =
+        let p =
           if not (Fixreg.is_arg_nullable f arg) then p else
-          { p with p_nullable = true } 
+          { p with p_nullable = true }
         in
-        let p = 
+        let p =
           if not (Fixreg.is_arg_voidp_or_index f arg) then p else
           let l = String.index p.p_type 'd' in (* void -> void_or_index *)
           { p with p_type = (String.sub p.p_type 0 (l + 1)) ^ "_or_index" ^
-                            (String.sub p.p_type (l + 1) 
+                            (String.sub p.p_type (l + 1)
                                (String.length p.p_type - l - 1)) }
         in
         (arg, p)
       in
-      let add_miss_ret f p = 
-        if Fixreg.is_ret_nullable f then {p with p_nullable = true} else p 
+      let add_miss_ret f p =
+        if Fixreg.is_ret_nullable f then {p with p_nullable = true} else p
       in
-      add_command r c_name 
-        { c_name; c_p_namespace; 
+      add_command r c_name
+        { c_name; c_p_namespace;
           c_ret = add_miss_ret c_name c_ret;
           c_params = List.rev_map (add_miss_arg c_name) (!c_params);
           c_alias = !c_alias; c_vec_equiv = !c_vec_equiv; }
-  | `Data _ -> err err_data 
-  | _ -> assert false 
+  | `Data _ -> err err_data
+  | _ -> assert false
   in
   loop r d
 
-let p_version s = 
+let p_version s =
   let l = String.length s in
   try
-    let d = String.rindex s '.' in 
-    int_of_string (String.sub s 0 d), 
+    let d = String.rindex s '.' in
+    int_of_string (String.sub s 0 d),
     int_of_string (String.sub s (d + 1) (l - d - 1))
   with _ -> err (err_vnum s)
 
-let p_i_elements d atts acc = 
+let p_i_elements d atts acc =
   let i_api = attv_opt n_api atts in
-  let i_profile = attv_opt n_profile atts in 
-  let p_element d i_type atts = 
-    let i_name = attv n_name atts in 
-    begin match Xmlm.input d with 
-    | `El_end -> { i_type; i_name; i_api; i_profile } 
+  let i_profile = attv_opt n_profile atts in
+  let p_element d i_type atts =
+    let i_name = attv n_name atts in
+    begin match Xmlm.input d with
+    | `El_end -> { i_type; i_name; i_api; i_profile }
     | _ -> err (err_exp_el_end)
     end
   in
-  let rec loop acc d = match Xmlm.input d with 
-  | `El_start (n, atts) when n = n_enum -> 
+  let rec loop acc d = match Xmlm.input d with
+  | `El_start (n, atts) when n = n_enum ->
       loop ((p_element d `Enum atts) :: acc) d
-  | `El_start (n, atts) when n = n_command -> 
-      loop ((p_element d `Command atts) :: acc) d 
-  | `El_start (n, atts) when n = n_type -> 
-      loop ((p_element d `Type atts) :: acc) d 
-  | `El_start _ -> skip_el d; loop acc d 
+  | `El_start (n, atts) when n = n_command ->
+      loop ((p_element d `Command atts) :: acc) d
+  | `El_start (n, atts) when n = n_type ->
+      loop ((p_element d `Type atts) :: acc) d
+  | `El_start _ -> skip_el d; loop acc d
   | `El_end -> acc
   | _ -> assert false
   in
   loop acc d
 
 let p_feature r d atts =
-  let f_api = attv n_api atts in 
+  let f_api = attv n_api atts in
   let f_number = p_version (attv n_number atts) in
-  let f_require = ref [] in 
+  let f_require = ref [] in
   let f_remove = ref [] in
-  let rec loop r d = match Xmlm.input d with 
-  | `El_start (n, atts) when n = n_require -> 
+  let rec loop r d = match Xmlm.input d with
+  | `El_start (n, atts) when n = n_require ->
       f_require := p_i_elements d ((n_api, f_api) :: atts) !f_require; loop r d
-  | `El_start (n, atts) when n = n_remove -> 
+  | `El_start (n, atts) when n = n_remove ->
       f_remove := p_i_elements d ((n_api, f_api) :: atts) !f_remove; loop r d
-  | `El_start _ -> skip_el d 
-  | `El_end -> 
-      add_feature r f_api 
+  | `El_start _ -> skip_el d
+  | `El_end ->
+      add_feature r f_api
         { f_api; f_number; f_require = !f_require; f_remove = !f_remove }
-  | `Data _ -> err err_data 
-  | _ -> assert false 
+  | `Data _ -> err err_data
+  | _ -> assert false
   in
-  loop r d 
+  loop r d
 
 let p_extension r d atts =
-  let x_name = attv n_name atts in 
-  let x_supported = attv_opt n_supported atts in 
-  let x_require = ref [] in 
-  let x_remove = ref [] in 
-  let rec loop r d = match Xmlm.input d with 
-  | `El_start (n, atts) when n = n_require -> 
+  let x_name = attv n_name atts in
+  let x_supported = attv_opt n_supported atts in
+  let x_require = ref [] in
+  let x_remove = ref [] in
+  let rec loop r d = match Xmlm.input d with
+  | `El_start (n, atts) when n = n_require ->
       x_require := p_i_elements d atts !x_require; loop r d
-  | `El_start (n, atts) when n = n_remove -> 
+  | `El_start (n, atts) when n = n_remove ->
       x_remove := p_i_elements d atts !x_remove; loop r d
-  | `El_start _ -> skip_el d 
-  | `El_end -> 
+  | `El_start _ -> skip_el d
+  | `El_end ->
       add_extension r x_name
         { x_name; x_supported; x_require = !x_require; x_remove = !x_remove }
-  | `Data _ -> err err_data 
-  | _ -> assert false 
+  | `Data _ -> err err_data
+  | _ -> assert false
   in
-  loop r d 
+  loop r d
 
 let p_registry d =
-  let r = 
+  let r =
     { types = Hashtbl.create 503;
-      groups = Hashtbl.create 503; 
-      enums = Hashtbl.create 6047; 
+      groups = Hashtbl.create 503;
+      enums = Hashtbl.create 6047;
       commands = Hashtbl.create 10047;
-      features = Hashtbl.create 97; 
+      features = Hashtbl.create 97;
       extensions = Hashtbl.create 1003; }
   in
-  while (Xmlm.peek d <> `El_end) do match Xmlm.input d with 
+  while (Xmlm.peek d <> `El_end) do match Xmlm.input d with
   | `El_start (n, _) when n = n_types -> p_seq r d n_type p_type
   | `El_start (n, _) when n = n_groups -> p_seq r d n_group p_group
   | `El_start (n, atts) when n = n_enums -> p_enums r d atts
-  | `El_start (n, atts) when n = n_commands -> 
+  | `El_start (n, atts) when n = n_commands ->
       let ns = attv n_namespace atts in
       p_seq r d n_command (p_command ns)
-  | `El_start (n, atts) when n = n_feature -> p_feature r d atts 
-  | `El_start (n, atts) when n = n_extensions -> 
+  | `El_start (n, atts) when n = n_feature -> p_feature r d atts
+  | `El_start (n, atts) when n = n_extensions ->
       p_seq r d n_extension p_extension
-  | `El_start (n, _) -> skip_el d 
-  | `Data _ -> err err_data 
-  | _ -> assert false; 
+  | `El_start (n, _) -> skip_el d
+  | `Data _ -> err err_data
+  | _ -> assert false;
   done;
-  ignore (Xmlm.input d); 
-  if not (Xmlm.eoi d) then err err_wf; 
+  ignore (Xmlm.input d);
+  if not (Xmlm.eoi d) then err err_wf;
   r
-      
+
 type src = [ `Channel of in_channel | `String of string ]
 type decoder = Xmlm.input
 
@@ -429,7 +429,7 @@ let decoded_range d = Xmlm.pos d, Xmlm.pos d
 let decode d = try
   ignore (Xmlm.input d); (* `Dtd *)
   begin match Xmlm.input d with
-  | `El_start (n, _) when n = n_registry -> `Ok (p_registry d) 	
+  | `El_start (n, _) when n = n_registry -> `Ok (p_registry d)
   | `El_start (n, _) -> err (err_exp_registry n)
   | _ -> assert false
   end;
@@ -443,7 +443,7 @@ with
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 

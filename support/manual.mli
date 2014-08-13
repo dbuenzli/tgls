@@ -8,10 +8,10 @@
 
 (** {1 Manual bindings} *)
 
-type binding = string * string 
+type binding = string * string
 (** The type for bindings. An [mli] signature and an [ml] implementation. *)
 
-val get : Capi.t -> string -> binding option 
+val get : Capi.t -> string -> binding option
 (** [get api f] is a manual binding, if any, for the C function [f] in
     the API [api]. *)
 
@@ -22,7 +22,7 @@ val get : Capi.t -> string -> binding option
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-     
+
    1. Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
 
