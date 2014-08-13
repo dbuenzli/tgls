@@ -101,7 +101,7 @@ let glMapBufferRange api = str
 val map_buffer_range : enum -> int -> int -> enum ->
   ('a, 'b) Bigarray.kind -> ('a, 'b) bigarray
 (** {{:%s}
-    [glMapBufferRanage]} [target offset length access kind]
+    [glMapBufferRange]} [target offset length access kind]
 
     {b Note.} [length] is the length in number of bigarray elements of the
     mapped buffer. [offset] is in bytes.
