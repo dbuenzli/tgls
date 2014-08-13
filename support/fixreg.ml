@@ -15,7 +15,7 @@ let is_arg_nullable f a = match f with
     (match a with "buffers" | "offsets" | "sizes" -> true | _ -> false)
 | "glBindSamplers" -> a = "samplers"
 | "glBindTextures" -> a = "textures"
-| "glBindVertexBuffers" ->
+| "glBindVertexBuffers" | "glVertexArrayVertexBuffers" ->
     (match a with "buffers" | "offsets" | "strides" -> true | _ -> false)
 | "glBufferData"
 | "glBufferSubData"

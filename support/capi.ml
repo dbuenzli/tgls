@@ -234,6 +234,7 @@ let typ nullable t =
   | `None, `None -> `Base base
   | `None, `Ptr -> `Ptr (`Base base)
   | `None, `Ptr_ptr -> `Ptr (`Ptr (`Base base))
+  | `Const, `None -> `Base base
   | `Const, `Ptr -> `Const (`Ptr (`Base base))
   | `Const, `Ptr_const_ptr -> `Const (`Ptr (`Const (`Ptr (`Base base))))
   | _ -> failwith (err_type t)

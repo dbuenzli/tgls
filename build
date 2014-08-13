@@ -16,8 +16,8 @@ action ()
                     check_reg
                     ./apiquery.native -mli -api gl3.3 > src/tgl3.mli
                     ./apiquery.native -ml -api gl3.3 > src/tgl3.ml
-                    ./apiquery.native -mli -api gl4.4 > src/tgl4.mli
-                    ./apiquery.native -ml -api gl4.4 > src/tgl4.ml
+                    ./apiquery.native -mli -api gl4.5 > src/tgl4.mli
+                    ./apiquery.native -ml -api gl4.5 > src/tgl4.ml
                     ./apiquery.native -mli -api gles2.0 > src/tgles2.mli
                     ./apiquery.native -ml -api gles2.0 > src/tgles2.ml
                     ./apiquery.native -mli -api gles3.1 > src/tgles3.mli

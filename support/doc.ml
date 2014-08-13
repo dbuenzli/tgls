@@ -42,8 +42,8 @@ let docs_GL_3_X =
 
 let docs_GL_4_X =
   let home = "http://www.opengl.org/registry" in
-  let man_base = "http://www.opengl.org/sdk/docs/man4/" in 
-  let man = page_uri (str "%sxhtml/%s.xml" man_base) in
+  let man_base = "http://www.opengl.org/sdk/docs/man4/" in
+  let man = page_uri (str "%shtml/%s.xhtml" man_base) in
   (home, man)
 
 let docs_ext e =
@@ -100,11 +100,15 @@ let () =
     "glBindSampler", "glBindSampler";
     "glBindSamplers", "glBindSamplers";
     "glBindTexture", "glBindTexture";
+    "glBindTextureUnit", "glBindTextureUnit";
     "glBindTextures", "glBindTextures";
     "glBindTransformFeedback", "glBindTransformFeedback";
     "glBindVertexArray", "glBindVertexArray";
     "glBindVertexBuffer", "glBindVertexBuffer";
+    "glVertexArrayVertexBuffer", "glBindVertexBuffer";
     "glBindVertexBuffers", "glBindVertexBuffers";
+    "glVertexArrayVertexBuffers", "glBindVertexBuffers";
+    "glVertexArrayElementBuffer", "glVertexArrayElementBuffer";
     "glBlendColor", "glBlendColor";
     "glBlendEquation", "glBlendEquation";
     "glBlendEquationSeparate", "glBlendEquationSeparate";
@@ -115,19 +119,30 @@ let () =
     "glBlendFuncSeparatei", "glBlendFuncSeparate";
     "glBlendFunci", "glBlendFunc";
     "glBlitFramebuffer", "glBlitFramebuffer";
+    "glBlitNamedFramebuffer", "glBlitFramebuffer";
     "glBufferData", "glBufferData";
+    "glNamedBufferData", "glBufferData";
     "glBufferStorage", "glBufferStorage";
+    "glNamedBufferStorage", "glBufferStorage";
     "glBufferSubData", "glBufferSubData";
+    "glNamedBufferSubData", "glBufferSubData";
     "glCheckFramebufferStatus", "glCheckFramebufferStatus";
+    "glCheckNamedFramebufferStatus", "glCheckFramebufferStatus";
     "glClampColor", "glClampColor";
     "glClear", "glClear";
     "glClearBuffer", "glClearBuffer";
     "glClearBufferData", "glClearBufferData";
+    "glClearNamedBufferData", "glClearBufferData";
     "glClearBufferSubData", "glClearBufferSubData";
+    "glClearNamedBufferSubData", "glClearBufferSubData";
     "glClearBufferfi", "glClearBuffer";
     "glClearBufferfv", "glClearBuffer";
     "glClearBufferiv", "glClearBuffer";
     "glClearBufferuiv", "glClearBuffer";
+    "glClearNamedFramebufferfi", "glClearBuffer";
+    "glClearNamedFramebufferfv", "glClearBuffer";
+    "glClearNamedFramebufferiv", "glClearBuffer";
+    "glClearNamedFramebufferuiv", "glClearBuffer";
     "glClearColor", "glClearColor";
     "glClearDepth", "glClearDepth";
     "glClearDepthf", "glClearDepth";
@@ -135,6 +150,7 @@ let () =
     "glClearTexImage", "glClearTexImage";
     "glClearTexSubImage", "glClearTexSubImage";
     "glClientWaitSync", "glClientWaitSync";
+    "glClipControl", "glClipControl";
     "glColorMask", "glColorMask";
     "glColorMaski", "glColorMask";
     "glCompileShader", "glCompileShader";
@@ -142,19 +158,35 @@ let () =
     "glCompressedTexImage2D", "glCompressedTexImage2D";
     "glCompressedTexImage3D", "glCompressedTexImage3D";
     "glCompressedTexSubImage1D", "glCompressedTexSubImage1D";
+    "glCompressedTextureSubImage1D", "glCompressedTexSubImage1D";
     "glCompressedTexSubImage2D", "glCompressedTexSubImage2D";
+    "glCompressedTextureSubImage2D", "glCompressedTexSubImage2D";
     "glCompressedTexSubImage3D", "glCompressedTexSubImage3D";
+    "glCompressedTextureSubImage3D", "glCompressedTexSubImage3D";
     "glCopyBufferSubData", "glCopyBufferSubData";
+    "glCopyNamedBufferSubData", "glCopyBufferSubData";
     "glCopyImageSubData", "glCopyImageSubData";
     "glCopyTexImage1D", "glCopyTexImage1D";
     "glCopyTexImage2D", "glCopyTexImage2D";
     "glCopyTexSubImage1D", "glCopyTexSubImage1D";
+    "glCopyTextureSubImage1D", "glCopyTexSubImage1D";
     "glCopyTexSubImage2D", "glCopyTexSubImage2D";
+    "glCopyTextureSubImage2D", "glCopyTexSubImage2D";
     "glCopyTexSubImage3D", "glCopyTexSubImage3D";
+    "glCopyTextureSubImage3D", "glCopyTexSubImage3D";
     "glCreateProgram", "glCreateProgram";
     "glCreateShader", "glCreateShader";
     "glCreateShaderProgram", "glCreateShaderProgram";
     "glCreateShaderProgramv", "glCreateShaderProgram";
+    "glCreateBuffers", "glCreateBuffers";
+    "glCreateFramebuffers", "glCreateFramebuffers";
+    "glCreateProgramPipelines","glCreateProgramPipelines";
+    "glCreateQueries","glCreateQueries";
+    "glCreateRenderbuffers","glCreateRenderbuffers";
+    "glCreateSamplers","glCreateSamplers";
+    "glCreateTextures","glCreateTextures";
+    "glCreateTransformFeedbacks","glCreateTransformFeedbacks";
+    "glCreateVertexArrays", "glCreateVertexArrays";
     "glCullFace", "glCullFace";
     "glDebugMessageCallback", "glDebugMessageCallback";
     "glDebugMessageControl", "glDebugMessageControl";
@@ -181,6 +213,7 @@ let () =
     "glDetachShader", "glDetachShader";
     "glDisable", "glEnable";
     "glDisableVertexAttribArray", "glEnableVertexAttribArray";
+    "glDisableVertexArrayAttrib", "glEnableVertexAttribArray";
     "glDisablei", "glEnable";
     "glDispatchCompute", "glDispatchCompute";
     "glDispatchComputeIndirect", "glDispatchComputeIndirect";
@@ -189,7 +222,9 @@ let () =
     "glDrawArraysInstanced", "glDrawArraysInstanced";
     "glDrawArraysInstancedBaseInstance", "glDrawArraysInstancedBaseInstance";
     "glDrawBuffer", "glDrawBuffer";
+    "glNamedFramebufferDrawBuffer", "glDrawBuffer";
     "glDrawBuffers", "glDrawBuffers";
+    "glNamedFramebufferDrawBuffers", "glDrawBuffers";
     "glDrawElements", "glDrawElements";
     "glDrawElementsBaseVertex", "glDrawElementsBaseVertex";
     "glDrawElementsIndirect", "glDrawElementsIndirect";
@@ -208,6 +243,7 @@ let () =
     "glDrawTransformFeedbackStreamInstanced";
     "glEnable", "glEnable";
     "glEnableVertexAttribArray", "glEnableVertexAttribArray";
+    "glEnableVertexArrayAttrib", "glEnableVertexAttribArray";
     "glEnablei", "glEnable";
     "glEndConditionalRender", "glBeginConditionalRender";
     "glEndQuery", "glBeginQuery";
@@ -217,13 +253,18 @@ let () =
     "glFinish", "glFinish";
     "glFlush", "glFlush";
     "glFlushMappedBufferRange", "glFlushMappedBufferRange";
+    "glFlushMappedNamedBufferRange", "glFlushMappedBufferRange";
     "glFramebufferParameteri", "glFramebufferParameteri";
+    "glNamedFramebufferParameteri", "glFramebufferParameteri";
     "glFramebufferRenderbuffer", "glFramebufferRenderbuffer";
+    "glNamedFramebufferRenderbuffer", "glFramebufferRenderbuffer";
     "glFramebufferTexture", "glFramebufferTexture";
+    "glNamedFramebufferTexture", "glFramebufferTexture";
     "glFramebufferTexture1D", "glFramebufferTexture";
     "glFramebufferTexture2D", "glFramebufferTexture";
     "glFramebufferTexture3D", "glFramebufferTexture";
     "glFramebufferTextureLayer", "glFramebufferTextureLayer";
+    "glNamedFramebufferTextureLayer", "glFramebufferTextureLayer";
     "glFrontFace", "glFrontFace";
     "glGenBuffers", "glGenBuffers";
     "glGenFramebuffers", "glGenFramebuffers";
@@ -235,6 +276,7 @@ let () =
     "glGenTransformFeedbacks", "glGenTransformFeedbacks";
     "glGenVertexArrays", "glGenVertexArrays";
     "glGenerateMipmap", "glGenerateMipmap";
+    "glGenerateTextureMipmap", "glGenerateMipmap";
     "glGet", "glGet";
     "glGetActiveAtomicCounterBufferiv", "glGetActiveAtomicCounterBufferiv";
     "glGetActiveAttrib", "glGetActiveAttrib";
@@ -253,11 +295,19 @@ let () =
     "glGetBooleani_v", "glGet";
     "glGetBooleanv", "glGet";
     "glGetBufferParameter", "glGetBufferParameter";
+    "glGetNamedBufferParameter", "glGetBufferParameter";
     "glGetBufferParameteri64v", "glGetBufferParameter";
+    "glGetNamedBufferParameteri64v", "glGetBufferParameter";
     "glGetBufferParameteriv", "glGetBufferParameter";
+    "glGetNamedBufferParameteriv", "glGetBufferParameter";
     "glGetBufferPointerv", "glGetBufferPointerv";
+    "glGetNamedBufferPointerv", "glGetBufferPointerv";
     "glGetBufferSubData", "glGetBufferSubData";
+    "glGetNamedBufferSubData", "glGetBufferSubData";
     "glGetCompressedTexImage", "glGetCompressedTexImage";
+    "glGetnCompressedTexImage", "glGetCompressedTexImage";
+    "glGetCompressedTextureImage", "glGetCompressedTexImage";
+    "glGetCompressedTextureSubImage", "glGetCompressedTextureSubImage";
     "glGetDebugMessageLog", "glGetDebugMessageLog";
     "glGetDoublei_v", "glGet";
     "glGetDoublev", "glGet";
@@ -270,8 +320,13 @@ let () =
     "glGetFramebufferAttachmentParameter";
     "glGetFramebufferAttachmentParameteriv",
     "glGetFramebufferAttachmentParameter";
+    "glGetNamedFramebufferAttachmentParameteriv",
+    "glGetFramebufferAttachmentParameter";
     "glGetFramebufferParameter", "glGetFramebufferParameter";
+    "glGetNamedFramebufferParameter", "glGetFramebufferParameter";
     "glGetFramebufferParameteriv", "glGetFramebufferParameter";
+    "glGetNamedFramebufferParameteriv", "glGetFramebufferParameter";
+    "glGetGraphicsResetStatus", "glGetGraphicsResetStatus";
     "glGetInteger64i_v", "glGet";
     "glGetInteger64v", "glGet";
     "glGetIntegeri_v", "glGet";
@@ -311,6 +366,7 @@ let () =
     "glGetQueryiv", "glGetQueryiv";
     "glGetRenderbufferParameter", "glGetRenderbufferParameter";
     "glGetRenderbufferParameteriv", "glGetRenderbufferParameter";
+    "glGetNamedRenderbufferParameteriv", "glGetRenderbufferParameter";
     "glGetSamplerParameter", "glGetSamplerParameter";
     "glGetSamplerParameterIiv", "glGetSamplerParameter";
     "glGetSamplerParameterIuiv", "glGetSamplerParameter";
@@ -328,15 +384,27 @@ let () =
     "glGetSync", "glGetSync";
     "glGetSynciv", "glGetSync";
     "glGetTexImage", "glGetTexImage";
+    "glGetnTexImage", "glGetTexImage";
+    "glGetTextureImage", "glGetTexImage";
+    "glGetTextureSubImage", "glGetTextureSubImage";
     "glGetTexLevelParameter", "glGetTexLevelParameter";
     "glGetTexLevelParameterfv", "glGetTexLevelParameter";
+    "glGetTextureLevelParameterfv", "glGetTexLevelParameter";
     "glGetTexLevelParameteriv", "glGetTexLevelParameter";
+    "glGetTextureLevelParameteriv", "glGetTexLevelParameter";
     "glGetTexParameter", "glGetTexParameter";
     "glGetTexParameterIiv", "glGetTexParameter";
+    "glGetTextureParameterIiv", "glGetTexParameter";
     "glGetTexParameterIuiv", "glGetTexParameter";
+    "glGetTextureParameterIuiv", "glGetTexParameter";
     "glGetTexParameterfv", "glGetTexParameter";
+    "glGetTextureParameterfv", "glGetTexParameter";
     "glGetTexParameteriv", "glGetTexParameter";
+    "glGetTextureParameteriv", "glGetTexParameter";
     "glGetTransformFeedbackVarying", "glGetTransformFeedbackVarying";
+    "glGetTransformFeedbackiv", "glGetTransformFeedback";
+    "glGetTransformFeedbacki_v", "glGetTransformFeedback";
+    "glGetTransformFeedbacki64_v", "glGetTransformFeedback";
     "glGetUniform", "glGetUniform";
     "glGetUniformBlockIndex", "glGetUniformBlockIndex";
     "glGetUniformIndices", "glGetUniformIndices";
@@ -347,6 +415,13 @@ let () =
     "glGetUniformfv", "glGetUniform";
     "glGetUniformiv", "glGetUniform";
     "glGetUniformuiv", "glGetUniform";
+    "glGetnUniformdv", "glGetUniform";
+    "glGetnUniformfv", "glGetUniform";
+    "glGetnUniformiv", "glGetUniform";
+    "glGetnUniformuiv", "glGetUniform";
+    "glGetVertexArrayIndexediv", "glGetVertexArrayIndexed";
+    "glGetVertexArrayIndexed64iv", "glGetVertexArrayIndexed";
+    "glGetVertexArrayiv", "glGetVertexArrayiv";
     "glGetVertexAttrib", "glGetVertexAttrib";
     "glGetVertexAttribIiv", "glGetVertexAttrib";
     "glGetVertexAttribIuiv", "glGetVertexAttrib";
@@ -357,7 +432,9 @@ let () =
     "glGetVertexAttribiv", "glGetVertexAttrib";
     "glHint", "glHint";
     "glInvalidateBufferData", "glInvalidateBufferData";
+    "glInvalidateNamedFramebufferData", "glInvalidateBufferData";
     "glInvalidateBufferSubData", "glInvalidateBufferSubData";
+    "glInvalidateNamedFramebufferSubData", "glInvalidateBufferSubData";
     "glInvalidateFramebuffer", "glInvalidateFramebuffer";
     "glInvalidateSubFramebuffer", "glInvalidateSubFramebuffer";
     "glInvalidateTexImage", "glInvalidateTexImage";
@@ -380,7 +457,9 @@ let () =
     "glLinkProgram", "glLinkProgram";
     "glLogicOp", "glLogicOp";
     "glMapBuffer", "glMapBuffer";
+    "glMapNamedBuffer", "glMapBuffer";
     "glMapBufferRange", "glMapBufferRange";
+    "glMapNamedBufferRange", "glMapBufferRange";
     "glMemoryBarrier", "glMemoryBarrier";
     "glMemoryBarrierByRegion", "glMemoryBarrier";
     "glMinSampleShading", "glMinSampleShading";
@@ -466,10 +545,14 @@ let () =
     "glPushDebugGroup", "glPushDebugGroup";
     "glQueryCounter", "glQueryCounter";
     "glReadBuffer", "glReadBuffer";
+    "glNamedFramebufferReadBuffer", "glReadBuffer";
     "glReadPixels", "glReadPixels";
+    "glReadnPixels", "glReadPixels";
     "glReleaseShaderCompiler", "glReleaseShaderCompiler";
     "glRenderbufferStorage", "glRenderbufferStorage";
+    "glNamedRenderbufferStorage", "glRenderbufferStorage";
     "glRenderbufferStorageMultisample", "glRenderbufferStorageMultisample";
+    "glNamedRenderbufferStorageMultisample", "glRenderbufferStorageMultisample";
     "glResumeTransformFeedback", "glResumeTransformFeedback";
     "glSampleCoverage", "glSampleCoverage";
     "glSampleMaski", "glSampleMaski";
@@ -494,8 +577,11 @@ let () =
     "glStencilMaskSeparate", "glStencilMaskSeparate";
     "glStencilOp", "glStencilOp";
     "glStencilOpSeparate", "glStencilOpSeparate";
+    "glTextureBarrier", "glTextureBarrier";
     "glTexBuffer", "glTexBuffer";
+    "glTextureBuffer", "glTexBuffer";
     "glTexBufferRange", "glTexBufferRange";
+    "glTextureBufferRange", "glTexBufferRange";
     "glTexImage1D", "glTexImage1D";
     "glTexImage2D", "glTexImage2D";
     "glTexImage2DMultisample", "glTexImage2DMultisample";
@@ -503,21 +589,37 @@ let () =
     "glTexImage3DMultisample", "glTexImage3DMultisample";
     "glTexParameter", "glTexParameter";
     "glTexParameterIiv", "glTexParameter";
+    "glTextureParameterIiv", "glTexParameter";
     "glTexParameterIuiv", "glTexParameter";
+    "glTextureParameterIuiv", "glTexParameter";
     "glTexParameterf", "glTexParameter";
+    "glTextureParameterf", "glTexParameter";
     "glTexParameterfv", "glTexParameter";
+    "glTextureParameterfv", "glTexParameter";
     "glTexParameteri", "glTexParameter";
+    "glTextureParameteri", "glTexParameter";
     "glTexParameteriv", "glTexParameter";
+    "glTextureParameteriv", "glTexParameter";
     "glTexStorage1D", "glTexStorage1D";
+    "glTextureStorage1D", "glTexStorage1D";
     "glTexStorage2D", "glTexStorage2D";
+    "glTextureStorage2D", "glTexStorage2D";
     "glTexStorage2DMultisample", "glTexStorage2DMultisample";
+    "glTextureStorage2DMultisample", "glTexStorage2DMultisample";
     "glTexStorage3D", "glTexStorage3D";
+    "glTextureStorage3D", "glTexStorage3D";
     "glTexStorage3DMultisample", "glTexStorage3DMultisample";
+    "glTextureStorage3DMultisample", "glTexStorage3DMultisample";
     "glTexSubImage1D", "glTexSubImage1D";
+    "glTextureSubImage1D", "glTexSubImage1D";
     "glTexSubImage2D", "glTexSubImage2D";
+    "glTextureSubImage2D", "glTexSubImage2D";
     "glTexSubImage3D", "glTexSubImage3D";
+    "glTextureSubImage3D", "glTexSubImage3D";
     "glTextureView", "glTextureView";
     "glTransformFeedbackVaryings", "glTransformFeedbackVaryings";
+    "glTransformFeedbackBufferBase", "glTransformFeedbackBufferBase";
+    "glTransformFeedbackBufferRange", "glTransformFeedbackBufferRange";
     "glUniform", "glUniform";
     "glUniform1d", "glUniform";
     "glUniform1dv", "glUniform";
@@ -572,7 +674,8 @@ let () =
     "glUniformMatrix4x3fv", "glUniform";
     "glUniformSubroutines", "glUniformSubroutines";
     "glUniformSubroutinesuiv", "glUniformSubroutines";
-    "glUnmapBuffer", "glMapBuffer";
+    "glUnmapBuffer", "glUnmapBuffer";
+    "glUnmapNamedBuffer", "glUnmapBuffer";
     "glUseProgram", "glUseProgram";
     "glUseProgramStages", "glUseProgramStages";
     "glValidateProgram", "glValidateProgram";
@@ -615,8 +718,10 @@ let () =
     "glVertexAttrib4uiv", "glVertexAttrib";
     "glVertexAttrib4usv", "glVertexAttrib";
     "glVertexAttribBinding", "glVertexAttribBinding";
+    "glVertexArrayAttribBinding", "glVertexAttribBinding";
     "glVertexAttribDivisor", "glVertexAttribDivisor";
     "glVertexAttribFormat", "glVertexAttribFormat";
+    "glVertexArrayAttribFormat", "glVertexAttribFormat";
     "glVertexAttribI1i", "glVertexAttrib";
     "glVertexAttribI1iv", "glVertexAttrib";
     "glVertexAttribI1ui", "glVertexAttrib";
@@ -638,6 +743,7 @@ let () =
     "glVertexAttribI4uiv", "glVertexAttrib";
     "glVertexAttribI4usv", "glVertexAttrib";
     "glVertexAttribIFormat", "glVertexAttribFormat";
+    "glVertexArrayAttribIFormat", "glVertexAttribFormat";
     "glVertexAttribIPointer", "glVertexAttribPointer";
     "glVertexAttribL1d", "glVertexAttrib";
     "glVertexAttribL1dv", "glVertexAttrib";
@@ -648,6 +754,7 @@ let () =
     "glVertexAttribL4d", "glVertexAttrib";
     "glVertexAttribL4dv", "glVertexAttrib";
     "glVertexAttribLFormat", "glVertexAttribFormat";
+    "glVertexArrayAttribLFormat", "glVertexAttribFormat";
     "glVertexAttribLPointer", "glVertexAttribPointer";
     "glVertexAttribP1ui", "glVertexAttrib";
     "glVertexAttribP1uiv", "glVertexAttrib";
@@ -659,6 +766,7 @@ let () =
     "glVertexAttribP4uiv", "glVertexAttrib";
     "glVertexAttribPointer", "glVertexAttribPointer";
     "glVertexBindingDivisor", "glVertexBindingDivisor";
+    "glVertexArrayBindingDivisor", "glVertexBindingDivisor";
     "glViewport", "glViewport";
     "glViewportArray", "glViewportArray";
     "glViewportArrayv", "glViewportArray";

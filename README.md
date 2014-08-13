@@ -33,7 +33,7 @@ Tgls provides four libraries and corresponding `ocamlfind` packages:
    core OpenGL 3.2 or OpenGL 3.3 context.
 
 * `tgl4`, supports all functions and enumerants to program with a
-   core OpenGL 4.0 to 4.4 context.
+   core OpenGL 4.0 to 4.5 context.
 
 * `tgles2`, supports all functions and enumerants to program with an
    OpenGL ES 2.0 context.
