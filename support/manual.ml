@@ -96,6 +96,31 @@ let map_buffer target len access kind =
   bigarray_of_ptr array1 len kind p
 "
 
+let glMapNamedBuffer api = str
+"\
+val map_named_buffer : enum -> int -> enum -> ('a, 'b) Bigarray.kind ->
+  ('a, 'b) bigarray
+(** {{:%s}
+    [glMapNamedBuffer]} [buffer length access kind]
+
+    {b Note.} [length] is the length, in number of bigarray elements, of the
+    mapped buffer.
+
+    {b Warning.} The bigarray becomes invalid once the buffer is unmapped and
+    program termination may happen if you don't respect the access policy. *)
+"
+(get_uri api "glMapNamedBuffer"),
+"\
+let map_named_buffer =
+  foreign ~stub \"glMapNamedBuffer\"
+    (int_as_uint @-> int_as_uint @-> returning (ptr void))
+
+let map_named_buffer buffer len access kind =
+  let p = map_named_buffer buffer access in
+  let p = coerce (ptr void) (access_ptr_typ_of_ba_kind kind) p in
+  bigarray_of_ptr array1 len kind p
+"
+
 let glMapBufferRange api = str
 "\
 val map_buffer_range : enum -> int -> int -> enum ->
@@ -118,6 +143,32 @@ let map_buffer_range =
 let map_buffer_range target offset len access kind =
   let len_bytes = ba_kind_byte_size kind * len in
   let p = map_buffer_range target offset len_bytes access in
+  let p = coerce (ptr void) (access_ptr_typ_of_ba_kind kind) p in
+  bigarray_of_ptr array1 len kind p
+"
+
+let glMapNamedBufferRange api = str
+"\
+val map_named_buffer_range : enum -> int -> int -> enum ->
+  ('a, 'b) Bigarray.kind -> ('a, 'b) bigarray
+(** {{:%s}
+    [glMapNamedBufferRange]} [buffer offset length access kind]
+
+    {b Note.} [length] is the length in number of bigarray elements of the
+    mapped buffer. [offset] is in bytes.
+
+    {b Warning.} The bigarray becomes invalid once the buffer is unmapped and
+    program termination may happen if you don't respect the access policy. *)
+"
+(get_uri api "glMapNamedBufferRange"),
+"\
+let map_named_buffer_range =
+  foreign ~stub \"glMapNamedBufferRange\"
+    (int_as_uint @-> int @-> int @-> int_as_uint @-> returning (ptr void))
+
+let map_named_buffer_range buffer offset len access kind =
+  let len_bytes = ba_kind_byte_size kind * len in
+  let p = map_named_buffer_range buffer offset len_bytes access in
   let p = coerce (ptr void) (access_ptr_typ_of_ba_kind kind) p in
   bigarray_of_ptr array1 len kind p
 "
@@ -161,7 +212,9 @@ let get api = function
 | "glDebugMessageCallback" -> Some (glDebugMessageCallback api)
 | "glGetUniformIndices" -> Some (glGetUniformIndices api)
 | "glMapBuffer" -> Some (glMapBuffer api)
+| "glMapNamedBuffer" -> Some (glMapNamedBuffer api)
 | "glMapBufferRange" -> Some (glMapBufferRange api)
+| "glMapNamedBufferRange" -> Some (glMapNamedBufferRange api)
 | "glShaderSource" -> Some (glShaderSource api)
 | "glTransformFeedbackVaryings" -> Some (glTransformFeedbackVaryings api)
 | _ -> None
