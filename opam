@@ -3,7 +3,9 @@ maintainer: "Daniel Bünzli <daniel.buenzl i@erratique.ch>"
 homepage: "http://erratique.ch/software/tgls"
 authors: ["Daniel Bünzli <daniel.buenzl i@erratique.ch>"]
 doc: "http://erratique.ch/software/tgls/doc/"
-tags: [ "bindings" "opengl" "opengl-es" "graphics" ]
+dev-repo: "http://erratique.ch/repos/tgls.git"
+bug-reports: "https://github.com/dbuenzli/tsdl/issues"
+tags: [ "bindings" "opengl" "opengl-es" "graphics" "org:erratique" ]
 license: "BSD3"
 ocaml-version: [>= "4.00.1"]
 depends: [ "ocamlfind" "ctypes" {>= "0.3"}]
