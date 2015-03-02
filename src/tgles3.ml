@@ -1,14 +1,12 @@
-/*---------------------------------------------------------------------------
+(*---------------------------------------------------------------------------
    Copyright (c) 2013 Daniel C. Bünzli. All rights reserved.
    Distributed under the BSD3 license, see license at the end of the file.
    %%NAME%% release %%VERSION%%
-  ---------------------------------------------------------------------------*/
+  ---------------------------------------------------------------------------*)
 
-/* This is just here for ocamlbuild to generate a correct dlltgl{3,4,ES2}.so object */
+module Gl = Tgles3_bindings.Gl(Tgles3_generated)
 
-void tgl_nop (void) { return; }
-
-/*---------------------------------------------------------------------------
+(*---------------------------------------------------------------------------
    Copyright (c) 2013 Daniel C. Bünzli.
    All rights reserved.
 
@@ -39,4 +37,4 @@ void tgl_nop (void) { return; }
    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  ---------------------------------------------------------------------------*/
+  ---------------------------------------------------------------------------*)

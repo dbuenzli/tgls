@@ -1,13 +1,13 @@
 #!/bin/sh
-# This script is only used for developement. It is removed by the 
-# distribution process. 
+# This script is only used for developement. It is removed by the
+# distribution process.
 
 set -e
 
 OCAMLBUILD=${OCAMLBUILD:="ocamlbuild -tag debug -tag annot -classic-display \
                           -use-ocamlfind"}
 
-action () 
+action ()
 {
     case $1 in
       default)      $OCAMLBUILD $* ;;
@@ -15,38 +15,39 @@ action ()
       support)      action apiquery
                     check_reg
                     ./apiquery.native -mli -api gl3.3 > src/tgl3.mli
-                    ./apiquery.native -ml -api gl3.3 > src/tgl3.ml
+                    ./apiquery.native -ml -api gl3.3 > src/tgl3_bindings.ml
                     ./apiquery.native -mli -api gl4.5 > src/tgl4.mli
-                    ./apiquery.native -ml -api gl4.5 > src/tgl4.ml
+                    ./apiquery.native -ml -api gl4.5 > src/tgl4_bindings.ml
                     ./apiquery.native -mli -api gles2.0 > src/tgles2.mli
-                    ./apiquery.native -ml -api gles2.0 > src/tgles2.ml
+                    ./apiquery.native -ml -api gles2.0 > src/tgles2_bindings.ml
                     ./apiquery.native -mli -api gles3.1 > src/tgles3.mli
-                    ./apiquery.native -ml -api gles3.1 > src/tgles3.ml
+                    ./apiquery.native -ml -api gles3.1 > src/tgles3_bindings.ml
                     ;;
       tgls)         $OCAMLBUILD \
                     tgl3.cmxa dlltgl3.so \
                     tgl4.cmxa dlltgl4.so \
                     tgles2.cmxa dlltgles2.so \
-                    tgles3.cmxa dlltgles3.so 
+                    tgles3.cmxa dlltgles3.so
                     ;;
       doc)          shift; pkg-doc $* doc/api-dev.docdir ;;
       clean)        $OCAMLBUILD -clean
-                    rm -f src/tgl3.mli src/tgl3.ml src/tgl4.mli src/tgl4.ml \
-                          src/tgles2.mli src/tgles2.ml src/tgles3.mli \
-                          src/tgles3.ml
+                    rm -f src/tgl3.mli src/tgl3_bindings.ml \
+                          src/tgl4.mli src/tgl4_bindings.ml \
+                          src/tgles2.mli src/tgles2_bindings.ml \
+                          src/tgles3.mli src/tgles3_bindings.ml
                     ;;
       *)            $OCAMLBUILD $* ;;
     esac
-} 
+}
 
 check_reg ()
 {
-    if [ ! -f "support/gl.xml" ]; then 
+    if [ ! -f "support/gl.xml" ]; then
         echo "Missing file support/gl.xml, see DEVEL.md"
         exit 1
     fi
 }
 
-if [ $# -eq 0 ]; 
-then action default ; 
+if [ $# -eq 0 ];
+then action default ;
 else action $*; fi

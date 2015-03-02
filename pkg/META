@@ -4,7 +4,7 @@ version = "%%VERSION%%"
 package "tgl3" (
  version = "%%VERSION%%"
  description = "Thin bindings to OpenGL 3.x for OCaml"
- requires = "ctypes ctypes.foreign"
+ requires = "ctypes ctypes.stubs"
  archive(byte) = "tgl3.cma"
  archive(byte, plugin) = "tgl3.cma"
  archive(native) = "tgl3.cmxa"
@@ -26,7 +26,7 @@ package "tgl3" (
 package "tgl4" (
  version = "%%VERSION%%"
  description = "Thin bindings to OpenGL 4.x for OCaml"
- requires = "ctypes ctypes.foreign"
+ requires = "ctypes ctypes.stubs"
  archive(byte) = "tgl4.cma"
  archive(byte, plugin) = "tgl4.cma"
  archive(native) = "tgl4.cmxa"
@@ -48,7 +48,7 @@ package "tgl4" (
 package "tgles2" (
  version = "%%VERSION%%"
  description = "Thin bindings to OpenGL ES 2 for OCaml"
- requires = "ctypes ctypes.foreign"
+ requires = "ctypes ctypes.stubs"
  archive(byte) = "tgles2.cma"
  archive(byte, plugin) = "tgles2.cma"
  archive(native) = "tgles2.cmxa"
@@ -70,7 +70,7 @@ package "tgles2" (
 package "tgles3" (
  version = "%%VERSION%%"
  description = "Thin bindings to OpenGL ES 3 for OCaml"
- requires = "ctypes ctypes.foreign"
+ requires = "ctypes ctypes.stubs"
  archive(byte) = "tgles3.cma"
  archive(byte, plugin) = "tgles3.cma"
  archive(native) = "tgles3.cmxa"

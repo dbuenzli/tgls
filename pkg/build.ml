@@ -1,8 +1,8 @@
-#!/usr/bin/env ocaml 
+#!/usr/bin/env ocaml
 #directory "pkg";;
 #use "topkg.ml";;
 
-let () = 
+let () =
   Pkg.describe "tgls" ~builder:`OCamlbuild [
     Pkg.lib "pkg/META";
     Pkg.lib ~exts:Exts.module_library "src/tgl3";
@@ -13,6 +13,10 @@ let () =
     Pkg.lib ~exts:Exts.library "src/tgl4_top";
     Pkg.lib ~exts:Exts.library "src/tgles2_top";
     Pkg.lib ~exts:Exts.library "src/tgles3_top";
+    Pkg.lib "src/libtgl3.a";
+    Pkg.lib "src/libtgl4.a";
+    Pkg.lib "src/libtgles2.a";
+    Pkg.lib "src/libtgles3.a";
     Pkg.stublibs "src/dlltgl3.so";
     Pkg.stublibs "src/dlltgl4.so";
     Pkg.stublibs "src/dlltgles2.so";

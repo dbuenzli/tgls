@@ -20,7 +20,7 @@ val create_shader_programv : enum -> string -> int
 (get_uri api "glCreateShaderProgramv"),
 "\
 let create_shader_programv =
-  foreign ~stub \"glCreateShaderProgramv\"
+  foreign (* ~stub *) \"glCreateShaderProgramv\"
     (int_as_uint @-> int @-> ptr string @-> returning int_as_uint)
 
 let create_shader_programv type_ src =
@@ -28,17 +28,18 @@ let create_shader_programv type_ src =
   create_shader_programv type_ 1 src
 "
 
+(* https://github.com/ocamllabs/ocaml-ctypes/issues/278 *)
 let glDebugMessageCallback api = str
 "\
-val debug_message_callback : debug_proc -> unit
+(*val debug_message_callback : debug_proc -> unit*)
 (** {{:%s}
     [glDebugMessageCallback]} [f] *)
 "
 (get_uri api "glDebugMessageCallback"),
 "\
 
-let debug_message_callback =
-  foreign ~stub \"glDebugMessageCallback\"
+(*let debug_message_callback =
+  foreign (* ~stub *) \"glDebugMessageCallback\"
     ((funptr (int_as_uint @-> int_as_uint @-> int_as_uint @->
               int_as_uint @-> int @-> ptr char @-> ptr void @->
               returning void)) @->
@@ -50,7 +51,7 @@ let debug_message_callback f =
     for i = 0 to len - 1 do s.[i] <- !@ (msg +@ i) done;
     f src typ id sev s
   in
-  debug_message_callback wrap_cb null
+  debug_message_callback wrap_cb null*)
 "
 
 let glGetUniformIndices api = str
@@ -61,7 +62,7 @@ val get_uniform_indices : int -> string list -> uint32_bigarray -> unit
 (get_uri api "glGetUniformIndices"),
 "\
 let get_uniform_indices =
-  foreign ~stub \"glGetUniformIndices\"
+  foreign (* ~stub *) \"glGetUniformIndices\"
     (int_as_uint @-> int @-> ptr string @-> ptr void @-> returning void)
 
 let get_uniform_indices program names indices =
@@ -87,7 +88,7 @@ val map_buffer : enum -> int -> enum -> ('a, 'b) Bigarray.kind ->
 (get_uri api "glMapBuffer"),
 "\
 let map_buffer =
-  foreign ~stub \"glMapBuffer\"
+  foreign (* ~stub *) \"glMapBuffer\"
     (int_as_uint @-> int_as_uint @-> returning (ptr void))
 
 let map_buffer target len access kind =
@@ -112,7 +113,7 @@ val map_named_buffer : enum -> int -> enum -> ('a, 'b) Bigarray.kind ->
 (get_uri api "glMapNamedBuffer"),
 "\
 let map_named_buffer =
-  foreign ~stub \"glMapNamedBuffer\"
+  foreign (* ~stub *) \"glMapNamedBuffer\"
     (int_as_uint @-> int_as_uint @-> returning (ptr void))
 
 let map_named_buffer buffer len access kind =
@@ -137,7 +138,7 @@ val map_buffer_range : enum -> int -> int -> enum ->
 (get_uri api "glMapBufferRange"),
 "\
 let map_buffer_range =
-  foreign ~stub \"glMapBufferRange\"
+  foreign (* ~stub *) \"glMapBufferRange\"
     (int_as_uint @-> int @-> int @-> int_as_uint @-> returning (ptr void))
 
 let map_buffer_range target offset len access kind =
@@ -163,7 +164,7 @@ val map_named_buffer_range : enum -> int -> int -> enum ->
 (get_uri api "glMapNamedBufferRange"),
 "\
 let map_named_buffer_range =
-  foreign ~stub \"glMapNamedBufferRange\"
+  foreign (* ~stub *) \"glMapNamedBufferRange\"
     (int_as_uint @-> int @-> int @-> int_as_uint @-> returning (ptr void))
 
 let map_named_buffer_range buffer offset len access kind =
@@ -182,7 +183,7 @@ val shader_source : int -> string -> unit
 (get_uri api "glShaderSource"),
 "\
 let shader_source =
-  foreign ~stub \"glShaderSource\"
+  foreign (* ~stub *) \"glShaderSource\"
     (int_as_uint @-> int @-> ptr string @-> ptr void @-> returning void)
 
 let shader_source sh src =
@@ -198,7 +199,7 @@ val transform_feedback_varyings : int -> string list -> enum -> unit
 (get_uri api "glTransformFeedbackVaryings"),
 "\
 let transform_feedback_varyings =
-  foreign ~stub \"glTransformFeedbackVaryings\"
+  foreign (* ~stub *) \"glTransformFeedbackVaryings\"
     (int_as_uint @-> int @-> ptr string @-> int_as_uint @-> returning void)
 
 let transform_feedback_varyings program varyings mode =
