@@ -9,10 +9,11 @@ tags: [ "bindings" "opengl" "opengl-es" "graphics" "org:erratique" ]
 license: "BSD3"
 ocaml-version: [>= "4.00.1"]
 depends: [ "ocamlfind" "ctypes" {>= "0.3"}]
-build: 
+build:
 [
   [ "ocaml" "pkg/git.ml" ]
   [ "ocaml" "pkg/build.ml" "native=%{ocaml-native}%"
-                           "native-dynlink=%{ocaml-native}%" ] # TODO fixme
+                           "native-dynlink=%{ocaml-native-dynlink}%"
+                           "tgl3=true" "tgl4=true" "tgles2=true" "tgles3=true" ]
 ]
 

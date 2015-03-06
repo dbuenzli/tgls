@@ -53,12 +53,12 @@ let pp_ml_type acc api ppf t = (* [acc] remembers views already printed *)
   | `Builtin _ | `Builtin_wrap_in _ -> acc
   | `Def (n, s) ->
       if List.mem n acc then acc else (pp ppf "@[%s@]@,@," s; n :: acc)
-  | `View (n, r, w, t) ->
+  | `View (n, r, w, t') ->
       if List.mem n acc then acc else
-      (pp ppf "@[let %s =@\n\
+      (pp ppf "@[let %s : %s typ =@\n\
                  \  view ~read:%s@\n\
                  \       ~write:%s@\n\
-                 \       %s@]@,@," n r w t; n :: acc)
+                 \       %s@]@,@," n t.Oapi.type_name r w t'; n :: acc)
   end
 
 let pp_ml_types api ppf l =
@@ -140,7 +140,7 @@ let pp_ml_fun ~log api ppf f = match f.Oapi.fun_def with
     let pp_sep ppf () = pp ppf " @@->@ " in
     let fname = f.Oapi.fun_name in
     let cname, _ = f.Oapi.fun_c in
-    pp ppf "@[<2>let %s =@\n@[<2>foreign ~stub \"%s\"@ \
+    pp ppf "@[<2>let %s =@\n@[<2>foreign (* ~stub *) \"%s\"@ \
             @[<1>(%a @@->@ returning %s)@]@]@]@,"
       fname cname (pp_list ~pp_sep pp_arg_ctype) args (ctypes_name ret);
     if not (must_wrap args) then () else
@@ -221,9 +221,9 @@ let pp_ml_module ~log ppf api =
   pp ppf
     "@[<v>\
      open Ctypes@,\
-     open Foreign@,@,\
      (* %s bindings *)@,@,\
-     module %s = struct@,@,\
+     module %s(Foreign: Cstubs.FOREIGN with type 'a fn = 'a) = struct@,\
+     \  open Foreign@,@,\
      \  (* Bigarrays *)@,@,\
      \  type ('a, 'b) bigarray = ('a,'b, Bigarray.c_layout) \
         Bigarray.Array1.t@,@,\
