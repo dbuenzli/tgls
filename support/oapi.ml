@@ -375,7 +375,7 @@ let ba_or_offset_as_voidp =
   let pp_wrap ppf arg =
     pp ppf
       "@[let %s = match %s with@\n\
-         | `Offset o -> ptr_of_raw_address (Int64.of_int o)@\n\
+         | `Offset o -> ptr_of_raw_address (Nativeint.of_int o)@\n\
          | `Data b -> to_voidp (bigarray_start array1 b)@\n\
          in@]" arg arg
   in
