@@ -8,7 +8,7 @@ bug-reports: "https://github.com/dbuenzli/tsdl/issues"
 tags: [ "bindings" "opengl" "opengl-es" "graphics" "org:erratique" ]
 license: "BSD3"
 ocaml-version: [>= "4.00.1"]
-depends: [ "ocamlfind" "ctypes" {>= "0.3"}]
+depends: [ "ocamlfind" "ctypes" {>= "0.4.0"} "ctypes-foreign" ]
 build: 
 [
   [ "ocaml" "pkg/git.ml" ]
