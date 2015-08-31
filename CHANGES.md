@@ -1,3 +1,7 @@
+
+* Support for FreeBSD, thanks to Alexander Diemand for the help.
+
+
 v0.8.3 2015-03-15 La Forclaz (VS)
 ---------------------------------
 

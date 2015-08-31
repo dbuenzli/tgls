@@ -6,6 +6,8 @@ open Command
 let os = run_and_read "uname -s"
 let darwin = os = "Darwin\n"
 let linux = os = "Linux\n"
+let freebsd = os = "FreeBSD\n"
+
 let rpi =
   linux &&
   try ignore (run_and_read "cat /proc/cpuinfo | grep -q BCM2708"); true
@@ -25,14 +27,16 @@ let pkg_config flags package =
   in
   if has_package then with_temp_file "pkgconfig" "pkg-config" cmd else []
 
+let use_pkg_config = linux || freebsd
+
 (* Tags for OpenGL X.Y *)
 
 let gl_tag ~tag ~lib ~cpkg  =
   let make_opt o arg = S [ A o; arg ] in
   let stub_l = [A (Printf.sprintf "-l%s" lib)] in
-  let cflags = if linux then pkg_config "cflags" cpkg else [] in
-  let libs_l = if linux then pkg_config "libs-only-l" cpkg else [] in
-  let libs_L = if linux then pkg_config "libs-only-L" cpkg else [] in
+  let cflags = if use_pkg_config then pkg_config "cflags" cpkg else [] in
+  let libs_l = if use_pkg_config then pkg_config "libs-only-l" cpkg else [] in
+  let libs_L = if use_pkg_config then pkg_config "libs-only-L" cpkg else [] in
   let linker = if linux then [A "-Wl,-no-as-needed"] else [] in
   let mklib_framework = if darwin then [A "-framework"; A "OpenGL" ] else [] in
   let lib_framework = if darwin then [A "-framework OpenGL" ] else [] in
@@ -55,15 +59,15 @@ let gles_tag ~tag ~lib ~cpkg  =
   let stub_l = [A (Printf.sprintf "-l%s" lib)] in
   let cflags =
     if rpi then [] else
-    if linux then pkg_config "cflags" cpkg else []
+    if use_pkg_config then pkg_config "cflags" cpkg else []
   in
   let libs_l =
     if rpi then [A "-lGLESv2"] else
-    if linux then pkg_config "libs-only-l" cpkg else []
+    if use_pkg_config then pkg_config "libs-only-l" cpkg else []
   in
   let libs_L =
     if rpi then [A "-L/opt/vc/lib"] else
-    if linux then pkg_config "libs-only-L" cpkg else []
+    if use_pkg_config then pkg_config "libs-only-L" cpkg else []
   in
   let linker =
     if rpi || linux then [A "-Wl,-no-as-needed"] else []
