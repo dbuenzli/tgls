@@ -13,7 +13,7 @@ open Tgl3
 
 let str = Printf.sprintf
 
-let ( >>= ) x f = match x with `Ok v -> f v | `Error _ as e -> e
+let ( >>= ) x f = match x with Result.Ok v -> f v | Result.Error _ as e -> e
 
 (* Helper functions. *)
 

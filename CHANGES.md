@@ -1,7 +1,7 @@
 
 
-
 * Support for FreeBSD, thanks to Alexander Diemand for the help.
+* Build depend on topkg.
 * Relicensed from BSD3 to ISC.
 
 

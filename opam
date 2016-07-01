@@ -7,11 +7,16 @@ dev-repo: "http://erratique.ch/repos/tgls.git"
 bug-reports: "https://github.com/dbuenzli/tgls/issues"
 tags: [ "bindings" "opengl" "opengl-es" "graphics" "org:erratique" ]
 license: "ISC"
-depends: [ "ocamlfind" "ctypes" {>= "0.4.0"} "ctypes-foreign" ]
 available: [ ocaml-version >= "4.01.0"]
-build:
-[
-  [ "ocaml" "pkg/git.ml" ]
-  [ "ocaml" "pkg/build.ml" "native=%{ocaml-native}%"
-                           "native-dynlink=%{ocaml-native-dynlink}%" ]
-]
+depends: [
+  "ocamlfind" {build}
+  "ocamlbuild" {build}
+  "topkg" {build}
+  "ctypes" {>= "0.4.0"}
+  "ctypes-foreign"
+  "tsdl" {test}
+  "xmlm" {dev}
+ ]
+build: [
+  "ocaml" "pkg/pkg.ml" "build"
+          "--pinned" pinned ]

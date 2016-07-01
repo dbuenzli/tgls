@@ -33,11 +33,11 @@ let pp_mli_api_header ppf api =
     {ul
     {- {{:%s}%s}}}
 
-    {e Release %s — %s — %s } *)
+    {e %s — %s — %s } *)
 @\n"
   syn lib_module (pp_opt pp_str) profile lsyn bind_module
   (String.lowercase lib_module) lib_module (Doc.home_uri api) syn
-  "%%VERSION%%" syn "%%MAINTAINER%%"
+  "%%VERSION%%" syn "{{:%%PKG_HOMEPAGE%% }homepage}"
 
 let pp_mli_api_footer ppf api =
   let lib_module = Oapi.module_lib api in

@@ -1,5 +1,4 @@
-true: thread
-<**/*.{ml,mli}> : bin_annot, annot
+true: thread, bin_annot, safe_string
 
 <support> : include
 <support/**> : package(xmlm)
@@ -23,7 +22,7 @@ true: thread
 <src/libtgles3.*> : use_gles3
 
 <test> : include
-<test/trigl{3,4,es2,es3}.{ml,mli,byte,native}> : package(tsdl)
+<test/trigl{3,4,es2,es3}.{ml,mli,byte,native}> : package(result), package(tsdl)
 <test/trigl3.{byte,native}> : use_gl3
 <test/trigl4.{byte,native}> : use_gl4
 <test/trigles2.{byte,native}> : use_gles2
@@ -34,4 +33,3 @@ true: thread
 <test/linkgl4.{byte,native}> : use_gl4
 <test/linkgles2.{byte,native}> : use_gles2
 <test/linkgles3.{byte,native}> : use_gles3
-
