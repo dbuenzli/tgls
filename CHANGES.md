@@ -1,5 +1,8 @@
 
+
+
 * Support for FreeBSD, thanks to Alexander Diemand for the help.
+* Relicensed from BSD3 to ISC.
 
 
 v0.8.3 2015-03-15 La Forclaz (VS)
