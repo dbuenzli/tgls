@@ -15,7 +15,8 @@ depends: [
   "ctypes" {>= "0.4.0"}
   "ctypes-foreign"
   "tsdl" {test}
-  "xmlm" {dev}
+  "result" {test}
+#  "xmlm" {dev}
  ]
 build: [
   "ocaml" "pkg/pkg.ml" "build"

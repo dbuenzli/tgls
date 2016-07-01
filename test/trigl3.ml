@@ -10,10 +10,11 @@
 
 open Tsdl
 open Tgl3
+open Result
 
 let str = Printf.sprintf
 
-let ( >>= ) x f = match x with Result.Ok v -> f v | Result.Error _ as e -> e
+let ( >>= ) x f = match x with Ok v -> f v | Error _ as e -> e
 
 (* Helper functions. *)
 
@@ -109,22 +110,22 @@ let create_geometry () =
   Gl.bind_vertex_array 0;
   Gl.bind_buffer Gl.array_buffer 0;
   Gl.bind_buffer Gl.element_array_buffer 0;
-  `Ok (gid, [iid; vid; cid])
+  Ok (gid, [iid; vid; cid])
 
 let delete_geometry gid bids =
   set_int (Gl.delete_vertex_arrays 1) gid;
   List.iter delete_buffer bids;
-  `Ok ()
+  Ok ()
 
 let compile_shader src typ =
   let get_shader sid e = get_int (Gl.get_shaderiv sid e) in
   let sid = Gl.create_shader typ in
   Gl.shader_source sid src;
   Gl.compile_shader sid;
-  if get_shader sid Gl.compile_status = Gl.true_ then `Ok sid else
+  if get_shader sid Gl.compile_status = Gl.true_ then Ok sid else
   let len = get_shader sid Gl.info_log_length in
   let log = get_string len (Gl.get_shader_info_log sid len None) in
-  (Gl.delete_shader sid; `Error log)
+  (Gl.delete_shader sid; Error (`Msg log))
 
 let create_program glsl_v =
   compile_shader (vertex_shader glsl_v) Gl.vertex_shader >>= fun vid ->
@@ -136,13 +137,13 @@ let create_program glsl_v =
   Gl.bind_attrib_location pid 0 "vertex";
   Gl.bind_attrib_location pid 1 "color";
   Gl.link_program pid;
-  if get_program pid Gl.link_status = Gl.true_ then `Ok pid else
+  if get_program pid Gl.link_status = Gl.true_ then Ok pid else
   let len = get_program pid Gl.info_log_length in
   let log = get_string len (Gl.get_program_info_log pid len None) in
-  (Gl.delete_program pid; `Error log)
+  (Gl.delete_program pid; Error (`Msg log))
 
 let delete_program pid =
-  Gl.delete_program pid; `Ok ()
+  Gl.delete_program pid; Ok ()
 
 let draw pid gid win =
   Gl.clear_color 0. 0. 0. 1.;
@@ -152,7 +153,7 @@ let draw pid gid win =
   Gl.draw_elements Gl.triangles 3 Gl.unsigned_byte (`Offset 0);
   Gl.bind_vertex_array 0;
   Sdl.gl_swap_window win;
-  `Ok ()
+  Ok ()
 
 let reshape win w h =
   Gl.viewport 0 0 w h
@@ -181,12 +182,12 @@ let create_window ~gl:(maj, min) =
   Sdl.gl_create_context win                                   >>= fun ctx ->
   Sdl.gl_make_current win ctx                                 >>= fun () ->
   Sdl.log "%a" pp_opengl_info ();
-  `Ok (win, ctx)
+  Ok (win, ctx)
 
 let destroy_window win ctx =
   Sdl.gl_delete_context ctx;
   Sdl.destroy_window win;
-  `Ok ()
+  Ok ()
 
 (* Event loop *)
 
@@ -198,8 +199,8 @@ let event_loop win draw =
   let rec loop () =
     ignore (Sdl.wait_event_timeout (Some e) 1);
     match event e with
-    | `Quit -> `Ok ()
-    | `Key_down when key_scancode e = `Escape -> `Ok ()
+    | `Quit -> Ok ()
+    | `Key_down when key_scancode e = `Escape -> Ok ()
     | `Window_event ->
         begin match window_event e with
         | `Exposed | `Resized ->
@@ -226,7 +227,7 @@ let tri ~gl:(maj, min as gl) =
   delete_geometry gid bids         >>= fun () ->
   destroy_window win ctx           >>= fun () ->
   Sdl.quit ();
-  `Ok ()
+  Ok ()
 
 let main () =
   let exec = Filename.basename Sys.executable_name in
@@ -239,7 +240,7 @@ let main () =
   let anon _ = raise (Arg.Bad "no arguments are supported") in
   Arg.parse (Arg.align options) anon usage;
   match tri ~gl:(3, !minor) with
-  | `Ok () -> exit 0
-  | `Error msg -> Sdl.log "%s@." msg; exit 1
+  | Ok () -> exit 0
+  | Error (`Msg msg) -> Sdl.log "%s@." msg; exit 1
 
 let () = main ()
