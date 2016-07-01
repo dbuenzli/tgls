@@ -3,14 +3,18 @@ open Command
 
 (* Platform detection *)
 
-let os = run_and_read "uname -s"
-let darwin = os = "Darwin\n"
-let linux = os = "Linux\n"
-let freebsd = os = "FreeBSD\n"
+let os =
+  String.trim @@
+  try Sys.getenv "TGLS_HOST_OS"
+  with Not_found -> run_and_read "uname -s"
+
+let darwin = os = "Darwin"
+let linux = os = "Linux"
+let freebsd = os = "FreeBSD"
 
 let rpi =
   linux &&
-  try ignore (run_and_read "cat /proc/cpuinfo | grep -q BCM2708"); true
+  try ignore (run_and_read "cat /proc/cpuinfo | grep -q 'BCM270.'"); true
   with Failure _ -> false
 
 (* pkg-config invocation. N.B. we don't fail if we don't have the package. *)
