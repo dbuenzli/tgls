@@ -1,4 +1,4 @@
-true: thread, bin_annot, safe_string
+true: thread, bin_annot, safe_string, package(bytes)
 
 <support> : include
 <support/**> : package(xmlm)

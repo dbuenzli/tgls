@@ -64,7 +64,7 @@ let module_lib api = match (Capi.id api) with
 
 let module_bind api = match (Capi.id api) with
 | `Gles _ | `Gl _ -> "Gl"
-| `Ext e -> let m = String.lowercase e in m.[0] <- Char.uppercase m.[0]; m
+| `Ext e -> String.capitalize (String.lowercase e)
 
 (* Types *)
 

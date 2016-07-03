@@ -46,9 +46,9 @@ let debug_message_callback =
 
 let debug_message_callback f =
   let wrap_cb src typ id sev len msg _ =
-    let s = String.create len in
-    for i = 0 to len - 1 do s.[i] <- !@ (msg +@ i) done;
-    f src typ id sev s
+    let s = Bytes.create len in
+    for i = 0 to len - 1 do Bytes.set s i (!@ (msg +@ i)) done;
+    f src typ id sev (Bytes.unsafe_to_string s)
   in
   debug_message_callback wrap_cb null
 "

@@ -1,4 +1,5 @@
 
+* Safe string support.
 * Fix build on 32-bit platforms.
 * Untested support for Windows.
 * Support for FreeBSD, thanks to Alexander Diemand for the help.

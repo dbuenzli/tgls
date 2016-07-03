@@ -12,6 +12,7 @@ depends: [
   "ocamlfind" {build}
   "ocamlbuild" {build}
   "topkg" {build}
+  "base-bytes"
   "ctypes" {>= "0.4.0"}
   "ctypes-foreign"
   "tsdl" {test}
