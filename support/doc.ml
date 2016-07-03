@@ -30,7 +30,7 @@ let docs_GL_ES_2_0 =
 
 let docs_GL_ES_3_0 =
   let home = "http://www.khronos.org/opengles/3_X" in
-  let man_base  = "http://www.khronos.org/opengles/sdk/docs/man3/" in
+  let man_base  = "http://www.khronos.org/opengles/sdk/docs/man32/" in
   let man = page_uri (str "%shtml/%s.xhtml" man_base) in
   (home, man)
 
@@ -109,6 +109,7 @@ let () =
     "glBindVertexBuffers", "glBindVertexBuffers";
     "glVertexArrayVertexBuffers", "glBindVertexBuffers";
     "glVertexArrayElementBuffer", "glVertexArrayElementBuffer";
+    "glBlendBarrier", "glBlendBarrier";
     "glBlendColor", "glBlendColor";
     "glBlendEquation", "glBlendEquation";
     "glBlendEquationSeparate", "glBlendEquationSeparate";
@@ -487,6 +488,7 @@ let () =
     "glPolygonOffset", "glPolygonOffset";
     "glPopDebugGroup", "glPopDebugGroup";
     "glPrimitiveRestartIndex", "glPrimitiveRestartIndex";
+    "glPrimitiveBoundingBox", "glPrimitiveBoundingBox";
     "glProgramBinary", "glProgramBinary";
     "glProgramParameter", "glProgramParameter";
     "glProgramParameteri", "glProgramParameter";

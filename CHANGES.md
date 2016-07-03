@@ -1,8 +1,9 @@
 
+* Support for OpenGL ES 3.2
 * Safe string support.
 * Fix build on 32-bit platforms.
-* Untested support for Windows.
-* Support for FreeBSD, thanks to Alexander Diemand for the help.
+* Untested Windows support.
+* FreeBSD support. Thanks to Alexander Diemand for the help.
 * Build depend on topkg.
 * Relicensed from BSD3 to ISC.
 

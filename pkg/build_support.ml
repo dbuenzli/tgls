@@ -29,7 +29,7 @@ let gen_apis () =
     gen_api "gl3.3" "tgl3" >>= fun () ->
     gen_api "gl4.5" "tgl4" >>= fun () ->
     gen_api "gles2.0" "tgles2" >>= fun () ->
-    gen_api "gles3.1" "tgles3"
+    gen_api "gles3.2" "tgles3"
   in
   (* FIXME this won't work on bytecode only pins *)
   OS.Cmd.run Cmd.(ocb % "apiquery.native")
