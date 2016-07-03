@@ -222,6 +222,9 @@ let pp_ml_module ~log ppf api =
     "@[<v>\
      open Ctypes@,\
      open Foreign@,@,\
+     let abi = Libffi_abi.(if Sys.win32 then stdcall else default_abi)@,\
+     let foreign ?from ?stub ?check_errno ?release_runtime_lock f fn =@,\
+       foreign ~abi ?from ?stub ?check_errno ?release_runtime_lock f fn@,@,\
      (* %s bindings *)@,@,\
      module %s = struct@,@,\
      \  (* Bigarrays *)@,@,\
