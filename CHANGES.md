@@ -1,7 +1,11 @@
+v0.8.4 2016-06-03 Cambridge (UK)
+-------------------------------
 
 * Support for OpenGL ES 3.2
 * Safe string support.
 * Fix build on 32-bit platforms.
+* Build system: allow to override host platform.
+* Build system: rpi3 support.
 * Untested Windows support.
 * FreeBSD support. Thanks to Alexander Diemand for the help.
 * Build depend on topkg.
