@@ -156,11 +156,13 @@ let pp_ml_fun ~log api ppf f = match f.Oapi.fun_def with
 
 let pp_ml_enum_value ppf = function
 | `GLenum e -> pp ppf "0x%X" e
+| `GLenum_max -> pp ppf "Int32.to_int 0xFFFF_FFFFl"
 | `GLuint i -> pp ppf "0x%lXl" i
 | `GLuint64 i -> pp ppf "0x%LXL" i
 
 let pp_mli_enum_type ppf = function
 | `GLenum e -> pp ppf "enum"
+| `GLenum_max -> pp ppf "enum"
 | `GLuint i -> pp ppf "int32"
 | `GLuint64 i -> pp ppf "int64"
 

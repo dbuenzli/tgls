@@ -73,6 +73,7 @@ let pp_fun api ppf f =
 let pp_enum api ppf e =
   let v = match e.Oapi.enum_value with
   | `GLenum v -> str "@[GLenum 0x%04X@]" v
+  | `GLenum_max -> str "@[GLenum 0x%04lX@]" 0xFFFF_FFFFl
   | `GLuint v -> str "@[GLuint 0x%04lX@]" v
   | `GLuint64 v -> str "@[GLuint64 0x%04LX@]" v
   in

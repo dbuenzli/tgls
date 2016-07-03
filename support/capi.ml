@@ -307,7 +307,9 @@ let funs api =
 
 (* C enumerations *)
 
-type enum_value = [ `GLenum of int | `GLuint64 of int64 | `GLuint of int32]
+type enum_value =
+  [ `GLenum of int | `GLenum_max | `GLuint64 of int64 | `GLuint of int32]
+
 type enum = string * enum_value
 
 let enums api =
@@ -322,10 +324,10 @@ let enums api =
     let v = match e_def.Glreg.e_type with
     | None ->
         (* FIXME (or not): hack for compiling on 32 bits platforms *)
-        if Sys.word_size = 32 && v = "0xFFFFFFFF" &&
+        if v = "0xFFFFFFFF" &&
            (e_def.Glreg.e_name = "GL_ALL_BARRIER_BITS" ||
             e_def.Glreg.e_name = "GL_ALL_SHADER_BITS")
-        then `GLenum (-1)
+        then `GLenum_max
         else
         `GLenum (get int_of_string v "<unspecified>")
     | Some ("ull" as t) -> `GLuint64 (get Int64.of_string v t)

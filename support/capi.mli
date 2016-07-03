@@ -88,7 +88,8 @@ val funs : t -> func list
 
 (** {1:enums C enumerations} *)
 
-type enum_value = [ `GLenum of int | `GLuint64 of int64 | `GLuint of int32]
+type enum_value =
+  [ `GLenum of int | `GLenum_max | `GLuint64 of int64 | `GLuint of int32]
 (** The type for C enumeration values. *)
 
 type enum = string * enum_value
