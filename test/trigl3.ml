@@ -3,8 +3,8 @@
    Draws a fantastic tri-colored triangle.
 
    Compile with:
-   ocamlfind ocamlc -linkpkg -package tsdl,tgls.tgl3 -o trigl3.byte trigl3.ml
-   ocamlfind ocamlopt -linkpkg -package tsdl,tgls.tgl3 -o trigl3.native \
+   ocamlfind ocamlc -linkpkg -package result,tsdl,tgls.tgl3 -o trigl3.byte trigl3.ml
+   ocamlfind ocamlopt -linkpkg -package result,tsdl,tgls.tgl3 -o trigl3.native \
                       trigl3.ml
 *)
 
