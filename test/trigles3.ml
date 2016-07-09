@@ -3,9 +3,9 @@
    Draws a fantastic tri-colored triangle.
 
    Compile with:
-   ocamlfind ocamlc -linkpkg -package tsdl,tgls.tgles3 -o trigles3.byte \
+   ocamlfind ocamlc -linkpkg -package result,tsdl,tgls.tgles3 -o trigles3.byte \
                     trigles3.ml
-   ocamlfind ocamlopt -linkpkg -package tsdl,tgls.tgles3 -o trigles3.native \
+   ocamlfind ocamlopt -linkpkg -package result,tsdl,tgls.tgles3 -o trigles3.native \
                       trigles3.ml
 *)
 
