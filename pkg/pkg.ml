@@ -11,17 +11,17 @@ let distrib =
   let exclude_paths () = Pkg.exclude_paths () >>| fun ps -> "support" :: ps in
   Pkg.distrib ~massage:build_support ~exclude_paths ()
 
-let without_gl   =
-  Topkg.Conf.(key "without-gl"   bool ~absent:false
-              ~doc:"Omit OpenGL (desktop) support")
-let without_gles =
-  Topkg.Conf.(key "without-gles" bool ~absent:false
-              ~doc:"Omit OpenGL ES support")
+let with_gl   =
+  Topkg.Conf.(key "with-gl"   bool ~absent:true
+              ~doc:"Include OpenGL (desktop) support")
+let with_gles =
+  Topkg.Conf.(key "with-gles" bool ~absent:true
+              ~doc:"Include OpenGL ES support")
 
 let () =
   Pkg.describe "tgls" ~distrib @@ fun c ->
-  let with_gl   = not (Topkg.Conf.value c without_gl)   in
-  let with_gles = not (Topkg.Conf.value c without_gles) in
+  let with_gl   = Topkg.Conf.value c with_gl   in
+  let with_gles = Topkg.Conf.value c with_gles in
   Ok [ Pkg.mllib ~cond:with_gl "src/tgl3.mllib";
        Pkg.mllib ~cond:with_gl "src/tgl4.mllib";
        Pkg.mllib ~cond:with_gles "src/tgles2.mllib";
