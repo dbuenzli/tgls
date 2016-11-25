@@ -1,15 +1,17 @@
 The distribution contains generated data. If you want to contribute
 please hack your way directly via the source repository.
 
-For developing, you will need to install [xmlm][1] and download a
-copy of the [OpenGL XML registry][2] to `$REGPATH`. From the root
-directory of the repository type:
+For developing, you will need to install [xmlm][xmlm] and download a
+copy of the [OpenGL XML registry][ogl-reg] to `support/gl.xml` (this
+will be done automatically if the file doesn't exist). Type:
 
-    ln -s $REGPATH support/gl.xml 
-    ./build support
+   ocaml ./pkg/build_support.ml
 
-See also [support/README.md][3] in the source repository.
+This will generate the files `src/tgl{3,4,es2,es3}.{mli,ml}` which
+are ignored by the VCS.
 
-[1]: http://erratique.ch/software/xmlm
-[2]: http://www.opengl.org/registry/
-[3]: support/README.md
+See also [support/README.md](support/README.md) in the source
+repository.
+
+[xmlm]: http://erratique.ch/software/xmlm
+[ogl-reg]: http://www.opengl.org/registry/
