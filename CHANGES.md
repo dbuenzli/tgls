@@ -1,3 +1,10 @@
+v0.8.5 2016-11-25 Zagreb
+------------------------
+
+* Allow to optionally build GL and GL ES. Thanks to Peter Zotov for
+  the patch.
+
+
 v0.8.4 2016-06-03 Cambridge (UK)
 -------------------------------
 
