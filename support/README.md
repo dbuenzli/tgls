@@ -20,7 +20,7 @@ and generate the bindings. Invoke with `-h` for more information.
 
 The documentation of these modules can be generated with:
     
-    ./build doc -b 
+    topkg doc --dev -r 
 
 from the root directory of a repo checkout.
 
