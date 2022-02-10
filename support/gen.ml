@@ -182,7 +182,8 @@ let pp_mli_module ~log ppf api =
     "@[<v>\
      (** {1 %s} *)@,@,\
      (** @[<v>%s bindings.@,@,\
-         @[{{!types}Types},@ {{!funs}functions}@ and@ {{!enums}enumerants}. *)\
+         @[{{!%s.types}Types},@ {{!%s.funs}functions}@ and@ \
+          {{!%s.enums}enumerants}. *)\
          @]@]@,\
      module %s : sig@,@,\
      \  (** {1:ba Bigarrays} *)@,@,\
@@ -202,6 +203,7 @@ let pp_mli_module ~log ppf api =
      \  @[<v>%a@]@,\
      end@,@,@]"
     synopsis synopsis (Oapi.module_bind api)
+    (Oapi.module_bind api) (Oapi.module_bind api) (Oapi.module_bind api)
     (pp_list ~pp_sep:pp_nop (pp_mli_type api))
     (sort_types (Oapi.types api))
     (pp_list (pp_mli_fun ~log api))

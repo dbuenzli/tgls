@@ -27,7 +27,7 @@
 
 (** OpenGL 3.x bindings.
     
-    {{!types}Types}, {{!funs}functions} and {{!enums}enumerants}. *)
+    {{!Gl.types}Types}, {{!Gl.funs}functions} and {{!Gl.enums}enumerants}. *)
 module Gl : sig
 
   (** {1:ba Bigarrays} *)
