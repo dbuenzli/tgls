@@ -11,8 +11,7 @@ platform. It is distributed under the ISC license.
           
 [ctypes]: https://github.com/ocamllabs/ocaml-ctypes
 
-Home page: http://erratique.ch/software/tgls  
-Contact: Daniel Bünzli `<daniel.buenzl i@erratique.ch>`"""
+Home page: <http://erratique.ch/software/tgls>"""
 maintainer: "Daniel Bünzli <daniel.buenzl i@erratique.ch>"
 authors: "The tgls programmers"
 license: "ISC"
@@ -28,10 +27,6 @@ depends: [
   "ctypes" {>= "0.4.0"}
   "ctypes-foreign"
   "xmlm" {dev}
-]
-depopts: ["cmdliner"]
-conflicts: [
-  "cmdliner" {< "1.1.0"}
 ]
 build: ["ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{dev}%"]
 dev-repo: "git+https://erratique.ch/repos/tgls.git"

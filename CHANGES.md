@@ -1,3 +1,8 @@
+v0.8.6 2022-02-10 La Forclaz (VS)
+---------------------------------
+
+* Handle `Pervasives` deprecation (and thus support OCaml 5.00).
+
 v0.8.5 2016-11-25 Zagreb
 ------------------------
 
