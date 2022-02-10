@@ -60,11 +60,11 @@ let identifier = function
 let module_lib api = match (Capi.id api) with
 | `Gles (m, _) -> str "Tgles%d" m
 | `Gl (m, _) -> str "Tgl%d" m
-| `Ext e -> str "T%s" (String.lowercase e)
+| `Ext e -> str "T%s" (String.lowercase_ascii e)
 
 let module_bind api = match (Capi.id api) with
 | `Gles _ | `Gl _ -> "Gl"
-| `Ext e -> String.capitalize (String.lowercase e)
+| `Ext e -> String.capitalize_ascii (String.lowercase_ascii e)
 
 (* Types *)
 
@@ -86,7 +86,7 @@ let bool =
     type_ctypes = `View ("bool",
                          "(fun u -> Unsigned.UChar.(compare u zero <> 0))",
                          "(fun b -> Unsigned.UChar.(of_int \
-                          (Pervasives.compare b false)))",
+                          (Stdlib.compare b false)))",
                          "uchar");
     type_doc = None; }
 
@@ -486,7 +486,7 @@ let fun_name api f = (* remove `gl', uncamlcase, lowercase *)
        not (is_digit (cname.[i - 1])) (* maps eg 2D to 2d not 2_d *)
     then (Buffer.add_char buf '_'; last_up := true)
     else (last_up := false);
-    Buffer.add_char buf (Char.lowercase cname.[i]);
+    Buffer.add_char buf (Char.lowercase_ascii cname.[i]);
   done;
   identifier (Buffer.contents buf)
 
@@ -584,7 +584,9 @@ let enums api =
     if not (String.length cname > 3 && (String.sub cname 0 3) = "GL_")
     then failwith (err_odd_ename cname)
     else
-    let n = String.lowercase (String.sub cname 3 (String.length cname - 3)) in
+    let n =
+      String.lowercase_ascii (String.sub cname 3 (String.length cname - 3))
+    in
     let n = identifier n in
     let n = if Sset.mem n fun_names then n ^ "_enum" else n in
     { enum_name = n; enum_c_name = cname; enum_value = v }

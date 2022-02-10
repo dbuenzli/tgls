@@ -106,7 +106,7 @@ type t =
 
 (** {1:decoder Decoder} *)
 
-type src = [ `Channel of Pervasives.in_channel | `String of string ]
+type src = [ `Channel of in_channel | `String of string ]
 (** The type for input sources. *)
 
 type decoder
