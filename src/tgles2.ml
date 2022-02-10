@@ -110,7 +110,7 @@ module Gl = struct
   
   let bool =
     view ~read:(fun u -> Unsigned.UChar.(compare u zero <> 0))
-         ~write:(fun b -> Unsigned.UChar.(of_int (Pervasives.compare b false)))
+         ~write:(fun b -> Unsigned.UChar.(of_int (Stdlib.compare b false)))
          uchar
   
   type enum = int
