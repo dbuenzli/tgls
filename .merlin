@@ -1,5 +1,6 @@
-PKG bytes result tsdl
+PKG b0.kit tsdl
 S src
 S support
 S test
+B _b0/**
 B _build/**

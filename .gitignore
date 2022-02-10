@@ -1,9 +1,5 @@
+_b0
 _build
 support/gl.xml
 tmp
-*~
-\.\#*
-\#*#
 *.install
-*.byte
-*.native

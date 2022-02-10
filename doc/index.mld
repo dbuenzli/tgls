@@ -1,0 +1,11 @@
+{0 Tgls {%html: <span class="version">%%VERSION%%</span>%}}
+
+Tgls is a set of independent OCaml libraries providing thin bindings
+to OpenGL libraries. It has support for core OpenGL 3.\{2,3\} and
+4.\{0,1,2,3,4\} and OpenGL ES 2 and 3.\{0,1,2\}.
+
+{!modules:
+Tgl3
+Tgl4
+Tgles2
+Tgles3}
