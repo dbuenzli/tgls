@@ -3,14 +3,6 @@
 #require "topkg"
 open Topkg
 
-let build_support () =
-  let ocaml = Conf.tool "ocaml" `Build_os in
-  OS.Cmd.run Cmd.(ocaml % "pkg/build_support.ml")
-
-let distrib =
-  let exclude_paths () = Pkg.exclude_paths () >>| fun ps -> "support" :: ps in
-  Pkg.distrib ~massage:build_support ~exclude_paths ()
-
 let with_gl   =
   Topkg.Conf.(key "with-gl"   bool ~absent:true
               ~doc:"Include OpenGL (desktop) support")
@@ -19,7 +11,7 @@ let with_gles =
               ~doc:"Include OpenGL ES support")
 
 let () =
-  Pkg.describe "tgls" ~distrib @@ fun c ->
+  Pkg.describe "tgls" @@ fun c ->
   let with_gl   = Topkg.Conf.value c with_gl   in
   let with_gles = Topkg.Conf.value c with_gles in
   Ok [ Pkg.mllib ~cond:with_gl "src/tgl3.mllib";
