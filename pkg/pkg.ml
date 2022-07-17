@@ -32,6 +32,7 @@ let () =
        Pkg.test ~cond:with_gles ~run:false "test/trigles3";
        Pkg.test ~cond:with_gl ~run:false "test/linkgl3";
        Pkg.test ~cond:with_gl ~run:false "test/linkgl4";
+       Pkg.test ~cond:with_gl ~run:false "test/dbglifetime4";
        Pkg.test ~cond:with_gles ~run:false "test/linkgles2";
        Pkg.test ~cond:with_gles ~run:false "test/linkgles3";
        Pkg.doc "test/assert_sizes.c";
