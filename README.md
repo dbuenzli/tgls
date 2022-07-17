@@ -74,6 +74,7 @@ The resulting binaries are in `_build/test` :
   correctly linked, the executables should exit with 0. 
 - `trigl{3,4,es2,es3}.native`, opens a window and draws a tricolor 
   triangle, needs [tsdl][4].
+- `dbglifetime4.native` tests debug message callback lifetimes
 
 The C file [`assert_sizes.c`](test/assert_sizes.c) is a program that
 should exit with 0 on your platform to ensure the bindings will
