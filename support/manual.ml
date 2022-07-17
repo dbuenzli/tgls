@@ -36,21 +36,30 @@ val debug_message_callback : debug_proc -> unit
 "
 (get_uri api "glDebugMessageCallback"),
 "\
+module DebugMessageCallback =
+  (val (dynamic_funptr (int_as_uint @-> int_as_uint @-> int_as_uint @->
+            int_as_uint @-> int @-> ptr char @-> ptr void @->
+            returning void)))
 
 let debug_message_callback =
   foreign ~stub \"glDebugMessageCallback\"
-    ((funptr (int_as_uint @-> int_as_uint @-> int_as_uint @->
-              int_as_uint @-> int @-> ptr char @-> ptr void @->
-              returning void)) @->
-     ptr void @-> returning void)
+    (DebugMessageCallback.t @-> ptr void @-> returning void)
 
-let debug_message_callback f =
+let debug_message_callback =
+  let debug_cb = ref None in
+  fun f ->
   let wrap_cb src typ id sev len msg _ =
     let s = Bytes.create len in
     for i = 0 to len - 1 do Bytes.set s i (!@ (msg +@ i)) done;
     f src typ id sev (Bytes.unsafe_to_string s)
   in
-  debug_message_callback wrap_cb null
+  let dyn_wrapped_cb = DebugMessageCallback.of_fun wrap_cb in
+  let old_cb = !debug_cb in
+  debug_cb := Some dyn_wrapped_cb;
+  debug_message_callback dyn_wrapped_cb null;
+  (match old_cb with
+  | Some old -> DebugMessageCallback.free old
+  | None -> ())
 "
 
 let glGetUniformIndices api = str
