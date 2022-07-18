@@ -1,3 +1,9 @@
+
+
+* Fix `Gl.debug_message_callback` raising `Ffi_stubs.CallToExpiredClosure`. 
+  Thanks to Edwin Török for the report and the patch (#6).
+
+
 v0.8.6 2022-02-10 La Forclaz (VS)
 ---------------------------------
 
