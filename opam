@@ -24,8 +24,8 @@ depends: [
   "ocamlfind" {build}
   "ocamlbuild" {build}
   "topkg" {build & >= "1.0.3"}
-  "ctypes" {>= "0.4.0"}
-  "ctypes-foreign"
+  "ctypes" {>= "0.21.1"}
+  "ctypes-foreign" {>= "0.21.1"}
   "xmlm" {dev}
 ]
 build: ["ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{dev}%"]

@@ -1,5 +1,5 @@
 
-* Fix build system. Explicitely depend on `ctypes.foreign`. 
+* Fix build system. Explicitely depend on `ctypes-foreign`. 
   Thanks to Etienne Millon for the patch (#29).
 * Fix `Gl.debug_message_callback` raising `Ffi_stubs.CallToExpiredClosure`. 
   Thanks to Edwin Török for the report and the patch (#6).

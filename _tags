@@ -6,9 +6,9 @@ true: thread, bin_annot, safe_string
 <support/**> : package(xmlm)
 
 <src> : include
-<src/tgl{3,4,es2,es3}.{ml,mli}> : package(ctypes), package(ctypes.foreign)
+<src/tgl{3,4,es2,es3}.{ml,mli}> : package(ctypes), package(ctypes-foreign)
 <src/tgl{3,4,es2,es3}.{cma,cmxa,cmxs}> : custom, thread, \
-  package(ctypes), package(ctypes.foreign)
+  package(ctypes), package(ctypes-foreign)
 <src/tgl{3,4,es2,es3}_top.*> : package(compiler-libs.toplevel)
 
 <src/tgl3.{cma,cmxa,cmxs}> : use_gl3
@@ -30,11 +30,11 @@ true: thread, bin_annot, safe_string
 <test/trigles2.{byte,native}> : use_gles2
 <test/trigles3.{byte,native}> : use_gles3
 
-<test/linkgl{3,4,es2,es3}.{ml,mli,byte,native}> : package(ctypes.foreign)
+<test/linkgl{3,4,es2,es3}.{ml,mli,byte,native}> : package(ctypes-foreign)
 <test/linkgl3.{byte,native}> : use_gl3
 <test/linkgl4.{byte,native}> : use_gl4
 <test/linkgles2.{byte,native}> : use_gles2
 <test/linkgles3.{byte,native}> : use_gles3
 
-<test/dbglifetime4.{ml,mli,byte,native}> : package(ctypes.foreign), package(tsdl)
+<test/dbglifetime4.{ml,mli,byte,native}> : package(ctypes-foreign), package(tsdl)
 <test/dbglifetime4.{byte,native}> : use_gl4

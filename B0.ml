@@ -3,7 +3,7 @@ open B0_kit.V000
 (* OCaml library names *)
 
 let ctypes = B0_ocaml.libname "ctypes"
-let ctypes_foreign = B0_ocaml.libname "ctypes.foreign"
+let ctypes_foreign = B0_ocaml.libname "ctypes-foreign"
 let integers = B0_ocaml.libname "integers" (* dep of ctypes *)
 let bigarray_compat = B0_ocaml.libname "bigarray-compat" (* dep of ctypes *)
 let tsdl = B0_ocaml.libname "tsdl"
@@ -52,7 +52,7 @@ let test kind ?(requires = []) ~id lib =
   let base = Fmt.str "%sgl%s" kind id in
   let srcs = [`File (Fpath.v (Fmt.str "test/%s.ml" base))] in
   let meta = B0_meta.(empty |> tag test) in
-  let requires = ctypes :: lib :: requires in
+  let requires = ctypes :: ctypes_foreign :: lib :: requires in
   let doc = Fmt.str "%s test" base in
   B0_ocaml.exe base ~srcs ~doc ~meta ~requires
 
@@ -84,8 +84,8 @@ let default =
         "ocamlfind", {|build|};
         "ocamlbuild", {|build|};
         "topkg", {|build & >= "1.0.3"|};
-        "ctypes", {|>= "0.4.0"|};
-        "ctypes-foreign", "";
+        "ctypes", {|>= "0.21.1"|};
+        "ctypes-foreign", {|>= "0.21.1"|};
 (*        "tsdl", {|with-test|}; *)
         "xmlm", {|dev|};
       ]

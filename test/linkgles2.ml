@@ -7,9 +7,9 @@
 (* Tests that the Tgles2 library link flags are correct.
 
    Compile with:
-   ocamlfind ocamlc -linkpkg -package ctypes.foreign,tgls.tgles2 \
+   ocamlfind ocamlc -linkpkg -package ctypes-foreign,tgls.tgles2 \
                     -o linkgles2.byte linkgles2.ml
-   ocamlfind ocamlopt -linkpkg -package ctypes.foreign,tgls.tgles2 \
+   ocamlfind ocamlopt -linkpkg -package ctypes-foreign,tgls.tgles2 \
                       -o linkgles2.native linkgles2.ml
 
    We try to load a symbol that should only be in the corresponding
