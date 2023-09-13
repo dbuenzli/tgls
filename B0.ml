@@ -67,19 +67,19 @@ let linktgles3, tritgles3 = lib_tests ~id:"es3" tgles3
 
 let default =
   let meta =
-    let open B0_meta in
-    empty
-    |> tag B0_opam.tag
-    |> add authors ["The tgls programmers"]
-    |> add maintainers ["Daniel Bünzli <daniel.buenzl i@erratique.ch>"]
-    |> add homepage "https://erratique.ch/software/tgls"
-    |> add online_doc "https://erratique.ch/software/tgls/doc/"
-    |> add licenses ["ISC"]
-    |> add repo "git+https://erratique.ch/repos/tgls.git"
-    |> add issues "https://github.com/dbuenzli/tgls/issues"
-    |> add description_tags
+    B0_meta.empty
+    |> B0_meta.(add authors) ["The tgls programmers"]
+    |> B0_meta.(add maintainers)
+       ["Daniel Bünzli <daniel.buenzl i@erratique.ch>"]
+    |> B0_meta.(add homepage) "https://erratique.ch/software/tgls"
+    |> B0_meta.(add online_doc) "https://erratique.ch/software/tgls/doc/"
+    |> B0_meta.(add licenses) ["ISC"]
+    |> B0_meta.(add repo) "git+https://erratique.ch/repos/tgls.git"
+    |> B0_meta.(add issues) "https://github.com/dbuenzli/tgls/issues"
+    |> B0_meta.(add description_tags)
       ["bindings"; "opengl"; "opengl-es"; "graphics"; "org:erratique"]
-    |> add B0_opam.Meta.depends
+    |> B0_meta.tag B0_opam.tag
+    |> B0_meta.add B0_opam.depends
       [ "ocaml", {|>= "4.08.0"|};
         "ocamlfind", {|build|};
         "ocamlbuild", {|build|};
@@ -89,8 +89,8 @@ let default =
 (*        "tsdl", {|with-test|}; *)
         "xmlm", {|dev|};
       ]
-    |> add B0_opam.Meta.build
+    |> B0_meta.add B0_opam.build
       {|[["ocaml" "pkg/pkg.ml" "build" "--dev-pkg" "%{dev}%"]]|}
   in
-  B0_pack.v "default" ~doc:"tgls package" ~meta ~locked:true @@
+  B0_pack.make "default" ~doc:"tgls package" ~meta ~locked:true @@
   B0_unit.list ()
