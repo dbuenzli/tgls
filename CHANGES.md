@@ -1,4 +1,9 @@
 
+* Fix Tgls on Windows + MingW64
+  * Try to load [opengl32.dll] at startup on Windows.
+  * Bring 64-bit Windows support by fixing selection of FFI ABI.
+  * Unlock the full OpenGL API on Windows by implementing indirect
+    procedure lookup with [wglGetProcAddress].
 * Fix build system. Explicitely depend on `ctypes-foreign`. 
   Thanks to Etienne Millon for the patch (#29).
 * Fix `Gl.debug_message_callback` raising `Ffi_stubs.CallToExpiredClosure`. 
