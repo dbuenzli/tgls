@@ -226,8 +226,17 @@ let pp_ml_module ~log ppf api =
     "@[<v>\
      open Ctypes@,\
      open Foreign@,@,\
+     let from =@,\
+     \  if Sys.win32 then@,\
+     \    try@,\
+     \      Some (Dl.(dlopen ~filename:\"opengl32.dll\" ~flags:[ RTLD_NOW ]))@,\
+     \    with _ ->@,\
+     \      (* In case some setups don't have the standard [opengl32.dll],@,\
+     \         don't prevent running by failing at toplevel. *)@,\
+     \      None@,\
+     \  else None@,@,\
      let abi = Libffi_abi.(if Sys.win32 then stdcall else default_abi)@,\
-     let foreign ?from ?stub ?check_errno ?release_runtime_lock f fn =@,\
+     let foreign ?stub ?check_errno ?release_runtime_lock f fn =@,\
        foreign ~abi ?from ?stub ?check_errno ?release_runtime_lock f fn@,@,\
      (* %s bindings *)@,@,\
      module %s = struct@,@,\
