@@ -10,9 +10,51 @@
 open Ctypes
 open Foreign
 
-let abi = Libffi_abi.(if Sys.win32 then stdcall else default_abi)
-let foreign ?from ?stub ?check_errno ?release_runtime_lock f fn =
-foreign ~abi ?from ?stub ?check_errno ?release_runtime_lock f fn
+let from =
+  if Sys.win32 then
+    try
+      Some (Dl.(dlopen ~filename:"opengl32.dll" ~flags:[ RTLD_NOW ]))
+    with _ ->
+      (* In case some setups don't have the standard [opengl32.dll],
+         don't prevent running by failing at toplevel. *)
+      None
+  else None
+
+let abi =
+  if Sys.win32 && Sys.word_size = 32 then
+    (* On X86 (32-bit) under Windows, [opengl32.dll] uses the [__stdcall] FFI ABI.
+       This is not the default for [libffi], so it may require passing a [~abi] paraameter.
+       Just in case, we try to look for one procedure, and revert to default if it fails.
+       In all other situations, we use the default FFI ABI. *)
+    try
+      ignore (foreign ?from ~abi:Libffi_abi.stdcall "glClear" (int @-> returning void)) ;
+      Libffi_abi.stdcall
+    with _ -> Libffi_abi.default_abi
+  else Libffi_abi.default_abi
+
+let foreign ?stub ?check_errno ?release_runtime_lock f fn =
+  if Sys.win32 then
+    (* In [opengl32.dll], non OpenGL 1.1 procedures must be looked up up via [wglGetProcAddress].
+       To simplify things, we don't hardcode the list but do a two-step auto-detection.
+       Some functions can only be resolved after OpenGL is initialized, so we delay the
+       lookup until the first call and cache the lookup result.*)
+    let cache = ref None in
+    fun x -> 
+      match !cache with
+      | Some f -> f x
+      | None ->
+        try
+          let fp = foreign ~abi ?from ~stub:false ?check_errno ?release_runtime_lock f fn in
+          cache := Some fp;
+          fp x
+        with Dl.DL_error _ ->
+          let ftyp = funptr_opt fn in
+          match foreign ~abi ?from "wglGetProcAddress" (string @-> returning ftyp) f with
+          | None -> failwith ("Could not resolve OpenGL procedure " ^ f)
+          | Some fpp ->
+            cache := Some fpp ;
+            fpp x
+  else foreign ~abi ?from ?stub ?check_errno ?release_runtime_lock f fn 
 
 (* OpenGL 3.x bindings *)
 
@@ -173,7 +215,7 @@ module Gl = struct
   
   (* Functions *)
 
-  let stub = true
+  let stub = true (* If changed, will need updating Windows specific [foreign]. *)
 
   let active_texture =
     foreign ~stub "glActiveTexture" (int_as_uint @-> returning void)
