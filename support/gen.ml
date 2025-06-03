@@ -247,7 +247,28 @@ let pp_ml_module ~log ppf api =
      \    with _ -> Libffi_abi.default_abi@,\
      \  else Libffi_abi.default_abi@,@,\
      let foreign ?stub ?check_errno ?release_runtime_lock f fn =@,\
-       foreign ~abi ?from ?stub ?check_errno ?release_runtime_lock f fn@,@,\
+     \  if Sys.win32 then@,\
+     \    (* In [opengl32.dll], non OpenGL 1.1 procedures must be looked up up via [wglGetProcAddress].@,\
+     \       To simplify things, we don't hardcode the list but do a two-step auto-detection.@,\
+     \       Some functions can only be resolved after OpenGL is initialized, so we delay the@,\
+     \       lookup until the first call and cache the lookup result.*)@,\
+     \    let cache = ref None in@,\
+     \    fun x -> @,\
+     \      match !cache with@,\
+     \      | Some f -> f x@,\
+     \      | None ->@,\
+     \        try@,\
+     \          let fp = foreign ~abi ?from ~stub:false ?check_errno ?release_runtime_lock f fn in@,\
+     \          cache := Some fp;@,\
+     \          fp x@,\
+     \        with Dl.DL_error _ ->@,\
+     \          let ftyp = funptr_opt fn in@,\
+     \          match foreign ~abi ?from \"wglGetProcAddress\" (string @-> returning ftyp) f with@,\
+     \          | None -> failwith (\"Could not resolve OpenGL procedure \" ^ f)@,\
+     \          | Some fpp ->@,\
+     \            cache := Some fpp ;@,\
+     \            fpp x@,\
+     \  else foreign ~abi ?from ?stub ?check_errno ?release_runtime_lock f fn @,@,\
      (* %s bindings *)@,@,\
      module %s = struct@,@,\
      \  (* Bigarrays *)@,@,\
@@ -299,7 +320,7 @@ let pp_ml_module ~log ppf api =
      \  (* Types *)@,@,\
      \  @[<v>%a@]@,\
      \  (* Functions *)@,@,\
-     \  let stub = true@,@,\
+     \  let stub = true (* If changed, will need updating Windows specific [foreign]. *)@,@,\
      \  @[<v>%a@]@,@,\
      \  (* Enums *)@,@,\
      \  @[<v>%a@]@,\
