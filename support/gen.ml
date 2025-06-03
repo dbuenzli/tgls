@@ -235,7 +235,17 @@ let pp_ml_module ~log ppf api =
      \         don't prevent running by failing at toplevel. *)@,\
      \      None@,\
      \  else None@,@,\
-     let abi = Libffi_abi.(if Sys.win32 then stdcall else default_abi)@,\
+     let abi =@,\
+     \  if Sys.win32 && Sys.word_size = 32 then@,\
+     \    (* On X86 (32-bit) under Windows, [opengl32.dll] uses the [__stdcall] FFI ABI.@,\
+     \       This is not the default for [libffi], so it may require passing a [~abi] paraameter.@,\
+     \       Just in case, we try to look for one procedure, and revert to default if it fails.@,\
+     \       In all other situations, we use the default FFI ABI. *)@,\
+     \    try@,\
+     \      ignore (foreign ?from ~abi:Libffi_abi.stdcall \"glClear\" (int @-> returning void)) ;@,\
+     \      Libffi_abi.stdcall@,\
+     \    with _ -> Libffi_abi.default_abi@,\
+     \  else Libffi_abi.default_abi@,@,\
      let foreign ?stub ?check_errno ?release_runtime_lock f fn =@,\
        foreign ~abi ?from ?stub ?check_errno ?release_runtime_lock f fn@,@,\
      (* %s bindings *)@,@,\
