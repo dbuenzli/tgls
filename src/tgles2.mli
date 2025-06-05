@@ -5,7 +5,7 @@
   ---------------------------------------------------------------------------*)
 
 (* WARNING do not edit. This file was automatically generated with:
-   _build/support/apiquery.native -mli -api gles2.0 *)
+   apiquery -mli -api gles2.0 *)
 
 (** OpenGL ES 2 thin bindings.
 

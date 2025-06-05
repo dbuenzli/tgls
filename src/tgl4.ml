@@ -5,7 +5,7 @@
   ---------------------------------------------------------------------------*)
 
 (* WARNING do not edit. This file was automatically generated with:
-   _build/support/apiquery.native -ml -api gl4.5 *)
+   apiquery -ml -api gl4.5 *)
 
 open Ctypes
 open Foreign

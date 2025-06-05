@@ -1,4 +1,5 @@
 open B0_kit.V000
+open Result.Syntax
 
 (* OCaml library names *)
 
@@ -40,11 +41,50 @@ let tgles3, tgles3_top, tgles3_lib, tgles3_top_lib = tgl ~id:"es3"
 
 (* API generator *)
 
-let gen =
-  let srcs = [`Dir (Fpath.v "support") ] in
-  let requires = [xmlm] in
+let apiquery =
+  let srcs = [`Dir ~/"support"; `X ~/"support/dump.ml" ] in
   let doc = "Gl OCaml API generation tool" in
-  B0_ocaml.exe "gen" ~srcs ~requires ~doc
+  B0_ocaml.exe "apiquery" ~srcs ~requires:[xmlm] ~doc
+
+let apidump =
+  let srcs = [`Dir ~/"support"; `X ~/"support/apiquery.ml" ] in
+  B0_ocaml.exe "apidump" ~srcs ~requires:[xmlm]
+
+let glxml = ~/"support/gl.xml"
+let glxml_url =
+  "https://cvs.khronos.org/svn/repos/ogl/trunk/doc/registry/public/api/gl.xml"
+
+let download_glxml =
+  let doc = "Download gl.xml to support/gl.xml" in
+  B0_unit.of_action "download-glxml" ~doc @@ fun env _ ~args:_ ->
+  let glxml = B0_env.in_scope_dir env glxml in
+  (Log.stdout @@ fun m ->
+   m "@[<v>Downloading %s@,to %a@]" glxml_url Fpath.pp glxml);
+  let* () = B0_action_kit.fetch_url env glxml_url glxml in
+  Ok ()
+
+let generate_libraries =
+  let doc = "Generate tgls.* libraries" in
+  let units = [apiquery] in
+  B0_unit.of_action "generate-libraries" ~units ~doc @@ fun env _ ~args:_ ->
+  let src = B0_env.in_scope_dir env ~/"src" in
+  let glxml = B0_env.in_scope_dir env glxml in
+  let* () = Os.File.must_exist glxml in
+  let* apiquery = B0_env.unit_exe_file_cmd env apiquery in
+  let gen_lib glapi lib =
+    let mli = Fpath.(src / lib + ".mli") in
+    let ml = Fpath.(src / lib + ".ml") in
+    let stdout = Os.Cmd.out_file ~force:true ~make_path:false mli in
+    let* () = Os.Cmd.run Cmd.(apiquery % "-mli" % "-api" % glapi) ~stdout in
+    let stdout = Os.Cmd.out_file ~force:true ~make_path:false ml in
+    let* () = Os.Cmd.run Cmd.(apiquery % "-ml" % "-api" % glapi) ~stdout in
+    Ok ()
+  in
+  let* () = gen_lib "gl3.3" "tgl3" in
+  let* () = gen_lib "gl4.5" "tgl4" in
+  let* () = gen_lib "gles2.0" "tgles2" in
+  let* () = gen_lib "gles3.2" "tgles3" in
+  Ok ()
 
 (* Tests *)
 
@@ -68,15 +108,14 @@ let linktgles3, tritgles3 = lib_tests ~id:"es3" tgles3
 let default =
   let meta =
     B0_meta.empty
-    |> B0_meta.(add authors) ["The tgls programmers"]
-    |> B0_meta.(add maintainers)
-       ["Daniel Bünzli <daniel.buenzl i@erratique.ch>"]
-    |> B0_meta.(add homepage) "https://erratique.ch/software/tgls"
-    |> B0_meta.(add online_doc) "https://erratique.ch/software/tgls/doc/"
-    |> B0_meta.(add licenses) ["ISC"]
-    |> B0_meta.(add repo) "git+https://erratique.ch/repos/tgls.git"
-    |> B0_meta.(add issues) "https://github.com/dbuenzli/tgls/issues"
-    |> B0_meta.(add description_tags)
+    |> ~~ B0_meta.authors ["The tgls programmers"]
+    |> ~~ B0_meta.maintainers ["Daniel Bünzli <daniel.buenzl i@erratique.ch>"]
+    |> ~~ B0_meta.homepage "https://erratique.ch/software/tgls"
+    |> ~~ B0_meta.online_doc "https://erratique.ch/software/tgls/doc/"
+    |> ~~ B0_meta.licenses ["ISC"]
+    |> ~~ B0_meta.repo "git+https://erratique.ch/repos/tgls.git"
+    |> ~~ B0_meta.issues "https://github.com/dbuenzli/tgls/issues"
+    |> ~~ B0_meta.description_tags
       ["bindings"; "opengl"; "opengl-es"; "graphics"; "org:erratique"]
     |> B0_meta.tag B0_opam.tag
     |> B0_meta.add B0_opam.depends

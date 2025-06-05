@@ -73,7 +73,9 @@ let pp_mli_api_footer ppf api =
 (* License *)
 
 let pp_license_header ppf () =
-  let invocation = String.concat " " (Array.to_list Sys.argv) in
+  let exe = Filename.basename Sys.executable_name in
+  let invocation = exe :: (List.tl (Array.to_list Sys.argv)) in
+  let invocation = String.concat " " invocation in
   pp ppf
 "\
 (*---------------------------------------------------------------------------

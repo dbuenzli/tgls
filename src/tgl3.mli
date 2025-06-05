@@ -5,7 +5,7 @@
   ---------------------------------------------------------------------------*)
 
 (* WARNING do not edit. This file was automatically generated with:
-   _build/support/apiquery.native -mli -api gl3.3 *)
+   apiquery -mli -api gl3.3 *)
 
 (** OpenGL 3.x thin bindings.
 

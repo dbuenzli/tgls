@@ -5,7 +5,7 @@
   ---------------------------------------------------------------------------*)
 
 (* WARNING do not edit. This file was automatically generated with:
-   _build/support/apiquery.native -ml -api gles3.2 *)
+   apiquery -ml -api gles3.2 *)
 
 open Ctypes
 open Foreign

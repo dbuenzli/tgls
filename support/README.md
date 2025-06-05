@@ -18,10 +18,4 @@ module. `mli` and `ml` generation for an OCaml API is handled by the
 The [`apiquery`](apiquery.ml) command line tool allows to query APIs
 and generate the bindings. Invoke with `-h` for more information.
 
-The documentation of these modules can be generated with:
-    
-    topkg doc --dev -r 
-
-from the root directory of a repo checkout.
-
 [1]: http://www.opengl.org/registry/
