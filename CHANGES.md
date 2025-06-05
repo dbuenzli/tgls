@@ -1,3 +1,5 @@
+v0.9.0 2025-06-05 Zagreb
+------------------------
 
 * Install each library in its own directory.
 * Remove `tgls.*.top` libraries. They were just opening the
@@ -7,11 +9,11 @@
   * Bring 64-bit Windows support by fixing selection of FFI ABI.
   * Unlock the full OpenGL API on Windows by implementing indirect
     procedure lookup with [wglGetProcAddress].
+  Thanks to Benjamin Canou for the patches (#33).
 * Fix build system. Explicitely depend on `ctypes-foreign`. 
   Thanks to Etienne Millon for the patch (#29).
 * Fix `Gl.debug_message_callback` raising `Ffi_stubs.CallToExpiredClosure`. 
   Thanks to Edwin Török for the report and the patch (#6).
-
 
 v0.8.6 2022-02-10 La Forclaz (VS)
 ---------------------------------
