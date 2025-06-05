@@ -4,8 +4,18 @@ Tgls is a set of independent OCaml libraries providing thin bindings
 to OpenGL libraries. It has support for core OpenGL 3.\{2,3\} and
 4.\{0,1,2,3,4\} and OpenGL ES 2 and 3.\{0,1,2\}.
 
-{!modules:
-Tgl3
-Tgl4
-Tgles2
-Tgles3}
+{1:library_tgls_tgl3 Library [tgls.tgl3]}
+
+{!modules: Tgl3}
+
+{1:library_tgls_tgl4 Library [tgls.tgl4]}
+
+{!modules: Tgl4}
+
+{1:library_tgls_tgles2 Library [tgls.tgles2]}
+
+{!modules: Tgles2}
+
+{1:library_tgls_tgles3 Library [tgls.tgles3]}
+
+{!modules: Tgles2}
