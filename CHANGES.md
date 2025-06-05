@@ -1,4 +1,6 @@
 
+* Remove `tgls.*.top` libraries. They were just opening the
+  API toplevel module. Not worth the maintenance trouble.
 * Fix Tgls on Windows + MingW64
   * Try to load [opengl32.dll] at startup on Windows.
   * Bring 64-bit Windows support by fixing selection of FFI ABI.

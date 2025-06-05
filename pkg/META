@@ -10,17 +10,7 @@ package "tgl3" (
  archive(native) = "tgl3.cmxa"
  plugin(byte) = "tgl3.cma"
  plugin(native) = "tgl3.cmxs"
- exists_if = "tgl3.cma"
-
- package "top" (
-  version = "%%VERSION%%"
-  description = "Toplevel module for Tgl3"
-  requires = "tgls.tgl3"
-  archive(byte) = "tgl3_top.cma"
-  archive(native) = "tgl3_top.cmxa"
-  plugin(byte) = "tgl3_top.cma"
-  plugin(native) = "tgl3_top.cmxs"
-  exists_if = "tgl3_top.cma"))
+ exists_if = "tgl3.cma")
 
 package "tgl4" (
  version = "%%VERSION%%"
@@ -30,17 +20,7 @@ package "tgl4" (
  archive(native) = "tgl4.cmxa"
  plugin(byte) = "tgl4.cma"
  plugin(native) = "tgl4.cmxs"
- exists_if = "tgl4.cma"
-
- package "top" (
-  version = "%%VERSION%%"
-  description = "Toplevel module for Tgl4"
-  requires = "tgls.tgl4"
-  archive(byte) = "tgl4_top.cma"
-  archive(native) = "tgl4_top.cmxa"
-  plugin(byte) = "tgl4_top.cma"
-  plugin(native) = "tgl4_top.cmxs"
-  exists_if = "tgl4_top.cma"))
+ exists_if = "tgl4.cma")
 
 package "tgles2" (
  version = "%%VERSION%%"
@@ -50,17 +30,7 @@ package "tgles2" (
  archive(native) = "tgles2.cmxa"
  plugin(byte) = "tgles2.cma"
  plugin(native) = "tgles2.cmxs"
- exists_if = "tgles2.cma"
-
- package "top" (
-  version = "%%VERSION%%"
-  description = "Toplevel module for Tgles2"
-  requires = "tgls.tgles2"
-  archive(byte) = "tgles2_top.cma"
-  archive(native) = "tgles2_top.cmxa"
-  plugin(byte) = "tgles2_top.cma"
-  plugin(native) = "tgles2_top.cmxs"
-  exists_if = "tgles2_top.cma"))
+ exists_if = "tgles2.cma")
 
 package "tgles3" (
  version = "%%VERSION%%"
@@ -70,14 +40,4 @@ package "tgles3" (
  archive(native) = "tgles3.cmxa"
  plugin(byte) = "tgles3.cma"
  plugin(native) = "tgles3.cmxs"
- exists_if = "tgles3.cma"
-
- package "top" (
-  version = "%%VERSION%%"
-  description = "Toplevel module for Tgles3"
-  requires = "tgls.tgles3"
-  archive(byte) = "tgles3_top.cma"
-  archive(native) = "tgles3_top.cmxa"
-  plugin(byte) = "tgles3_top.cma"
-  plugin(native) = "tgles3_top.cmxs"
-  exists_if = "tgles3_top.cma"))
+ exists_if = "tgles3.cma")

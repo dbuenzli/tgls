@@ -22,10 +22,6 @@ let () =
        Pkg.clib ~cond:with_gl "src/libtgl4.clib";
        Pkg.clib ~cond:with_gles "src/libtgles2.clib";
        Pkg.clib ~cond:with_gles "src/libtgles3.clib";
-       Pkg.mllib ~cond:with_gl ~api:[] "src/tgl3_top.mllib";
-       Pkg.mllib ~cond:with_gl ~api:[] "src/tgl4_top.mllib";
-       Pkg.mllib ~cond:with_gles ~api:[] "src/tgles2_top.mllib";
-       Pkg.mllib ~cond:with_gles ~api:[] "src/tgles3_top.mllib";
        Pkg.test ~cond:with_gl ~run:false "test/trigl3";
        Pkg.test ~cond:with_gl ~run:false "test/trigl4";
        Pkg.test ~cond:with_gles ~run:false "test/trigles2";

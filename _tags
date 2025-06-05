@@ -9,7 +9,6 @@ true: thread, bin_annot, safe_string
 <src/tgl{3,4,es2,es3}.{ml,mli}> : package(ctypes), package(ctypes-foreign)
 <src/tgl{3,4,es2,es3}.{cma,cmxa,cmxs}> : custom, thread, \
   package(ctypes), package(ctypes-foreign)
-<src/tgl{3,4,es2,es3}_top.*> : package(compiler-libs.toplevel)
 
 <src/tgl3.{cma,cmxa,cmxs}> : use_gl3
 <src/libtgl3.*> : use_gl3
