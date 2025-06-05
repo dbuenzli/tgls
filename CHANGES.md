@@ -1,4 +1,5 @@
 
+* Install each library in its own directory.
 * Remove `tgls.*.top` libraries. They were just opening the
   API toplevel module. Not worth the maintenance trouble.
 * Fix Tgls on Windows + MingW64

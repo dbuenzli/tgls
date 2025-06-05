@@ -15,12 +15,13 @@ let xmlm = B0_ocaml.libname "xmlm"
 (* Libraries *)
 
 let tgl ~id =
+  (* FIXME this is not ready yet we need the right runes for the C
+     stubs which are platform dependent, the triangle tests work likely
+     because of linking against SDL. The link tests do not work with B0. *)
   let base = Fmt.str "tgl%s" id in
   let tgl_name = B0_ocaml.libname ("tgls." ^ base) in
+  let srcs = [ `Dir ~/(Fmt.str "src/%s" base); `File ~/"src/tgl_stub.c" ] in
   let tgl =
-    let srcs = [ `File (Fpath.v (Fmt.str "src/%s.mli" base));
-                 `File (Fpath.v (Fmt.str "src/%s.ml" base)) ]
-    in
     let requires = [ctypes; ctypes_foreign; integers; bigarray_compat] in
     B0_ocaml.lib tgl_name ~srcs ~requires
   in
@@ -64,8 +65,8 @@ let generate_libraries =
   let* () = Os.File.must_exist glxml in
   let* apiquery = B0_env.unit_exe_file_cmd env apiquery in
   let gen_lib glapi lib =
-    let mli = Fpath.(src / lib + ".mli") in
-    let ml = Fpath.(src / lib + ".ml") in
+    let mli = Fpath.(src / lib / lib + ".mli") in
+    let ml = Fpath.(src / lib / lib + ".ml") in
     let stdout = Os.Cmd.out_file ~force:true ~make_path:false mli in
     let* () = Os.Cmd.run Cmd.(apiquery % "-mli" % "-api" % glapi) ~stdout in
     let stdout = Os.Cmd.out_file ~force:true ~make_path:false ml in
@@ -81,19 +82,20 @@ let generate_libraries =
 (* Tests *)
 
 let test kind ?(requires = []) ~id lib =
-  let base = Fmt.str "%sgl%s" kind id in
-  let srcs = [`File (Fpath.v (Fmt.str "test/%s.ml" base))] in
-  let meta = B0_meta.(empty |> tag test) in
+  let src = ~/(Fmt.str "test/%sgl%s.ml" kind id) in
   let requires = ctypes :: ctypes_foreign :: lib :: requires in
-  let doc = Fmt.str "%s test" base in
-  B0_ocaml.exe base ~srcs ~doc ~meta ~requires
+  B0_ocaml.test src ~requires
 
-let lib_tests ~id lib = test "tri" ~id lib ~requires:[tsdl], test "link" ~id lib
+let lib_tests ~id lib =
+  test "tri" ~id lib ~requires:[tsdl],
+  test "link" ~id lib
 
 let linktgl3, tritgl3 = lib_tests ~id:"3" tgl3
 let linktgl4, tritgl4 = lib_tests ~id:"4" tgl4
 let linktgles2, tritgles2 = lib_tests ~id:"es2" tgles2
 let linktgles3, tritgles3 = lib_tests ~id:"es3" tgles3
+let dbgllifetime4 =
+  B0_ocaml.test ~/"test/dbglifetime4.ml" ~requires:[tgl4; tsdl] ~run:false
 
 (* Packs *)
 

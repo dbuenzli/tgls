@@ -6,21 +6,22 @@ true: thread, bin_annot, safe_string
 <support/**> : package(xmlm)
 
 <src> : include
-<src/tgl{3,4,es2,es3}.{ml,mli}> : package(ctypes), package(ctypes-foreign)
-<src/tgl{3,4,es2,es3}.{cma,cmxa,cmxs}> : custom, thread, \
+<src/tgl{3,4,es2,es3}> : include
+<src/tgl{3,4,es2,es3}/*.{ml,mli}> : package(ctypes), package(ctypes-foreign)
+<src/tgl{3,4,es2,es3}/*.{cma,cmxa,cmxs}> : custom, thread, \
   package(ctypes), package(ctypes-foreign)
 
-<src/tgl3.{cma,cmxa,cmxs}> : use_gl3
-<src/libtgl3.*> : use_gl3
+<src/tgl3/tgl3.{cma,cmxa,cmxs}> : use_gl3
+<src/tgl3/libtgl3.*> : use_gl3
 
-<src/tgl4.{cma,cmxa,cmxs}> : use_gl4
-<src/libtgl4.*> : use_gl4
+<src/tgl4/tgl4.{cma,cmxa,cmxs}> : use_gl4
+<src/tgl4/libtgl4.*> : use_gl4
 
-<src/tgles2.{cma,cmxa,cmxs}> : use_gles2
-<src/libtgles2.*> : use_gles2
+<src/tgles2/tgles2.{cma,cmxa,cmxs}> : use_gles2
+<src/tgles2/libtgles2.*> : use_gles2
 
-<src/tgles3.{cma,cmxa,cmxs}> : use_gles3
-<src/libtgles3.*> : use_gles3
+<src/tgles3/tgles3.{cma,cmxa,cmxs}> : use_gles3
+<src/tgles3/libtgles3.*> : use_gles3
 
 <test> : include
 <test/trigl{3,4,es2,es3}.{ml,mli,byte,native}> :  package(tsdl)
