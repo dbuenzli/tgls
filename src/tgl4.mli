@@ -12,15 +12,11 @@
     Consult the {{!conventions}binding conventions}.
 
     Open the module use it, this defines only the module [Gl]
-    in your scope. To use in the toplevel with [findlib],
-    just [#require "tgls.tgl4"], it automatically loads the library and
-    opens the [Tgl4] module.
+    in your scope.
 
     {b References}
     {ul
-    {- {{:http://www.opengl.org/registry}OpenGL 4.x}}}
-
-    {e %%VERSION%% — OpenGL 4.x — {{:%%PKG_HOMEPAGE%% }homepage} } *)
+    {- {{:http://www.opengl.org/registry}OpenGL 4.x}}} *)
 
 (** {1 OpenGL 4.x} *)
 

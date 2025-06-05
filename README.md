@@ -21,7 +21,6 @@ Tgls can be installed with `opam`:
 If you don't use `opam` consult the [`opam`](opam) file for
 build instructions and a complete specification of the dependencies.
 
-
 ## Supported OpenGL versions 
 
 Tgls provides four libraries:
@@ -44,7 +43,6 @@ easiest way to access them is to manually use [ocaml-ctypes][ctypes] and
 the appropriate constants (the tools in [support](support/) could be
 enhanced to support them but it's not planned to do so).
 
-
 ## Documentation
 
 The documentation can be consulted [online] or via `odig doc tgls`.
@@ -57,7 +55,7 @@ issue tracker.
 
 ## Sample programs
 
-A few sample programs can be found in [`test`][test], you need
+A few sample programs can be found in [`test`](test), you need
 [`tsdl`] to compile them.
 
 The C file [`assert_sizes.c`](test/assert_sizes.c) is a program that

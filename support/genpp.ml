@@ -24,19 +24,13 @@ let pp_mli_api_header ppf api =
     Consult the {{!conventions}binding conventions}.
 
     Open the module use it, this defines only the module [%s]
-    in your scope. To use in the toplevel with [findlib],
-    just [#require \"tgls.%s\"], it automatically loads the library and
-    opens the [%s] module.
+    in your scope.
 
     {b References}
     {ul
-    {- {{:%s}%s}}}
-
-    {e %s — %s — %s } *)
+    {- {{:%s}%s}}} *)
 @\n"
-  syn lib_module (pp_opt pp_str) profile lsyn bind_module
-  (String.lowercase_ascii lib_module) lib_module (Doc.home_uri api) syn
-  "%%VERSION%%" syn "{{:%%PKG_HOMEPAGE%% }homepage}"
+  syn lib_module (pp_opt pp_str) profile lsyn bind_module (Doc.home_uri api) syn
 
 let pp_mli_api_footer ppf api =
   let lib_module = Oapi.module_lib api in

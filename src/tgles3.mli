@@ -12,15 +12,11 @@
     Consult the {{!conventions}binding conventions}.
 
     Open the module use it, this defines only the module [Gl]
-    in your scope. To use in the toplevel with [findlib],
-    just [#require "tgls.tgles3"], it automatically loads the library and
-    opens the [Tgles3] module.
+    in your scope.
 
     {b References}
     {ul
-    {- {{:http://www.khronos.org/opengles/3_X}OpenGL ES 3.x}}}
-
-    {e %%VERSION%% — OpenGL ES 3.x — {{:%%PKG_HOMEPAGE%% }homepage} } *)
+    {- {{:http://www.khronos.org/opengles/3_X}OpenGL ES 3.x}}} *)
 
 (** {1 OpenGL ES 3.x} *)
 

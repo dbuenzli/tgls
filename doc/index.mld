@@ -18,4 +18,4 @@ to OpenGL libraries. It has support for core OpenGL 3.\{2,3\} and
 
 {1:library_tgls_tgles3 Library [tgls.tgles3]}
 
-{!modules: Tgles2}
+{!modules: Tgles3}
