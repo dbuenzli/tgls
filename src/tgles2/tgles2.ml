@@ -26,7 +26,8 @@ let abi =
        Just in case, we try to look for one procedure, and revert to default if it fails.
        In all other situations, we use the default FFI ABI. *)
     try
-      ignore (foreign ?from ~abi:Libffi_abi.stdcall "glClear" (int @-> returning void)) ;
+      ignore (foreign ?from ~abi:Libffi_abi.stdcall "glClear" (int @-> returning void))
+      [@warning "-5"];
       Libffi_abi.stdcall
     with _ -> Libffi_abi.default_abi
   else Libffi_abi.default_abi
