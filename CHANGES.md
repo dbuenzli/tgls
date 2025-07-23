@@ -1,3 +1,7 @@
+
+- Have each library has now its own `tgl_stub.c` nop stub. In turn this
+  makes `tgls` compatible with `topkg` >= 1.1.0`
+
 v0.9.0 2025-06-05 Zagreb
 ------------------------
 

@@ -3,6 +3,6 @@
    SPDX-License-Identifier: ISC
   ---------------------------------------------------------------------------*/
 
-/* This is just here for ocamlbuild to generate a correct dlltgl{3,4,ES2}.so object */
+/* This is just here for ocamlbuild to generate a correct dlltgles2.so object */
 
-void tgl_nop (void) { return; }
+void tgles2_nop (void) { return; }

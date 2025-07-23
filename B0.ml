@@ -20,7 +20,7 @@ let tgl ~id =
      because of linking against SDL. The link tests do not work with B0. *)
   let base = Fmt.str "tgl%s" id in
   let tgl_name = B0_ocaml.libname ("tgls." ^ base) in
-  let srcs = [ `Dir ~/(Fmt.str "src/%s" base); `File ~/"src/tgl_stub.c" ] in
+  let srcs = [ `Dir ~/(Fmt.str "src/%s" base) ] in
   let tgl =
     let requires = [ctypes; ctypes_foreign; integers; bigarray_compat] in
     B0_ocaml.lib tgl_name ~srcs ~requires
