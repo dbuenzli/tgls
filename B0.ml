@@ -116,7 +116,7 @@ let default =
       [ "ocaml", {|>= "4.08.0"|};
         "ocamlfind", {|build|};
         "ocamlbuild", {|build|};
-        "topkg", {|build & >= "1.0.3"|};
+        "topkg", {|build & >= "1.1.0"|};
         "ctypes", {|>= "0.21.1"|};
         "ctypes-foreign", {|>= "0.21.1"|};
 (*        "tsdl", {|with-test|}; *)
