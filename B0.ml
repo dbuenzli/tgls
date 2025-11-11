@@ -53,7 +53,10 @@ let download_glxml =
   let glxml = B0_env.in_scope_dir env glxml in
   (Log.stdout @@ fun m ->
    m "@[<v>Downloading %s@,to %a@]" glxml_url Fpath.pp glxml);
-  let* () = B0_action_kit.fetch_url env glxml_url glxml in
+  let force = true and make_path = true in
+  let* () =
+    B0_action_kit.download_url env ~force ~make_path glxml_url ~dst:glxml
+  in
   Ok ()
 
 let generate_libraries =
@@ -116,7 +119,7 @@ let default =
       [ "ocaml", {|>= "4.08.0"|};
         "ocamlfind", {|build|};
         "ocamlbuild", {|build|};
-        "topkg", {|build & >= "1.1.0"|};
+        "topkg", {|build & >= "1.1.1"|};
         "ctypes", {|>= "0.21.1"|};
         "ctypes-foreign", {|>= "0.21.1"|};
 (*        "tsdl", {|with-test|}; *)
