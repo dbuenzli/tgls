@@ -6,7 +6,6 @@ open Result.Syntax
 let ctypes = B0_ocaml.libname "ctypes"
 let ctypes_foreign = B0_ocaml.libname "ctypes-foreign"
 let integers = B0_ocaml.libname "integers" (* dep of ctypes *)
-let bigarray_compat = B0_ocaml.libname "bigarray-compat" (* dep of ctypes *)
 let tsdl = B0_ocaml.libname "tsdl"
 let xmlm = B0_ocaml.libname "xmlm"
 
@@ -22,7 +21,7 @@ let tgl ~id =
   let tgl_name = B0_ocaml.libname ("tgls." ^ base) in
   let srcs = [ `Dir ~/(Fmt.str "src/%s" base) ] in
   let tgl =
-    let requires = [ctypes; ctypes_foreign; integers; bigarray_compat] in
+    let requires = [ctypes; ctypes_foreign; integers] in
     B0_ocaml.lib tgl_name ~srcs ~requires
   in
   tgl_name, tgl
