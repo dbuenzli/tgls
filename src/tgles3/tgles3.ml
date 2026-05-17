@@ -480,7 +480,9 @@ module Gl = struct
   
   let create_shader_programv type_ src =
     let src = allocate string src in
-    create_shader_programv type_ 1 src
+    let ret = create_shader_programv type_ 1 src in
+    ignore (Sys.opaque_identity src);
+    ret
   
   let cull_face =
     foreign ~stub "glCullFace" (int_as_uint @-> returning void)
@@ -1490,7 +1492,9 @@ module Gl = struct
   
   let shader_source sh src =
     let src = allocate string src in
-    shader_source sh 1 src null
+    let ret = shader_source sh 1 src null in
+    ignore (Sys.opaque_identity src);
+    ret
   
   let stencil_func =
     foreign ~stub "glStencilFunc"

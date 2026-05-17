@@ -1,3 +1,8 @@
+
+
+- Fix gc race condition in `Gl.{shader_source,create_shader_programv}`.
+  Thanks to Yiming Xiang for reporting (#34).
+
 v0.9.1 2025-07-23 Zagreb
 ------------------------
 

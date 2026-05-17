@@ -793,7 +793,9 @@ module Gl = struct
   
   let create_shader_programv type_ src =
     let src = allocate string src in
-    create_shader_programv type_ 1 src
+    let ret = create_shader_programv type_ 1 src in
+    ignore (Sys.opaque_identity src);
+    ret
   
   let create_textures =
     foreign ~stub "glCreateTextures"
@@ -2499,7 +2501,9 @@ module Gl = struct
   
   let shader_source sh src =
     let src = allocate string src in
-    shader_source sh 1 src null
+    let ret = shader_source sh 1 src null in
+    ignore (Sys.opaque_identity src);
+    ret
   
   let shader_storage_block_binding =
     foreign ~stub "glShaderStorageBlockBinding"

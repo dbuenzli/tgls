@@ -599,7 +599,9 @@ module Gl = struct
   
   let shader_source sh src =
     let src = allocate string src in
-    shader_source sh 1 src null
+    let ret = shader_source sh 1 src null in
+    ignore (Sys.opaque_identity src);
+    ret
   
   let stencil_func =
     foreign ~stub "glStencilFunc"
