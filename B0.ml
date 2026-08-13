@@ -51,7 +51,7 @@ let download_glxml =
   B0_unit.of_action "download-glxml" ~doc @@ fun env _ ~args:_ ->
   let glxml = B0_env.in_scope_dir env glxml in
   (Log.stdout @@ fun m ->
-   m "@[<v>Downloading %s@,to %a@]" glxml_url Fpath.pp glxml);
+   m "@[<v>Downloading %s@,to %a@]" glxml_url Filepath.pp glxml);
   let force = true and make_path = true in
   let* () =
     B0_action_kit.download_url env ~force ~make_path glxml_url ~dst:glxml
@@ -67,8 +67,8 @@ let generate_libraries =
   let* () = Os.File.must_exist glxml in
   let* apiquery = B0_env.unit_exe_file_cmd env apiquery in
   let gen_lib glapi lib =
-    let mli = Fpath.(src / lib / lib + ".mli") in
-    let ml = Fpath.(src / lib / lib + ".ml") in
+    let mli = Filepath.(src / lib / lib + ".mli") in
+    let ml = Filepath.(src / lib / lib + ".ml") in
     let stdout = Os.Cmd.out_file ~force:true ~make_path:false mli in
     let* () = Os.Cmd.run Cmd.(apiquery % "-mli" % "-api" % glapi) ~stdout in
     let stdout = Os.Cmd.out_file ~force:true ~make_path:false ml in
